@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+@layer components{
+    .table-row-wrapper{
+      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-lg my-4 dark:bg-gray-700 dark:text-gray-100;
+    }
+    .table-button{
+      @apply rounded-3xl bg-saphire-100 p-3 mx-2 hover:bg-saphire-200 dark:text-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900;
+    }
+    .module-wrapper{
+      @apply absolute h-full w-full top-0 left-0 flex items-center justify-center;
+    }
+    .module-window{
+      @apply rounded-lg bg-gray-200 flex flex-col p-6 dark:bg-gray-900 w-2/5;
+    }
+    .module-content-wrapper{
+      @apply p-4 flex flex-col;
+    }
+    .module-header{
+      @apply text-2xl font-semibold mb-2 dark:text-gray-100;
+    }
+    .module-input-text{
+      @apply rounded-md my-2 px-3 py-2 w-full dark:bg-gray-700 dark:text-gray-100;
+    }
+    .module-button{
+      @apply bg-saphire-400 w-[100%] rounded-md py-2 my-2 text-gray-50 font-semibold hover:bg-saphire-500;
+    }
+    .sidebar-link{
+      @apply flex flex-row my-2 transition-all p-2 rounded-3xl text-gray-700 hover:bg-saphire-500 hover:text-gray-200;
+    }
+    .main-wrapper{
+      @apply h-full px-7 py-4 bg-slate-200 overflow-y-scroll dark:bg-gray-900;
+    }
+    .main-header{
+      @apply text-3xl text-gray-800 font-semibold my-4 dark:text-gray-100;
+    }
+    .filter-panel{
+      @apply flex flex-row my-6 justify-between;
+    }
+    .list-header{
+      @apply grid grid-cols-3 items-center bg-white px-6 py-4 rounded-lg my-4 dark:bg-gray-700 dark:text-gray-100;
+    }
+    .list-header-p{
+      @apply font-semibold px-2;
+    }
+    .flex-x{
+        @apply flex flex-row items-center;
+    }
+    .my-react-select-container .my-react-select__control {
+        @apply bg-white dark:bg-gray-700 border-2 border-white dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500;
+      }
+    
+      .my-react-select-container .my-react-select__control--is-focused {
+        @apply border-gray-500 hover:border-gray-500 dark:border-gray-400 dark:hover:border-gray-400 shadow-none;
+      }
+    
+      .my-react-select-container .my-react-select__menu {
+        @apply bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600;
+      }
+    
+      .my-react-select-container .my-react-select__option {
+        @apply text-gray-600 dark:text-gray-200 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-800;
+      }
+      /* .my-react-select-container .my-react-select__option--is-focused {
+        @apply bg-neutral-200 dark:bg-neutral-800;
+      } */
+    
+      .my-react-select-container .my-react-select__indicator-separator {
+        @apply bg-gray-400;
+      }
+    
+      .my-react-select-container .my-react-select__input-container,
+      .my-react-select-container .my-react-select__placeholder,
+      .my-react-select-container .my-react-select__single-value {
+        @apply text-gray-600 dark:text-gray-400;
+      }
+}
+.font-logo{
+    font-family: 'Neucha';
+}
+.hidden-scroll{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.hidden-scroll::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+}
