@@ -53,7 +53,7 @@ const handleDeleteClick = (id) => {
             ))}
         </div>
         {props.showNewModule && 
-        <NewDictionaryRecord setShowNewModule={props.setShowNewModule} title={props.title}/>}
+        <NewDictionaryRecord addMethod={props.addMethod} setShowNewModule={props.setShowNewModule} title={props.title}/>}
         </>
   )
 }

@@ -27,13 +27,23 @@ function PaymentMethod() {
     const editMethod = () => {
 
     }  
-    const addMethod = () => {
-
+    const addMethod = (nameValue) => {
+      axios.post('https://localhost:7247/api/PaymentMethod', {
+        name: nameValue,
+      })
+      .then(response => {
+        console.log('New payment method has been added');
+        fetchMethods()
+      })
+      .catch(error => {
+        console.error(error)
+      })
     }
     const deleteMethod = (id) => {
       axios.delete(`https://localhost:7247/api/PaymentMethod/${id}`)
       .then(response => {
         console.log(`Payment method with ID ${id} has been deleted`);
+        fetchMethods()
       })
       .catch(error => {
         console.error(error)
@@ -60,7 +70,10 @@ function PaymentMethod() {
       isAscending,
       setIsAscending,
       filteredItems,
-      deleteMethod
+      deleteMethod,
+      fetchMethods,
+      addMethod,
+      editMethod
   };
   return (
     <DictionaryComponent {...props}/>
