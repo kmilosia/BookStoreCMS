@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../styles'
 import CloseWindowButton from '../components/CloseWindowButton'
 
-function NewDeliveryMethod({setShowNewModule}) {
+function NewRentalOption({setShowNewModule}) {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const handleNameInput = (e) => {
@@ -30,4 +30,4 @@ function NewDeliveryMethod({setShowNewModule}) {
   )
 }
 
-export default NewDeliveryMethod
+export default NewRentalOption

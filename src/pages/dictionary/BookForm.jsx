@@ -4,37 +4,37 @@ import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 
-function AdminRole() {
-    const title = 'admin role'
-    const header = 'Admin Roles'
-    const [roles, setRoles] = useState([])
+function BookForm() {
+    const title = 'form'
+    const header = 'Forms'
+    const [forms, setForms] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    //fetch all roles from db
-    const fetchRoles = () => {
+    //fetch all forms from db
+    const fetchForms = () => {
       const address = `v2/beers?size=6`
         fetchAll({address})
-        .then(data => {setRoles(data)})
+        .then(data => {setForms(data)})
         .catch(error=>{
-          console.error('Error fetching admin roles', error);
+          console.error('Error fetching book forms', error);
         })
     }   
-    //render array of sorted roles from sortcategories method which returns array of sorted array
-    const sortedItems = sortItems(roles, selectedOption, isAscending);
-    //render array from sorted roles that will be filtered by value from searchbar
+    //render array of sorted forms from sortcategories method which returns array of sorted array
+    const sortedItems = sortItems(forms, selectedOption, isAscending);
+    //render array from sorted forms that will be filtered by value from searchbar
     const filteredItems = filterItems(sortedItems, searchValue);
     //render page
     useEffect(()=>{
-        fetchRoles()
+        fetchForms()
     },[])
     const props = {
       title,
       header,
-      roles,
-      setRoles,
+      forms,
+      setForms,
       editedID,
       setEditedID,
       selectedOption,
@@ -52,6 +52,6 @@ function AdminRole() {
   )
 }
 
-export default AdminRole
+export default BookForm
 
 

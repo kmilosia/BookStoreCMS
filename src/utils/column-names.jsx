@@ -17,7 +17,7 @@ export const addressColumnNames = [
 export const deliveryMethodColumnNames = [
     { name: 'ID'},
     { name: 'Name'},
-    { name: 'Cost'}
+    { name: 'Price'}
 ]
 export const publisherColumnName = [
     { name: 'ID'},

@@ -22,8 +22,8 @@ const handleEditClick = (itemID) => {
 const handleSaveClick = () => {
     props.setEditedID(null)
 }
-const handleDeleteClick = () => {
-
+const handleDeleteClick = (id) => {
+  props.deleteMethod(id)
 }
   return (
     <>
@@ -47,7 +47,7 @@ const handleDeleteClick = () => {
                 <div className='flex justify-end'>
                   {props.editedID !== null && props.editedID === item.id && <button onClick={() => handleSaveClick()} className='table-button'><FaSave /></button>} 
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick()} className='table-button'><BsTrash3Fill /></button>
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
                 </div>              
               </div>            
             ))}

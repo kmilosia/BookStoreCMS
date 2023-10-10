@@ -1,9 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home, Login,AccountStatus,AdminRole,Availability,Category,Edition,FileFormat,Form,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher } from './pages/import'
+import { Book,Author,City,Country, Home,RentalStatus, Login,AccountStatus,Availability,Category,Edition,FileFormat,BookForm,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
-import RentalStatus from './pages/dictionary/RentalStatus';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false)
@@ -22,12 +21,12 @@ function App() {
             <Route path='/language' element={<Language />}/>         
             <Route path='/country' element={<Country />}/>         
             <Route path='/account-status' element={<AccountStatus />}/>
-            <Route path='/admin-role' element={<AdminRole />}/>
+            <Route path='/permission' element={<Permission />}/>
             <Route path='/availability' element={<Availability />}/>
             <Route path='/category' element={<Category />}/>
             <Route path='/edition' element={<Edition />}/>
             <Route path='/file-format' element={<FileFormat />}/>
-            <Route path='/form' element={<Form />}/>
+            <Route path='/form' element={<BookForm />}/>
             <Route path='/gender' element={<Gender />}/>
             <Route path='/publisher' element={<Publisher />}/>
             <Route path='/order-status' element={<OrderStatus />}/>

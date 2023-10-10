@@ -3,6 +3,7 @@ import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import axios from 'axios'
 
 function PaymentMethod() {
     const title = 'payment method'
@@ -14,13 +15,30 @@ function PaymentMethod() {
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const fetchMethods = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setMethods(data)})
-        .catch(error=>{
-          console.error('Error fetching delivery methods', error);
-        })
-    }   
+      axios.get('https://localhost:7247/api/PaymentMethod')
+      .then(response => {
+        console.log(response.data);
+        setMethods(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      })        
+    } 
+    const editMethod = () => {
+
+    }  
+    const addMethod = () => {
+
+    }
+    const deleteMethod = (id) => {
+      axios.delete(`https://localhost:7247/api/PaymentMethod/${id}`)
+      .then(response => {
+        console.log(`Payment method with ID ${id} has been deleted`);
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    }
     const sortedItems = sortItems(methods, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
     useEffect(()=>{
@@ -41,7 +59,8 @@ function PaymentMethod() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      deleteMethod
   };
   return (
     <DictionaryComponent {...props}/>
