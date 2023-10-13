@@ -1,1 +1,1 @@
-export const apiURL = 'https://random-data-api.com/api/'
+export const url = 'https://random-data-api.com/api/'

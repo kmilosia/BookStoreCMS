@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Book,Author,City,Country, Home,RentalStatus, Login,AccountStatus,Availability,Category,Edition,FileFormat,BookForm,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
+import Payment from './pages/dictionary/Payment';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false)
@@ -20,6 +21,7 @@ function App() {
             <Route path='/city' element={<City />}/>         
             <Route path='/language' element={<Language />}/>         
             <Route path='/country' element={<Country />}/>         
+            <Route path='/payment' element={<Payment />}/>         
             <Route path='/account-status' element={<AccountStatus />}/>
             <Route path='/permission' element={<Permission />}/>
             <Route path='/availability' element={<Availability />}/>

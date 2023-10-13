@@ -2,9 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../styles'
 import CloseWindowButton from '../components/CloseWindowButton'
-import axios from 'axios'
 
-function NewDictionaryRecord({setShowNewModule,title,addMethod}) {
+function NewDictionaryRecord({setShowNewModule,postData,table}) {
     const [nameValue, setNameValue] = useState('')
     //onchange method for observing changes in name input
     const handleValueChange = (e) => {
@@ -15,9 +14,10 @@ function NewDictionaryRecord({setShowNewModule,title,addMethod}) {
         setShowNewModule(false)
     }
     const handleAcceptButton = () => {
-        addMethod(nameValue)
+        postData(nameValue)
         handleCloseModule()
     } 
+    const title = table.split(/(?=[A-Z])/).join(" ").toLowerCase();
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>

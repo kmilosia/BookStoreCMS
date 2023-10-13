@@ -6,8 +6,8 @@ import axios from 'axios'
 import NewDictionaryRecord from '../../modules/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
-function AccountStatus() {
-    const table = "AccountStatus"
+function Payment() {
+    const table = 'PaymentMethod'
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -20,7 +20,7 @@ function AccountStatus() {
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/AccountStatus`)
+          const response = await axiosClient.get(`/PaymentMethod`)
           console.log(response.data);
           setData(response.data)
       }catch(err){
@@ -30,7 +30,7 @@ function AccountStatus() {
   
    const postData = async (name) => {
       try{
-          const response = await axiosClient.post(`/AccountStatus`, {
+          const response = await axiosClient.post(`/PaymentMethod`, {
               name: name,
           })
           getAllData()
@@ -39,23 +39,21 @@ function AccountStatus() {
       }
   }
   
-   const putData = async (id, nameValue) => {
+   const putData = async (id, name) => {
       try{
-          const response = await axiosClient.put(`/AccountStatus/${id}`, {
-              id: id,
-              name: nameValue,
+          const response = await axiosClient.put(`/PaymentMethod/${id}`, {
+              name: name,
           })
-          console.log(response.data);
           getAllData()
       }catch(err){
-          console.error(err.response)
+          console.error(err)
       }
   }
   
    const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/AccountStatus/${id}`)
-          console.log(id);
+          const response = await axiosClient.delete(`/PaymentMethod/${id}`)
+          getAllData()
       }catch(err){
           console.error(err)
       }
@@ -87,11 +85,11 @@ function AccountStatus() {
   return (
     <>
         <DictionaryComponent {...props}/>
-        {showNewModule && <NewDictionaryRecord table={table} setShowNewModule={setShowNewModule} postData={postData} />}
+        {showNewModule && <NewDictionaryRecord postData={postData} setShowNewModule={setShowNewModule} table={table}/>}
     </>
   )
 }
 
-export default AccountStatus
+export default Payment
 
 

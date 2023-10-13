@@ -6,7 +6,7 @@ function ListHeader(props) {
   return (
     <div className={`list-header ${gridCols}`}>
         {props.columnNames.map(column => (
-            <p className='list-header-p'>{column.name}</p>
+            <p key={column.name} className='list-header-p'>{column.name}</p>
         ))}    
     </div>
   )

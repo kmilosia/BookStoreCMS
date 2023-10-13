@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
@@ -14,6 +13,7 @@ function PaymentMethod() {
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+
     const fetchMethods = () => {
       axios.get('https://localhost:7247/api/PaymentMethod')
       .then(response => {
@@ -22,10 +22,19 @@ function PaymentMethod() {
       })
       .catch(error => {
         console.error(error);
-      })        
+      })    
     } 
-    const editMethod = () => {
-
+    const editMethod = (id, nameValue) => {
+      axios.put(`https://localhost:7247/api/PaymentMethod/${id}`, {
+        name: nameValue
+      })
+      .then(response => {
+        console.log(`Payment method of ID ${id} has been updated`);
+        fetchMethods()
+      })
+      .catch(error => {
+        console.error(error)
+      })
     }  
     const addMethod = (nameValue) => {
       axios.post('https://localhost:7247/api/PaymentMethod', {
