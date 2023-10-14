@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
-import axios from 'axios'
 import NewDictionaryRecord from '../../modules/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
@@ -14,21 +13,18 @@ function AccountStatus() {
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
           const response = await axiosClient.get(`/AccountStatus`)
-          console.log(response.data);
           setData(response.data)
       }catch(err){
           console.error(err)
       }
-  }
-  
-   const postData = async (name) => {
+    }
+    const postData = async (name) => {
       try{
           const response = await axiosClient.post(`/AccountStatus`, {
               name: name,
@@ -37,33 +33,31 @@ function AccountStatus() {
       }catch(err){
           console.error(err)
       }
-  }
-  
-   const putData = async (id, nameValue) => {
+    }
+    const putData = async (id, nameValue) => {
       try{
           const response = await axiosClient.put(`/AccountStatus/${id}`, {
               id: id,
               name: nameValue,
           })
-          console.log(response.data);
           getAllData()
       }catch(err){
-          console.error(err.response)
+        console.error(err)
       }
-  }
-  
-   const deleteData = async (id) => {
+    }
+    const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/AccountStatus/${id}`)
-          console.log(id);
+          getAllData()
       }catch(err){
           console.error(err)
       }
-  }
+    }
 
     useEffect(()=>{
         getAllData()
     },[])
+    
     const props = {
       table,
       data,

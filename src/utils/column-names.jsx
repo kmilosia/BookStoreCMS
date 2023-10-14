@@ -1,26 +1,26 @@
 export const authorColumnNames = [
     { name: 'ID'},
-    { name: 'Name'},
-    { name: 'Surname'}
+    { name: 'Imię'},
+    { name: 'Nazwisko'}
  ]
 export const dictionaryColumnNames = [
     { name: 'ID'},
-    { name: 'Name'}
+    { name: 'Nazwa'}
 ]
 export const addressColumnNames = [
     {name: 'ID'},
-    {name: 'Street'},
-    {name: 'Postcode'},
-    {name: 'Country'},
-    {name: 'City'},
+    {name: 'Ulica'},
+    {name: 'Kod Pocztowy'},
+    {name: 'Kraj'},
+    {name: 'Miasto'},
 ]
 export const deliveryMethodColumnNames = [
     { name: 'ID'},
-    { name: 'Name'},
-    { name: 'Price'}
+    { name: 'Nazwa'},
+    { name: 'Kwota'}
 ]
 export const publisherColumnName = [
     { name: 'ID'},
-    { name: 'Name'},
-    { name: 'Description'}
+    { name: 'Nazwa'},
+    { name: 'Opis'}
 ]

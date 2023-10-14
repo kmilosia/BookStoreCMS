@@ -7,10 +7,10 @@ function AddNewButton(props) {
     props.setShowNewModule(true)
 }
   return (
-    <button onClick={handleAddClick} className='flex flex-row justify-between  items-center rounded-lg bg-saphire-500 text-white px-3 py-2 text-sm hover:bg-saphire-600'>
+    <button onClick={handleAddClick} className='flex flex-row justify-between items-center rounded-md bg-orange-500 text-dracula-100 px-3 py-2 text-sm hover:bg-orange-600'>
         <div className='flex flex-row justify-between items-center'>
-            <FiPlus className='text-lg mx-1 text-gray-100 font-semibold'/>
-            <h3 className='mx-2 text-base'>Add {props.title}</h3>
+            <FiPlus className='text-xl mx-1 text-dracula-100 font-semibold'/>
+            <h3 className='mx-2 text-base'>{props.title}</h3>
         </div>              
     </button>
   )

@@ -15,9 +15,10 @@ import EditAuthor from '../modules/EditAuthor'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import ViewAuthor from '../modules/ViewAuthor'
+import axiosClient from '../api/apiClient'
 
 function Author() {
-    const title = 'author'
+    const table = 'Author'
     const [authors, setAuthors] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -26,16 +27,43 @@ function Author() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    const fetchAuthors = () => {
-        const address = `v2/beers?size=6`
-        fetchAll({address})
-          .then(data => {setAuthors(data)})
-          .catch(error=>{
-            console.error('Error fetching authors', error);
-          })
-    }     
+   
     const sortedItems = sortItems(authors, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/Author`)
+          setAuthors(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (object) => {
+      try{
+          const response = await axiosClient.post(`/Author`, object)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/Author/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, object) => {
+      try{
+          const response = await axiosClient.put(`/Author/${id}`, object)
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+  }
+
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -47,19 +75,20 @@ function Author() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
+
     useEffect(()=>{
-        fetchAuthors()
+        getAllData()
     },[])
       
   return (
     <>
     <div className='main-wrapper'>
-        <h1 className='main-header'>Authors</h1>    
+        <h1 className='main-header'>Autorzy</h1>    
         <div className='filter-panel'>
             <SortBar options={authorSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
             <div className='flex-x'>
-            <Searchbar setSearchValue={setSearchValue} title={title} />
-            <AddNewButton setShowNewModule={setShowNewModule} title={title} /> 
+            <Searchbar setSearchValue={setSearchValue} title="Szukaj autora..." />
+            <AddNewButton setShowNewModule={setShowNewModule} title="Dodaj Autora" /> 
             </div>  
         </div>
         <ListHeader columnNames={authorColumnNames} />      
@@ -76,9 +105,9 @@ function Author() {
             </div>        
         ))}
     </div>
-    {showNewModule && <NewAuthor setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditAuthor editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewAuthor setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewAuthor postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditAuthor putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewAuthor editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

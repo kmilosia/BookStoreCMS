@@ -1,5 +1,5 @@
 import React from 'react'
-import pageNotFoundImage from '../assets/pagenotfound.png'
+import pageNotFoundImage from '../assets/404.png'
 import { Link } from 'react-router-dom'
 
 function PageNotFoundError() {

@@ -9,6 +9,7 @@ import {FiSettings, FiPlus, FiMinus} from 'react-icons/fi'
 import hannahAvatar from '../assets/hannah.jpg'
 import {MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight,MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md'
 import { checkTheme } from '../utils/theme'
+import {GiSecretBook} from 'react-icons/gi'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -26,34 +27,31 @@ function Sidebar() {
     document.documentElement.classList.toggle('dark', isDarkTheme);
   }, [isDarkTheme]);
 
-  const primaryLinkStyle = 'flex flex-row items-center hover:text-saphire-600 py-2 justify-between px-1'
-  const secondaryLinkStyle = 'flex flex-row items-center py-2 hover:text-saphire-500'
+  const primaryLinkStyle = 'flex flex-row items-center hover:text-orange-500 py-2 justify-between px-1'
+  const secondaryLinkStyle = 'flex flex-row items-center py-2 hover:text-orange-500'
   return (
-    <div className='bg-gray-50 h-screen w-[300px] grid content-between text-gray-800 dark:text-gray-300 dark:bg-gray-800'>
-      <div className='flex flex-row items-center justify-between border-b-[1px] dark:border-gray-700 px-2 py-3'>
-        <div className='flex flex-row items-center'>
-          {isDarkTheme ? 
-          <Link to='/'><img alt='Logo' src={logoWhite} width={25} className='mx-1'/></Link> :
-          <Link to='/'><img alt='Logo' src={logoBlack} width={25} className='mx-1'/></Link>
-          }
-          <span className='font-logo ml-1'>Owl's Cranny</span>
-        </div>
-        {/* <button className='mx-1'><MdOutlineKeyboardArrowLeft className='text-xl text-gray-700 dark:text-gray-400 dark:hover:text-gray-50 hover:text-gray-900'/></button>   */}
+    <div style={{gridTemplateRows: 'max-content auto max-content'}} className='bg-dracula-100 max-h-screen w-[300px] grid text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
+      
+      <div className='flex flex-row items-center justify-between border-b-[1px] dark:border-dracula-600 px-2 py-3'>
+        <Link className='flex flex-row items-center p-1 transition-all text-orange-600 hover:text-orange-700 dark:hover:text-orange-500'>
+          <GiSecretBook className='text-3xl mx-1'/>
+          <h1 className='text-lg font-semibold font-logo self-end'>Spellarium</h1>
+        </Link> 
       </div>
 
-      <div className='flex flex-col h-full px-3 py-4 overflow-y-scroll hidden-scroll'>
-        <span className='text-xs text-gray-500 font-semibold my-1 mx-2'>OVERVIEW</span>
-              
+      <div className='flex flex-col h-full px-3 py-4 overflow-y-scroll hidden-scroll justify-start'>
+        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-1 mx-2'>OGÓLNE</span>
         <button onClick={()=> setIsDictionaryExpanded(!isDictionaryExpanded)} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
             <BiBook className='text-xl mx-1'/>
-            <span>Dictionary</span>
+            <span>Słownik</span>
           </div>
-          <FiPlus className='text-gray-400 dark:text-gray-600'/>
+          <FiPlus className='text-dracula-500 dark:text-dracula-400'/>
         </button>
         {isDictionaryExpanded &&  
-        <div className='flex flex-col px-4 border-l-[1px] ml-[1.1rem] text-gray-400 dark:border-gray-600'>
-          <Link to='/account-status' className={secondaryLinkStyle}>Account status</Link>
+        <div className='flex flex-col px-4 border-l-[1px] ml-[1.1rem] text-dracula-500 dark:text-dracula-400 dark:border-dracula-600'>
+          <Link to='/account-status' className={secondaryLinkStyle}>Status Konta</Link>
+          <Link to='/author' className={secondaryLinkStyle}>Autor</Link>
           <Link to='/admin-role' className={secondaryLinkStyle}>Admin role</Link>
           <Link to='/availability' className={secondaryLinkStyle}>Availability</Link>
           <Link to='/category' className={secondaryLinkStyle}>Category</Link>
@@ -66,7 +64,7 @@ function Sidebar() {
           <Link to='/order-status' className={secondaryLinkStyle}>Order status</Link>
           <Link to='/shipping-status' className={secondaryLinkStyle}>Shipping status</Link>
           <Link to='/transaction-status' className={secondaryLinkStyle}>Transaction status</Link>            
-        </div> }  
+        </div> }   
 
         <button onClick={()=> setIsOrderExpanded(!isOrderExpanded)} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
@@ -112,46 +110,36 @@ function Sidebar() {
           <Link to='/transaction-status' className={secondaryLinkStyle}>Transaction status</Link>            
         </div> }
 
-        <button className='flex flex-row items-center hover:text-saphire-600 py-2 justify-between px-1'>
+         <button className='flex flex-row items-center hover:text-saphire-600 py-2 justify-between px-1'>
           <div className='flex flex-row items-center'>
             <BiUser className='text-xl mx-1'/>
             <span>User</span>
           </div>
           <FiPlus />
-        </button>
+        </button>        
 
-        <button className='flex flex-row items-center hover:text-saphire-600 py-2 justify-between px-1'>
-          <div className='flex flex-row items-center'>
-            <BiUser className='text-xl mx-1'/>
-            <span>User</span>
-          </div>
-          <FiPlus />
-        </button>
-        
       </div>
-
-      <div>
-
-      <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-gray-700'>
-        <span className='text-xs text-gray-500 font-semibold my-1 mx-2'>ACCOUNT</span>       
-        <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-2 hover:text-saphire-500'>
-          {isDarkTheme ? <><BsMoonStarsFill className='text-lg mx-2'/><span>Dark mode</span></> : <><BsSunFill className='text-lg mx-2'/><span>Light mode</span></>}
+      <div className='flex flex-col'>
+      <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>
+        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-1 mx-2'>KONTO</span>       
+        <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-2 hover:text-orange-500'>
+          {isDarkTheme ? <><BsMoonStarsFill className='text-lg mx-2'/><span>Tryb nocny</span></> : <><BsSunFill className='text-lg mx-2'/><span>Tryb dzienny</span></>}
         </button>
-        <Link className='flex flex-row items-center py-2 hover:text-saphire-500'><FiSettings className='text-lg mx-2'/>Settings</Link>
-        <button className='flex flex-row items-center py-2 hover:text-saphire-500'><AiOutlineLogout className='text-lg mx-2 '/>Log out</button>      
+        <Link className='flex flex-row items-center py-2 hover:text-orange-500'><FiSettings className='text-lg mx-2'/>Ustawienia</Link>
+        <button className='flex flex-row items-center py-2 hover:text-orange-500'><AiOutlineLogout className='text-lg mx-2 '/>Wyloguj się</button>      
       </div>
-      <div className='border-t-[1px] py-4 px-3 flex flex-row items-center dark:border-gray-700'>
+       <div className='border-t-[1px] py-4 px-3 flex flex-row items-center dark:border-dracula-600'>
         <div>
           <img src={hannahAvatar} width={30} className='rounded-3xl'/>
         </div>
         <div className='flex flex-col mx-2'>
           <h1 className='text-xs font-semibold'>Hannah Montana</h1>
-          <p className='text-xs text-gray-500 dark:text-gray-400'>Accountant</p>
+          <p className='text-xs text-gray-500 dark:text-gray-400'>Admin</p>
         </div>
       </div>
       </div>
 
-    </div>
+    </div>//main
   )
 }
 
