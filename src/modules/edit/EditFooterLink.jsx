@@ -92,13 +92,6 @@ function EditFooterLink(props) {
       setSelectedOption(selected);
     }
   }, [columns, columnId]);
-  // useEffect(()=> {
-  //   getFooterColumns()
-  //   getItem(props.editedID)
-  //   let selected = columns.find((col) => col.value === columnId);
-  //   setSelectedOption(selected)
-        
-  // },[])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
