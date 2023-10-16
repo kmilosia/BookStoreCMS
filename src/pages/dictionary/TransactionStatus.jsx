@@ -1,40 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function TransactionStatus() {
-    const title = 'transaction status'
-    const header = 'Transaction Statuses'
-    const [statuses, setStatuses] = useState([])
+    const title = "Status Transakcji"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    //fetch all statuses from db
-    const fetchStatuses = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setStatuses(data)})
-        .catch(error=>{
-          console.error('Error fetching transaction statuses', error);
-        })
-    }   
-    //render array of sorted statuses from sort categories method which returns array of sorted array
-    const sortedItems = sortItems(statuses, selectedOption, isAscending);
-    //render array from sorted statuses that will be filtered by value from searchbar
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
-    //render page
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/TransactionsStatus`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/TransactionsStatus`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/TransactionsStatus/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/TransactionsStatus/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchStatuses()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      statuses,
-      setStatuses,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -45,10 +72,17 @@ function TransactionStatus() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

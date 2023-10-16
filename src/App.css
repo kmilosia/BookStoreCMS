@@ -9,7 +9,7 @@
       @apply text-dracula-900 dark:text-dracula-100;
     }
     .table-row-wrapper{
-      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-lg my-4 dark:bg-gray-700 dark:text-gray-100;
+      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-lg my-4 dark:bg-dracula-700 dark:text-gray-100;
     }
     .table-button{
       @apply rounded-3xl bg-saphire-100 p-3 mx-2 hover:bg-saphire-200 dark:text-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900;
@@ -35,8 +35,11 @@
     .sidebar-link{
       @apply flex flex-row my-2 transition-all p-2 rounded-3xl text-gray-700 hover:bg-saphire-500 hover:text-gray-200;
     }
+    .sidemenu-link{
+      @apply flex flex-row items-center py-2 hover:text-orange-500;
+    }
     .main-wrapper{
-      @apply h-full px-7 py-4 bg-slate-200 overflow-y-scroll dark:bg-gray-900;
+      @apply h-full px-7 py-4 bg-slate-200 overflow-y-scroll dark:bg-dracula-900;
     }
     .main-header{
       @apply text-3xl text-midnight-800 font-semibold my-4 dark:text-midnight-100;

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { backgroundOverlayModule } from '../styles'
-import CloseWindowButton from '../components/CloseWindowButton'
-import axiosClient from '../api/apiClient'
+import { backgroundOverlayModule } from '../../styles'
+import CloseWindowButton from '../../components/CloseWindowButton'
+import axiosClient from '../../api/apiClient'
 
 function EditAuthor(props) {
     const [name, setName] = useState('')

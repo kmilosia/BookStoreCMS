@@ -1,40 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function FileFormat() {
-    const title = 'file format'
-    const header = 'File Formats'
-    const [formats, setFormats] = useState([])
+    const title = "Format Pliku"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    //fetch all formats from db
-    const fetchFormats = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setFormats(data)})
-        .catch(error=>{
-          console.error('Error fetching file formats', error);
-        })
-    }   
-    //render array of sorted formats from sortcategories method which returns array of sorted array
-    const sortedItems = sortItems(formats, selectedOption, isAscending);
-    //render array from sorted formats that will be filtered by value from searchbar
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
-    //render page
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/FileFormat`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/FileFormat`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/FileFormat/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/FileFormat/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchFormats()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      formats,
-      setFormats,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -45,10 +72,17 @@ function FileFormat() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

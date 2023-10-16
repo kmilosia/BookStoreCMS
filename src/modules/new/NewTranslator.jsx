@@ -1,20 +1,16 @@
 import React from 'react'
 import { useState } from 'react'
-import { backgroundOverlayModule } from '../styles'
-import CloseWindowButton from '../components/CloseWindowButton'
+import { backgroundOverlayModule } from '../../styles'
+import CloseWindowButton from '../../components/CloseWindowButton'
 
-function NewAuthor({setShowNewModule, postData}) {
+function NewTranslator({setShowNewModule, postData}) {
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [description, setDescription] = useState('')
     const handleNameInput = (e) => {
         setName(e.target.value)
     }
     const handleSurnameInput = (e) => {
         setSurname(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -23,7 +19,6 @@ function NewAuthor({setShowNewModule, postData}) {
         const data = {
             name: name,
             surname: surname,
-            description: description,
         }
         postData(data)
         handleCloseModule()
@@ -33,10 +28,9 @@ function NewAuthor({setShowNewModule, postData}) {
         <div className='rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/5'>
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='p-4 flex flex-col'>
-                <h1 className='text-2xl font-semibold mb-2 text-dracula-900 dark:text-dracula-100'>Dodaj nowego autora</h1>
+                <h1 className='text-2xl font-semibold mb-2 text-dracula-900 dark:text-dracula-100'>Dodaj nowego translatora</h1>
                 <input onChange={handleNameInput} type='text' placeholder='Imię' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
                 <input onChange={handleSurnameInput} type='text' placeholder='Nazwisko' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <textarea onChange={handleDescriptionInput} placeholder='Opis autora' rows={4} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
                 <button onClick={handleAcceptButton} className='bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600'>Akceptuj</button>
             </div>
         </div>
@@ -44,4 +38,4 @@ function NewAuthor({setShowNewModule, postData}) {
   )
 }
 
-export default NewAuthor
+export default NewTranslator

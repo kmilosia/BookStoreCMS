@@ -4,7 +4,7 @@ import Searchbar from '../../components/Searchbar'
 import AddNewButton from '../../components/AddNewButton'
 import { dictionarySortOptions } from '../../utils/select-options'
 import ListHeader from '../../components/ListHeader'
-import { dictionaryColumnNames } from '../../utils/column-names'
+import { dictionaryColumns } from '../../utils/column-names'
 import { AiFillEdit } from 'react-icons/ai'
 import { FaSave } from 'react-icons/fa'
 import { BsTrash3Fill } from 'react-icons/bs'
@@ -31,20 +31,18 @@ const handleSaveClick = (id) => {
 const handleDeleteClick = (id) => {
   props.deleteData(id)
 }
-const title = props.table.split(/(?=[A-Z])/).join(" ");
-
   return (
     <>
     <div className='main-wrapper'>
-        <h1 className='main-header'>{title}</h1>    
+        <h1 className='main-header'>{props.title}</h1>    
         <div className='filter-panel'>
             <SortBar options={dictionarySortOptions} setSelectedOption={props.setSelectedOption} selectedOption={props.selectedOption} isAscending={props.isAscending} setIsAscending={props.setIsAscending}/>                     
             <div className='flex-x'>
-            <Searchbar setSearchValue={props.setSearchValue} title={title} />
-            <AddNewButton setShowNewModule={props.setShowNewModule} title={title} /> 
+            <Searchbar setSearchValue={props.setSearchValue} title={props.title} />
+            <AddNewButton setShowNewModule={props.setShowNewModule} title={props.title} /> 
             </div>  
         </div>
-        <ListHeader  columnNames={dictionaryColumnNames}/>
+        <ListHeader  columnNames={dictionaryColumns}/>
             {props.filteredItems.map(item => (             
               <div key={item.id} className='table-row-wrapper'>
                 <p className='px-2'>{item.id}</p>

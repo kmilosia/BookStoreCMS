@@ -2,72 +2,66 @@ import React, { useEffect, useState } from 'react'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
-import axios from 'axios'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function PaymentMethod() {
-    const title = 'payment method'
-    const header = 'Payment Methods'
-    const [methods, setMethods] = useState([])
+    const title = "Forma Płatności"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-
-    const fetchMethods = () => {
-      axios.get('https://localhost:7247/api/PaymentMethod')
-      .then(response => {
-        console.log(response.data);
-        setMethods(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      })    
-    } 
-    const editMethod = (id, nameValue) => {
-      axios.put(`https://localhost:7247/api/PaymentMethod/${id}`, {
-        name: nameValue
-      })
-      .then(response => {
-        console.log(`Payment method of ID ${id} has been updated`);
-        fetchMethods()
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    }  
-    const addMethod = (nameValue) => {
-      axios.post('https://localhost:7247/api/PaymentMethod', {
-        name: nameValue,
-      })
-      .then(response => {
-        console.log('New payment method has been added');
-        fetchMethods()
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    }
-    const deleteMethod = (id) => {
-      axios.delete(`https://localhost:7247/api/PaymentMethod/${id}`)
-      .then(response => {
-        console.log(`Payment method with ID ${id} has been deleted`);
-        fetchMethods()
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    }
-    const sortedItems = sortItems(methods, selectedOption, isAscending);
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/PaymentMethod`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/PaymentMethod`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/PaymentMethod/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/PaymentMethod/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchMethods()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      methods,
-      setMethods,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -79,13 +73,16 @@ function PaymentMethod() {
       isAscending,
       setIsAscending,
       filteredItems,
-      deleteMethod,
-      fetchMethods,
-      addMethod,
-      editMethod
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
-import { backgroundOverlayModule } from '../styles'
-import CloseWindowButton from '../components/CloseWindowButton'
+import { backgroundOverlayModule } from '../../styles'
+import CloseWindowButton from '../../components/CloseWindowButton'
 
 function EditAddress(props) {
     const [street, setStreet] = useState('')

@@ -1,40 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function Permission() {
-    const title = 'permission'
-    const header = 'Permissions'
-    const [permissions, setPermissions] = useState([])
+    const title = "Przywileje"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    //fetch all genders from db
-    const fetchPermissions = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setPermissions(data)})
-        .catch(error=>{
-          console.error('Error fetching permissions', error);
-        })
-    }   
-    //render array of sorted genders from sortcategories method which returns array of sorted array
-    const sortedItems = sortItems(permissions, selectedOption, isAscending);
-    //render array from sorted genders that will be filtered by value from searchbar
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
-    //render page
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/Permission`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/Permission`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/Permission/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/Permission/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchPermissions()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      permissions,
-      setPermissions,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -45,10 +72,17 @@ function Permission() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

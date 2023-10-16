@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import logoBlack from '../assets/logo-black-bold.png'
-import logoWhite from '../assets/logo-white-bold.png'
 import { BiUser, BiPackage, BiBook, BiBookBookmark} from 'react-icons/bi'
-import {AiOutlineLogout} from 'react-icons/ai'
-import {BsFillSunFill, BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
-import {FiSettings, FiPlus, FiMinus} from 'react-icons/fi'
+import {AiOutlineClose, AiOutlineLogout} from 'react-icons/ai'
+import {MdMiscellaneousServices} from 'react-icons/md'
+import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
+import {FiSettings,FiLayout, FiMis} from 'react-icons/fi'
 import hannahAvatar from '../assets/hannah.jpg'
-import {MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight,MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md'
 import { checkTheme } from '../utils/theme'
 import {GiSecretBook} from 'react-icons/gi'
+import DictionaryLinks from './links/DictionaryLinks'
+import LayoutLinks from './links/LayoutLinks'
+import OtherLinks from './links/OtherLinks'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
-  const [isDictionaryExpanded, setIsDictionaryExpanded] = useState(false)
-  const [isOrderExpanded, setIsOrderExpanded] = useState(false)
-  const [isBookExpanded, setIsBookExpanded] = useState(false)
+  const [isSideMenuExpanded, setIsSideMenuExpanded] = useState(false)
+  const [sideMenu, setSideMenu] = useState(null)
+  const toggleSideMenu = (menu) => {
+    setSideMenu(menu)
+    setIsSideMenuExpanded(true)
+  }
   const toggleTheme = () => {
     setIsDarkTheme((prevTheme) => {
       const newTheme = !prevTheme;
@@ -28,9 +32,11 @@ function Sidebar() {
   }, [isDarkTheme]);
 
   const primaryLinkStyle = 'flex flex-row items-center hover:text-orange-500 py-2 justify-between px-1'
-  const secondaryLinkStyle = 'flex flex-row items-center py-2 hover:text-orange-500'
+
   return (
-    <div style={{gridTemplateRows: 'max-content auto max-content'}} className='bg-dracula-100 max-h-screen w-[300px] grid text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
+    <div className='flex flex-row max-h-screen w-auto'>
+
+    <div style={{gridTemplateRows: 'max-content auto max-content'}} className='bg-dracula-100 max-h-full w-auto grid text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
       
       <div className='flex flex-row items-center justify-between border-b-[1px] dark:border-dracula-600 px-2 py-3'>
         <Link className='flex flex-row items-center p-1 transition-all text-orange-600 hover:text-orange-700 dark:hover:text-orange-500'>
@@ -41,82 +47,28 @@ function Sidebar() {
 
       <div className='flex flex-col h-full px-3 py-4 overflow-y-scroll hidden-scroll justify-start'>
         <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-1 mx-2'>OGÓLNE</span>
-        <button onClick={()=> setIsDictionaryExpanded(!isDictionaryExpanded)} className={primaryLinkStyle}>
+
+        <button onClick={() => toggleSideMenu("dictionary")} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
             <BiBook className='text-xl mx-1'/>
             <span>Słownik</span>
           </div>
-          <FiPlus className='text-dracula-500 dark:text-dracula-400'/>
         </button>
-        {isDictionaryExpanded &&  
-        <div className='flex flex-col px-4 border-l-[1px] ml-[1.1rem] text-dracula-500 dark:text-dracula-400 dark:border-dracula-600'>
-          <Link to='/account-status' className={secondaryLinkStyle}>Status Konta</Link>
-          <Link to='/author' className={secondaryLinkStyle}>Autor</Link>
-          <Link to='/admin-role' className={secondaryLinkStyle}>Admin role</Link>
-          <Link to='/availability' className={secondaryLinkStyle}>Availability</Link>
-          <Link to='/category' className={secondaryLinkStyle}>Category</Link>
-          <Link to='/edition' className={secondaryLinkStyle}>Edition</Link>
-          <Link to='/file-format' className={secondaryLinkStyle}>File format</Link>
-          <Link to='/form' className={secondaryLinkStyle}>Form</Link>
-          <Link to='/gender' className={secondaryLinkStyle}>Gender</Link>
-          <Link to='/city' className={secondaryLinkStyle}>City</Link>
-          <Link to='/country' className={secondaryLinkStyle}>Country</Link>
-          <Link to='/order-status' className={secondaryLinkStyle}>Order status</Link>
-          <Link to='/shipping-status' className={secondaryLinkStyle}>Shipping status</Link>
-          <Link to='/transaction-status' className={secondaryLinkStyle}>Transaction status</Link>            
-        </div> }   
-
-        <button onClick={()=> setIsOrderExpanded(!isOrderExpanded)} className={primaryLinkStyle}>
+          
+        <button onClick={()=> toggleSideMenu("layout")} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
-            <BiPackage className='text-xl mx-1'/>
-            <span>Order</span>
+            <FiLayout className='text-xl mx-1'/>
+            <span>Layout</span>
           </div>
-          <FiPlus className='text-gray-400 dark:text-gray-600'/>
         </button>
-        {isOrderExpanded &&  
-        <div className='flex flex-col px-4 border-l-[1px] ml-[1.1rem] text-gray-400 dark:border-gray-600'>
-          <Link to='/account-status' className={secondaryLinkStyle}>Account status</Link>
-          <Link to='/admin-role' className={secondaryLinkStyle}>Admin role</Link>
-          <Link to='/availability' className={secondaryLinkStyle}>Availability</Link>
-          <Link to='/category' className={secondaryLinkStyle}>Category</Link>
-          <Link to='/edition' className={secondaryLinkStyle}>Edition</Link>
-          <Link to='/file-format' className={secondaryLinkStyle}>File format</Link>
-          <Link to='/form' className={secondaryLinkStyle}>Form</Link>
-          <Link to='/gender' className={secondaryLinkStyle}>Gender</Link>
-          <Link to='/order-status' className={secondaryLinkStyle}>Order status</Link>
-          <Link to='/shipping-status' className={secondaryLinkStyle}>Shipping status</Link>
-          <Link to='/transaction-status' className={secondaryLinkStyle}>Transaction status</Link>            
-        </div> }
 
-        <button onClick={()=> setIsBookExpanded(!isBookExpanded)} className={primaryLinkStyle}>
+        <button onClick={()=> toggleSideMenu("other")} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
-            <BiBookBookmark className='text-xl mx-1'/>
-            <span>Book</span>
+            <MdMiscellaneousServices className='text-xl mx-1'/>
+            <span>Inne</span>
           </div>
-          <FiPlus className='text-gray-400 dark:text-gray-600'/>
         </button>
-        {isBookExpanded &&  
-        <div className='flex flex-col px-4 border-l-[1px] ml-[1.1rem] text-gray-400 dark:border-gray-600'>
-          <Link to='/account-status' className={secondaryLinkStyle}>Account status</Link>
-          <Link to='/admin-role' className={secondaryLinkStyle}>Admin role</Link>
-          <Link to='/availability' className={secondaryLinkStyle}>Availability</Link>
-          <Link to='/category' className={secondaryLinkStyle}>Category</Link>
-          <Link to='/edition' className={secondaryLinkStyle}>Edition</Link>
-          <Link to='/file-format' className={secondaryLinkStyle}>File format</Link>
-          <Link to='/form' className={secondaryLinkStyle}>Form</Link>
-          <Link to='/gender' className={secondaryLinkStyle}>Gender</Link>
-          <Link to='/order-status' className={secondaryLinkStyle}>Order status</Link>
-          <Link to='/shipping-status' className={secondaryLinkStyle}>Shipping status</Link>
-          <Link to='/transaction-status' className={secondaryLinkStyle}>Transaction status</Link>            
-        </div> }
-
-         <button className='flex flex-row items-center hover:text-saphire-600 py-2 justify-between px-1'>
-          <div className='flex flex-row items-center'>
-            <BiUser className='text-xl mx-1'/>
-            <span>User</span>
-          </div>
-          <FiPlus />
-        </button>        
+               
 
       </div>
       <div className='flex flex-col'>
@@ -128,18 +80,51 @@ function Sidebar() {
         <Link className='flex flex-row items-center py-2 hover:text-orange-500'><FiSettings className='text-lg mx-2'/>Ustawienia</Link>
         <button className='flex flex-row items-center py-2 hover:text-orange-500'><AiOutlineLogout className='text-lg mx-2 '/>Wyloguj się</button>      
       </div>
-       <div className='border-t-[1px] py-4 px-3 flex flex-row items-center dark:border-dracula-600'>
+       <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>
         <div>
           <img src={hannahAvatar} width={30} className='rounded-3xl'/>
         </div>
         <div className='flex flex-col mx-2'>
-          <h1 className='text-xs font-semibold'>Hannah Montana</h1>
+          <h1 className='text-xs font-semibold whitespace-nowrap'>Hannah Montana</h1>
           <p className='text-xs text-gray-500 dark:text-gray-400'>Admin</p>
         </div>
       </div>
       </div>
 
-    </div>//main
+    </div>
+    
+    {isSideMenuExpanded &&
+    <div className='grid grid-rows-[max-content_auto_max-content] max-h-screen px-2 py-2 border-l-[1px] w-max text-dracula-900 dark:text-dracula-100 dark:border-dracula-600 dark:bg-dracula-700'>
+          
+          {sideMenu === 'dictionary' ? 
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-xl font-semibold'>Słownik</h1>
+          </div>
+          <DictionaryLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/> 
+          </>
+          : sideMenu === "layout" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-xl font-semibold'>Słownik</h1>
+          </div>
+          <LayoutLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+          : sideMenu === "other" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-xl font-semibold'>Inne</h1>
+          </div>
+          <OtherLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+           : ""}
+          <div className='w-full flex justify-center pt-4 pb-2'>
+          <button className='flex justify-end' onClick={() => setIsSideMenuExpanded(false)}><AiOutlineClose className='text-xl transition-all text-dracula-500 hover:text-dracula-600 dark:hover:text-dracula-400'/></button>
+          </div>
+    </div>
+    }
+
+    </div>
   )
 }
 

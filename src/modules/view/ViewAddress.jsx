@@ -1,6 +1,6 @@
 import React from 'react'
-import { backgroundOverlayModule } from '../styles'
-import CloseWindowButton from '../components/CloseWindowButton'
+import { backgroundOverlayModule } from '../../styles'
+import CloseWindowButton from '../../components/CloseWindowButton'
 
 function ViewAddress(props) {
     const handleCloseModule = () => {

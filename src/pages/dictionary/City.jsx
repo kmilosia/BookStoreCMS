@@ -1,36 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function City() {
-    const title = 'city'
-    const header = 'Cities'
-    const [cities, setCities] = useState([])
+    const title = "Miasto"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    const fetchCities = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setCities(data)})
-        .catch(error=>{
-          console.error('Error fetching cities', error);
-        })
-    }   
-    const sortedItems = sortItems(cities, selectedOption, isAscending);
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/City`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/City`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/City/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/City/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchCities()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      cities,
-      setCities,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -41,10 +72,17 @@ function City() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

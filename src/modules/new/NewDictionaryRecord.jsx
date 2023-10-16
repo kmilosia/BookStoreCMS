@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { backgroundOverlayModule } from '../styles'
-import CloseWindowButton from '../components/CloseWindowButton'
+import { backgroundOverlayModule } from '../../styles'
+import CloseWindowButton from '../../components/CloseWindowButton'
 
-function NewDictionaryRecord({setShowNewModule,postData,table}) {
+function NewDictionaryRecord({setShowNewModule,postData,title}) {
     const [nameValue, setNameValue] = useState('')
     //onchange method for observing changes in name input
     const handleValueChange = (e) => {
@@ -17,15 +17,14 @@ function NewDictionaryRecord({setShowNewModule,postData,table}) {
         postData(nameValue)
         handleCloseModule()
     } 
-    const title = table.split(/(?=[A-Z])/).join(" ").toLowerCase();
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Add new {title}</h1>
+                <h1 className='module-header'>Dodaj {title}</h1>
                 <input onChange={handleValueChange} type='text' placeholder='Name' className='module-input-text'/>
-                <button onClick={handleAcceptButton} className='module-button'>Accept</button>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

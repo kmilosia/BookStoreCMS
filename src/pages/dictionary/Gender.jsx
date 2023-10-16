@@ -1,40 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../../api/fetchAPI'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
+import axiosClient from '../../api/apiClient'
 
 function Gender() {
-    const title = 'gender'
-    const header = 'Genders'
-    const [genders, setGenders] = useState([])
+    const title = "Płeć"
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    //fetch all genders from db
-    const fetchGenders = () => {
-      const address = `v2/beers?size=6`
-        fetchAll({address})
-        .then(data => {setGenders(data)})
-        .catch(error=>{
-          console.error('Error fetching genders', error);
-        })
-    }   
-    //render array of sorted genders from sortcategories method which returns array of sorted array
-    const sortedItems = sortItems(genders, selectedOption, isAscending);
-    //render array from sorted genders that will be filtered by value from searchbar
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
-    //render page
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/Gender`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (name) => {
+      try{
+          const response = await axiosClient.post(`/Gender`, {
+              name: name,
+          })
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, nameValue) => {
+      try{
+          const response = await axiosClient.put(`/Gender/${id}`, {
+              id: id,
+              name: nameValue,
+          })
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/Gender/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+
     useEffect(()=>{
-        fetchGenders()
+        getAllData()
     },[])
+    
     const props = {
       title,
-      header,
-      genders,
-      setGenders,
+      data,
+      setData,
       editedID,
       setEditedID,
       selectedOption,
@@ -45,10 +72,17 @@ function Gender() {
       setShowNewModule,
       isAscending,
       setIsAscending,
-      filteredItems
+      filteredItems,
+      getAllData,
+      postData,
+      deleteData,
+      putData
   };
   return (
-    <DictionaryComponent {...props}/>
+    <>
+        <DictionaryComponent {...props}/>
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
+    </>
   )
 }
 

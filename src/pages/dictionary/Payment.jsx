@@ -3,7 +3,7 @@ import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import axios from 'axios'
-import NewDictionaryRecord from '../../modules/NewDictionaryRecord'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
 function Payment() {

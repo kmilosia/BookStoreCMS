@@ -2,23 +2,22 @@ import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/AddNewButton'
-import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { personSortOptions } from '../utils/select-options'
+import { footerColumnsSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { personColumns } from '../utils/column-names'
-import NewAuthor from '../modules/new/NewAuthor'
-import EditAuthor from '../modules/edit/EditAuthor'
+import { footerColumns } from '../utils/column-names'
+import NewFooterColumn from '../modules/new/NewFooterColumn'
+import EditFooterColumn from '../modules/edit/EditFooterColumn'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import ViewAuthor from '../modules/view/ViewAuthor'
+import ViewFooterColumn from '../modules/view/ViewFooterColumn'
 import axiosClient from '../api/apiClient'
 
-function Author() {
-    const [data, setData] = useState([])
+function FooterColumns() {
+    const [columns, setColumns] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
@@ -27,20 +26,21 @@ function Author() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
    
-    const sortedItems = sortItems(data, selectedOption, isAscending);
+    const sortedItems = sortItems(columns, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Author`)
-          setData(response.data)
+          const response = await axiosClient.get(`/FooterColumns`)
+          setColumns(response.data)
+          console.log(response.data);
       }catch(err){
           console.error(err)
       }
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Author`, object)
+          const response = await axiosClient.post(`/FooterColumns`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -48,7 +48,7 @@ function Author() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Author/${id}`)
+          const response = await axiosClient.delete(`/FooterColumns/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -56,7 +56,7 @@ function Author() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Author/${id}`, object)
+          const response = await axiosClient.put(`/FooterColumns/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
@@ -82,20 +82,21 @@ function Author() {
   return (
     <>
     <div className='main-wrapper'>
-        <h1 className='main-header'>Autor</h1>    
+        <h1 className='main-header'>Kolumny w footerze</h1>    
         <div className='filter-panel'>
-            <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
+            <SortBar options={footerColumnsSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
             <div className='flex-x'>
-            <Searchbar setSearchValue={setSearchValue} />
-            <AddNewButton setShowNewModule={setShowNewModule} title="Autor" /> 
+            <Searchbar setSearchValue={setSearchValue}/>
+            <AddNewButton setShowNewModule={setShowNewModule} title="Kolumnę" /> 
             </div>  
         </div>
-        <ListHeader columnNames={personColumns} />      
+        <ListHeader columnNames={footerColumns} />      
         {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-4'>
+            <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.name}</p>
-                <p className='px-2'>{item.surname}</p>
+                <p className='px-2'>{item.position}</p>
+                <p className='px-2'>{item.htmlObject}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -104,11 +105,11 @@ function Author() {
             </div>        
         ))}
     </div>
-    {showNewModule && <NewAuthor postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditAuthor putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewAuthor editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewFooterColumn postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditFooterColumn putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewFooterColumn editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
 
-export default Author
+export default FooterColumns

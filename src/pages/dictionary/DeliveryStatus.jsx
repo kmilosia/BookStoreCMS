@@ -5,8 +5,8 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
-function Availability() {
-    const title = "Dostępność"
+function DeliveryStatus() {
+    const title = "Status Dostawy"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -18,7 +18,7 @@ function Availability() {
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Availability`)
+          const response = await axiosClient.get(`/DeliveryStatus`)
           setData(response.data)
       }catch(err){
           console.error(err)
@@ -26,7 +26,7 @@ function Availability() {
     }
     const postData = async (name) => {
       try{
-          const response = await axiosClient.post(`/Availability`, {
+          const response = await axiosClient.post(`/DeliveryStatus`, {
               name: name,
           })
           getAllData()
@@ -36,7 +36,7 @@ function Availability() {
     }
     const putData = async (id, nameValue) => {
       try{
-          const response = await axiosClient.put(`/Availability/${id}`, {
+          const response = await axiosClient.put(`/DeliveryStatus/${id}`, {
               id: id,
               name: nameValue,
           })
@@ -47,7 +47,7 @@ function Availability() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Availability/${id}`)
+          const response = await axiosClient.delete(`/DeliveryStatus/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -86,6 +86,6 @@ function Availability() {
   )
 }
 
-export default Availability
+export default DeliveryStatus
 
 

@@ -9,12 +9,12 @@ import { addressSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { addressColumnNames } from '../utils/column-names'
+import { addressColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import EditAddress from '../modules/EditAddress'
-import NewAddress from '../modules/NewAddress'
-import ViewAddress from '../modules/ViewAddress'
+import EditAddress from '../modules/edit/EditAddress'
+import NewAddress from '../modules/new/NewAddress'
+import ViewAddress from '../modules/view/ViewAddress'
 
 function Address() {
     const title = 'address'
@@ -62,7 +62,7 @@ function Address() {
             <AddNewButton setShowNewModule={setShowNewModule} title={title} /> 
             </div>  
         </div>
-        <ListHeader columnNames={addressColumnNames} />      
+        <ListHeader columnNames={addressColumns} />      
         {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-6'>
                 <p className='px-2'>{item.id}</p>                       

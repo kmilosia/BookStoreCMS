@@ -5,19 +5,22 @@ import AddNewButton from '../components/AddNewButton'
 import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { personSortOptions } from '../utils/select-options'
+import { dictionarySortOptions, personSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { personColumns } from '../utils/column-names'
-import NewAuthor from '../modules/new/NewAuthor'
-import EditAuthor from '../modules/edit/EditAuthor'
+import { dictionaryColumns, personColumns } from '../utils/column-names'
+import NewTranslator from '../modules/new/NewTranslator'
+import EditTranslator from '../modules/edit/EditTranslator'
+import ViewTranslator from '../modules/view/ViewTranslator'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import ViewAuthor from '../modules/view/ViewAuthor'
 import axiosClient from '../api/apiClient'
+import NewFooterLink from '../modules/new/NewFooterLink'
+import EditFooterLink from '../modules/edit/EditFooterLink'
+import ViewFooterLink from '../modules/view/ViewFooterLink'
 
-function Author() {
+function FooterLinks() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -32,7 +35,7 @@ function Author() {
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Author`)
+          const response = await axiosClient.get(`/FooterLinks`)
           setData(response.data)
       }catch(err){
           console.error(err)
@@ -40,7 +43,7 @@ function Author() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Author`, object)
+          const response = await axiosClient.post(`/FooterLinks`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -48,7 +51,7 @@ function Author() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Author/${id}`)
+          const response = await axiosClient.delete(`/FooterLinks/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -56,7 +59,7 @@ function Author() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Author/${id}`, object)
+          const response = await axiosClient.put(`/FooterLinks/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
@@ -68,8 +71,8 @@ function Author() {
        setShowEditModule(true)
     }
     const handleDeleteClick = (itemID) => {
-      deleteData(itemID)
-    }
+        deleteData(itemID)
+      }
     const handleViewClick = (itemID) => {
       setEditedID(itemID)
       setShowViewModule(true)
@@ -82,20 +85,19 @@ function Author() {
   return (
     <>
     <div className='main-wrapper'>
-        <h1 className='main-header'>Autor</h1>    
+        <h1 className='main-header'>Linki w stopce</h1>    
         <div className='filter-panel'>
-            <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
+            <SortBar options={dictionarySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
             <div className='flex-x'>
             <Searchbar setSearchValue={setSearchValue} />
-            <AddNewButton setShowNewModule={setShowNewModule} title="Autor" /> 
+            <AddNewButton setShowNewModule={setShowNewModule} title="Link Footer" /> 
             </div>  
         </div>
-        <ListHeader columnNames={personColumns} />      
+        <ListHeader columnNames={dictionaryColumns} />      
         {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-4'>
+            <div key={item.id} className='table-row-wrapper grid-cols-3'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.name}</p>
-                <p className='px-2'>{item.surname}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -104,11 +106,11 @@ function Author() {
             </div>        
         ))}
     </div>
-    {showNewModule && <NewAuthor postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditAuthor putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewAuthor editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewFooterLink postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditFooterLink putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewFooterLink editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
 
-export default Author
+export default FooterLinks

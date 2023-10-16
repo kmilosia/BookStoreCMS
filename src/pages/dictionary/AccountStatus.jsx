@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { sortItems } from '../../utils/sort'
 import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
-import NewDictionaryRecord from '../../modules/NewDictionaryRecord'
+import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
 function AccountStatus() {
-    const table = "AccountStatus"
+    const title = "Status Konta"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -59,7 +59,7 @@ function AccountStatus() {
     },[])
     
     const props = {
-      table,
+      title,
       data,
       setData,
       editedID,
@@ -81,7 +81,7 @@ function AccountStatus() {
   return (
     <>
         <DictionaryComponent {...props}/>
-        {showNewModule && <NewDictionaryRecord table={table} setShowNewModule={setShowNewModule} postData={postData} />}
+        {showNewModule && <NewDictionaryRecord title={title} setShowNewModule={setShowNewModule} postData={postData} />}
     </>
   )
 }

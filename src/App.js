@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, Login,AccountStatus,Availability,Category,Edition,FileFormat,BookForm,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 import Payment from './pages/dictionary/Payment';
@@ -28,7 +28,8 @@ function App() {
             <Route path='/category' element={<Category />}/>
             <Route path='/edition' element={<Edition />}/>
             <Route path='/file-format' element={<FileFormat />}/>
-            <Route path='/form' element={<BookForm />}/>
+            <Route path='/form' element={<Form />}/>
+            <Route path='/translator' element={<Translator />}/>
             <Route path='/gender' element={<Gender />}/>
             <Route path='/publisher' element={<Publisher />}/>
             <Route path='/order-status' element={<OrderStatus />}/>
@@ -37,6 +38,9 @@ function App() {
             <Route path='/transaction-status' element={<TransactionStatus />}/>
             <Route path='/payment-method' element={<PaymentMethod />}/>
             <Route path='/delivery-method' element={<DeliveryMethod />}/>
+            <Route path='/delivery-status' element={<DeliveryStatus />}/>
+            <Route path='/footer-columns' element={<FooterColumns />}/>
+            <Route path='/footer-links' element={<FooterLinks />}/>
 
             <Route path='*' element={<PageNotFound />}/>
           </Route>
