@@ -7,6 +7,11 @@ export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}
 ]
+export const imageColumns = [
+    { name: 'ID'},
+    { name: 'Zdjęcie'},
+    { name: 'URL'}
+]
 export const addressColumns = [
     {name: 'ID'},
     {name: 'Ulica'},
@@ -29,4 +34,9 @@ export const footerColumns = [
     { name: 'Nazwa'},
     { name: 'Pozycja'},
     { name: 'HTML Tag'},
+]
+export const bookColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Wydawnictwo'},
 ]

@@ -5,18 +5,21 @@ import AddNewButton from '../components/AddNewButton'
 import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { authorSortOptions } from '../utils/select-options'
+import { imageSortOptions, personSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { publisherColumnName } from '../utils/column-names'
+import { imageColumns, personColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import NewImage from '../modules/NewImage'
+import axiosClient from '../api/apiClient'
+import NewImage from '../modules/new/NewImage'
+import EditImage from '../modules/edit/EditImage'
+import ViewImage from '../modules/view/ViewImage'
+import {truncate} from '../utils/truncate-text'
 
 function Image() {
-    const title = 'image'
-    const [images, setImages] = useState([])
+    const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
@@ -24,57 +27,89 @@ function Image() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    const fetchImages = () => {
-        const address = `v2/beers?size=6`
-        fetchAll({address})
-          .then(data => {setImages(data)})
-          .catch(error=>{
-            console.error('Error fetching images', error);
-          })
-    }     
-    const sortedItems = sortItems(images, selectedOption, isAscending);
+   
+    const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
+
+    const getAllData = async () => {
+      try{
+          const response = await axiosClient.get(`/Images`)
+          setData(response.data)
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const postData = async (object) => {
+      try{
+          const response = await axiosClient.post(`/Images`, object)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+          const response = await axiosClient.delete(`/Images/${id}`)
+          getAllData()
+      }catch(err){
+          console.error(err)
+      }
+    }
+    const putData = async (id, object) => {
+      try{
+          const response = await axiosClient.put(`/Images/${id}`, object)
+          getAllData()
+      }catch(err){
+        console.error(err)
+      }
+  }
+
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
     }
-    const handleDeleteClick = () => {
-   
-    }
+    const handleDeleteClick = (itemID) => {
+        deleteData(itemID)
+      }
     const handleViewClick = (itemID) => {
       setEditedID(itemID)
       setShowViewModule(true)
     }
+
     useEffect(()=>{
-        fetchImages()
+        getAllData()
     },[])
       
   return (
     <>
-    <div className='main-wrapper'>
-        <h1 className='main-header'>Images</h1>    
-        <div className='filter-panel'>
-            <SortBar options={authorSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>                     
-            <div className='flex-x'>
-            <Searchbar setSearchValue={setSearchValue} title={title} />
-            <AddNewButton setShowNewModule={setShowNewModule} title={title} /> 
-            </div>  
+  <div className='h-full grid grid-rows-[max-content_auto] px-6 py-6 bg-slate-200 dark:bg-dracula-900'>
+      <div className='flex flex-col'>
+        <h1 className='main-header'>Zdjęcie</h1>    
+        <div className='flex flex-row justify-end my-4'>
+          <SortBar options={imageSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
+          <AddNewButton setShowNewModule={setShowNewModule} title="Zdjęcie"/>                   
         </div>
-        <ListHeader columnNames={publisherColumnName} />      
-        {filteredItems.map(item => (             
+        <ListHeader  columnNames={imageColumns}/>
+      </div>
+      <div className='w-full overflow-auto scrollbar-default'>
+      {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
-                <p className='px-2'>{item.id}</p>                       
-                <p className='px-2'>{item.name}</p>
-                <p className='px-2'>{item.name}</p>
+                <p className='px-2'>{item.id}</p>
+                <img className='px-2 w-3/5 h-auto object-contain' src={item.imageURL}/>                     
+                <p className='px-2 break-all'>{truncate(item.imageURL, 15, 50)}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick()} className='table-button'><BsTrash3Fill /></button>
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
                 </div>             
             </div>        
         ))}
-    </div>
-    {showNewModule && <NewImage setShowNewModule={setShowNewModule}/>}
+      </div>
+        </div>
+    {showNewModule && <NewImage postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditImage putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewImage editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

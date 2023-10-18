@@ -23,7 +23,7 @@ function NewDictionaryRecord({setShowNewModule,postData,title}) {
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
                 <h1 className='module-header'>Dodaj {title}</h1>
-                <input onChange={handleValueChange} type='text' placeholder='Name' className='module-input-text'/>
+                <input onChange={handleValueChange} type='text' placeholder='Nazwa' className='module-input-text'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

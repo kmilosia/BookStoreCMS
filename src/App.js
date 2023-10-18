@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Address, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 import Payment from './pages/dictionary/Payment';
@@ -16,7 +16,6 @@ function App() {
           <Route element={<Layout />}>
             <Route path='/dashboard' element={<Home />}/>
             <Route path='/author' element={<Author />}/>
-            <Route path='/address' element={<Address />}/>
             <Route path='/book' element={<Book />}/>         
             <Route path='/city' element={<City />}/>         
             <Route path='/language' element={<Language />}/>         
@@ -29,6 +28,7 @@ function App() {
             <Route path='/edition' element={<Edition />}/>
             <Route path='/file-format' element={<FileFormat />}/>
             <Route path='/form' element={<Form />}/>
+            <Route path='/image' element={<Image />}/>
             <Route path='/translator' element={<Translator />}/>
             <Route path='/gender' element={<Gender />}/>
             <Route path='/publisher' element={<Publisher />}/>

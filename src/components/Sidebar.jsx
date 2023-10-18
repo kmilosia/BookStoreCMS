@@ -10,7 +10,7 @@ import { checkTheme } from '../utils/theme'
 import {GiSecretBook} from 'react-icons/gi'
 import DictionaryLinks from './links/DictionaryLinks'
 import LayoutLinks from './links/LayoutLinks'
-import OtherLinks from './links/OtherLinks'
+import BookLinks from './links/BookLinks'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -62,10 +62,10 @@ function Sidebar() {
           </div>
         </button>
 
-        <button onClick={()=> toggleSideMenu("other")} className={primaryLinkStyle}>
+        <button onClick={()=> toggleSideMenu("book")} className={primaryLinkStyle}>
           <div className='flex flex-row items-center'>
-            <MdMiscellaneousServices className='text-xl mx-1'/>
-            <span>Inne</span>
+            <BiBookBookmark className='text-xl mx-1'/>
+            <span>Książka</span>
           </div>
         </button>
                
@@ -94,28 +94,28 @@ function Sidebar() {
     </div>
     
     {isSideMenuExpanded &&
-    <div className='grid grid-rows-[max-content_auto_max-content] max-h-screen px-2 py-2 border-l-[1px] w-max text-dracula-900 dark:text-dracula-100 dark:border-dracula-600 dark:bg-dracula-700'>
+    <div className='grid grid-rows-[max-content_auto_max-content] max-h-screen px-4 py-2 border-l-[1px] w-max text-dracula-900 dark:text-dracula-100 dark:border-dracula-600 dark:bg-dracula-700'>
           
           {sideMenu === 'dictionary' ? 
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
-            <h1 className='text-xl font-semibold'>Słownik</h1>
+            <h1 className='text-base font-semibold'>Słownik</h1>
           </div>
           <DictionaryLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/> 
           </>
           : sideMenu === "layout" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
-            <h1 className='text-xl font-semibold'>Słownik</h1>
+            <h1 className='text-base font-semibold'>Słownik</h1>
           </div>
           <LayoutLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
           </>
-          : sideMenu === "other" ?
+          : sideMenu === "book" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
-            <h1 className='text-xl font-semibold'>Inne</h1>
+            <h1 className='text-base font-semibold'>Książka</h1>
           </div>
-          <OtherLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <BookLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
           </>
            : ""}
           <div className='w-full flex justify-center pt-4 pb-2'>

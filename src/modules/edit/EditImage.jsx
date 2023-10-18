@@ -4,35 +4,34 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 
-function EditPublisher(props) {
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [publisher,setPublisher] = useState({})
+function EditImage(props) {
+    const [imageURL, setImageURL] = useState('')
+    const [source, setSource] = useState('')
+    const [image,setImage] = useState({})
 
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Publisher/${id}`)
-          setPublisher(response.data)
-          setName(response.data.name)
-          setDescription(response.data.description)
+          const response = await axiosClient.get(`/Images/${id}`)
+          setImage(response.data)
+          setImageURL(response.data.imageURL)
+          setSource(response.data.imageURL)
         }catch(err){
           console.error(err)
         }
     }
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
+    const handleURLInput = (e) => {
+        setImageURL(e.target.value)
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
+    const handleAddButton = () => {
+        setSource(imageURL)
+    }
     const handleSaveClick = () => {
-        publisher.name = name
-        publisher.description = description
-        props.putData(publisher.id, publisher)
+        image.imageURL = imageURL
+        props.putData(image.id, image)
         props.setEditedID(null)
         props.setShowEditModule(false)
   }
@@ -44,9 +43,10 @@ function EditPublisher(props) {
         <div className='module-window'>
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj wydawnictwo</h1>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} row={4} value={description} className='module-input-text'/>
+                <h1 className='module-header'>Edytuj zdjęcie</h1>
+                <img src={source} className='w-full object-contain h-auto my-1' />
+                <input onChange={handleURLInput} type='text' value={imageURL} className='module-input-text'/>
+                <button onClick={handleAddButton} className='module-button'>Dodaj zdjęcie</button>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>
@@ -54,4 +54,4 @@ function EditPublisher(props) {
   )
 }
 
-export default EditPublisher
+export default EditImage

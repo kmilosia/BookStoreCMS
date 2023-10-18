@@ -9,7 +9,7 @@
       @apply text-dracula-900 dark:text-dracula-100;
     }
     .table-row-wrapper{
-      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-lg my-4 dark:bg-dracula-700 dark:text-gray-100;
+      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-sm border-b-2 border-dracula-300 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
     }
     .table-button{
       @apply rounded-3xl bg-saphire-100 p-3 mx-2 hover:bg-saphire-200 dark:text-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900;
@@ -18,7 +18,7 @@
       @apply absolute h-full w-full top-0 left-0 flex items-center justify-center;
     }
     .module-window{
-      @apply rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/5;
+      @apply rounded-sm bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-1/3;
     }
     .module-content-wrapper{
       @apply p-4 flex flex-col;
@@ -27,28 +27,28 @@
       @apply text-2xl font-semibold mb-2 text-dracula-900 dark:text-dracula-100;
     }
     .module-input-text{
-      @apply focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-sm my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-button{
-      @apply bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600;
+      @apply bg-orange-500 w-[100%] rounded-sm py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600;
     }
     .sidebar-link{
       @apply flex flex-row my-2 transition-all p-2 rounded-3xl text-gray-700 hover:bg-saphire-500 hover:text-gray-200;
     }
     .sidemenu-link{
-      @apply flex flex-row items-center py-2 hover:text-orange-500;
+      @apply flex flex-row items-center py-2 text-sm hover:text-orange-500;
     }
     .main-wrapper{
       @apply h-full px-7 py-4 bg-slate-200 overflow-y-scroll dark:bg-dracula-900;
     }
     .main-header{
-      @apply text-3xl text-midnight-800 font-semibold my-4 dark:text-midnight-100;
+      @apply text-3xl mx-2 text-midnight-800 font-semibold dark:text-midnight-100;
     }
     .filter-panel{
       @apply flex flex-row my-6 justify-between;
     }
     .list-header{
-      @apply grid grid-cols-3 items-center bg-midnight-50 px-6 py-4 rounded-lg my-4 dark:bg-midnight-900 dark:text-gray-100;
+      @apply grid grid-cols-3 items-center bg-midnight-50 px-6 py-4 rounded-sm my-4 dark:bg-midnight-900 dark:text-gray-100;
     }
     .list-header-p{
       @apply font-semibold px-2;
@@ -57,7 +57,7 @@
         @apply flex flex-row items-center;
     }
     .my-react-select-container .my-react-select__control {
-        @apply bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-100 dark:border-dracula-700 hover:border-dracula-300 dark:hover:border-dracula-500;
+        @apply rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-100 dark:border-dracula-700 hover:border-dracula-300 dark:hover:border-dracula-500;
       }
     
       .my-react-select-container .my-react-select__control--is-focused {
@@ -65,18 +65,22 @@
       }
     
       .my-react-select-container .my-react-select__menu {
-        @apply bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
+        @apply rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
       }
     
       .my-react-select-container .my-react-select__option {
-        @apply text-dracula-500 dark:text-dracula-200 bg-dracula-100 hover:bg-dracula-300 dark:bg-dracula-700 dark:hover:bg-dracula-800;
+        @apply  text-dracula-500 dark:text-dracula-200 bg-dracula-100 hover:bg-dracula-300 dark:bg-dracula-700 dark:hover:bg-dracula-800;
       }
       .my-react-select-container .my-react-select__placeholder{
-        @apply text-dracula-400 dark:text-dracula-500;
+        @apply text-dracula-400;
       }
       .my-react-select-container .my-react-select__input-container,
       .my-react-select-container .my-react-select__single-value {
-        @apply text-dracula-500 dark:text-dracula-400;
+        @apply  text-dracula-700 dark:text-dracula-200;
+      }
+
+      .scrollbar-default{
+        @apply scrollbar-thin pr-[0.1rem] scrollbar-track-dracula-300 scrollbar-thumb-dracula-100 dark:scrollbar-track-dracula-900 dark:scrollbar-thumb-dracula-800 ;
       }
 }
 *{
