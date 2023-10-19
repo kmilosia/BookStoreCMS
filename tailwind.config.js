@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         dracula: {
           100: '#FFFFFF', //big text h1's
-          200: '#FEFEFE', //smaller text h3's
+          150: '#f7f7f7', //big text h1's
+          200: '#efeef2', //smaller text h3's
           300: '#E4E2E9', //grayed text p's ex. navbar
           400: '#B3AFC0', //more grayed text ex.extra elements
+          450: '#84818e',
           500: '#565167', //the grayest text ex.extra info
           600: '#2B2833', //border
           700: '#1D1B22', //modules bg

@@ -21,19 +21,22 @@ function ViewPublisher(props) {
         getItem(props.editedID)
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='module-content-wrapper dark:text-gray-100'>
-                <h1 className='module-header'>Informacje o wydawnictwie</h1>
-                <div className='flex flex-row my-1'>
-                    <p className='font-semibold'>Nazwa:</p>
-                    <h2 className='mx-2'>{publisher.name}</h2>
-                </div>
-                <div className='flex flex-row my-1'>
-                    <p className='font-semibold'>Opis:</p>
-                    <h2 className='mx-2'>{publisher.description}</h2>
-                </div>               
+            <div className='module-content-wrapper'>
+            <div className='module-header-row'>
+                    <h1 className='module-header'>{publisher.name}</h1>
+                    <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>  
+                <div className='flex flex-col my-1'>
+                    <p className='column-info-title'>Nazwa</p>
+                    <h2 className='column-info-text'>{publisher.name}</h2>
+                </div>             
+                <div className='divider'></div>           
+                <div className='flex flex-col my-1'>
+                    <p className='column-info-title'>Opis</p>
+                    <h2 className='column-info-text'>{publisher.description}</h2>
+                </div>              
             </div>
         </div>
     </div>

@@ -3,18 +3,19 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import { FiPlus } from 'react-icons/fi'
 
 function EditImage(props) {
+    const [title, setTitle] = useState('')
     const [imageURL, setImageURL] = useState('')
-    const [source, setSource] = useState('')
     const [image,setImage] = useState({})
 
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Images/${id}`)
           setImage(response.data)
+          setTitle(response.data.title)
           setImageURL(response.data.imageURL)
-          setSource(response.data.imageURL)
         }catch(err){
           console.error(err)
         }
@@ -22,14 +23,14 @@ function EditImage(props) {
     const handleURLInput = (e) => {
         setImageURL(e.target.value)
     }
+    const handleTitleInput = (e) => {
+      setTitle(e.target.value)
+  }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
-    const handleAddButton = () => {
-        setSource(imageURL)
-    }
-    const handleSaveClick = () => {
+    const handleAcceptButton = () => {
         image.imageURL = imageURL
         props.putData(image.id, image)
         props.setEditedID(null)
@@ -39,18 +40,24 @@ function EditImage(props) {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
-        <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj zdjęcie</h1>
-                <img src={source} className='w-full object-contain h-auto my-1' />
-                <input onChange={handleURLInput} type='text' value={imageURL} className='module-input-text'/>
-                <button onClick={handleAddButton} className='module-button'>Dodaj zdjęcie</button>
-                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-window'>
+        <div className='module-content-wrapper'>
+        <div className='module-header-row'>
+              <h1 className='module-header'>Edytuj zdjęcie</h1>
+              <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
+            <img src={imageURL} className='w-full object-contain h-auto my-1' />
+            <div className='flex flex-row items-center'>
+              <div className='grid grid-cols-[1fr_2fr] gap-2'>
+                <input onChange={handleTitleInput} value={title} type='text' placeholder='Tytuł zdjęcia' className='module-input-text'/>
+                <input onChange={handleURLInput} value={imageURL} type='text' placeholder='Adres URL' className='module-input-text'/>
+              </div>
+            </div>
+            <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>
+</div>
   )
 }
 

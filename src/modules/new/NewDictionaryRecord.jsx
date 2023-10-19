@@ -18,7 +18,7 @@ function NewDictionaryRecord({setShowNewModule,postData,title}) {
         handleCloseModule()
     } 
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>

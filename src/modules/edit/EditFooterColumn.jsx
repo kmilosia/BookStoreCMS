@@ -46,17 +46,19 @@ function EditFooterColumn(props) {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
-        <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj kolumnę w footerze</h1>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handlePositionInput} type='number' value={position} className='module-input-text'/>
-                <input onChange={handleHTMLObjectInput} type='text' value={htmlObject} className='module-input-text'/>
-                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
-            </div>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-window'>
+        <div className='module-content-wrapper'>
+        <div className='module-header-row'>
+              <h1 className='module-header'>Edytuj kolumnę footera</h1>
+              <CloseWindowButton handleCloseModule={handleCloseModule} />
+            </div>                
+            <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
+            <input onChange={handlePositionInput} type='text' value={position} className='module-input-text'/>
+            <input onChange={handleHTMLObjectInput} type='text' value={htmlObject} className='module-input-text'/>
+            <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
         </div>
+    </div>
     </div>
   )
 }

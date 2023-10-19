@@ -1,112 +1,216 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
+import { useEffect } from 'react'
+import axiosClient from '../../api/apiClient'
+import { FiMinus, FiPlus } from 'react-icons/fi'
 
-function EditBook(props) {
-  // const [name, setName] = useState('')
-  // const [position, setPosition] = useState('')
-  // const [path, setPath] = useState('')
-  // const [url, setUrl] = useState('')
-  // const [selectedOption, setSelectedOption] = useState(null)
-  // const [columns, setColumns] = useState([])
-  // const [columnId, setColumnId] = useState(null)
-  // const [link, setLink] = useState({})
 
-  // const getFooterColumns = async () => {
-  //   try{
-  //     const response = await axiosClient.get(`/FooterColumns`)
-  //     const optionColumns = response.data.map(item => ({
-  //       value: item.id,
-  //       label: item.name
-  //     }))
-  //     setColumns(optionColumns)
-  //   }catch(err){
-  //     console.error(err)
-  //   }
-  // }
-  //   const getItem = async (id) => {
-  //       try{
-  //         const response = await axiosClient.get(`/FooterLinks/${id}`)
-  //         setLink(response.data)
-  //         setName(response.data.name)
-  //         setPosition(response.data.position)
-  //         setPath(response.data.path)
-  //         setUrl(response.data.url)
-  //         setColumnId(response.data.footerColumnID)
-          
-  //       }catch(err){
-  //         console.error(err)
-  //       }
-  //   }
-  //   const handleNameInput = (e) => {
-  //       setName(e.target.value)
-  //   }
-  //   const handlePositionInput = (e) => {
-  //     setPosition(e.target.value)
-  //   }
-  //   const handlePathInput = (e) => {
-  //     setPath(e.target.value)
-  //   }
-  //   const handleUrlInput = (e) => {
-  //     setUrl(e.target.value)
-  //   }
-  //   const handleCloseModule = () => {
-  //     props.setEditedID(null)
-  //     props.setShowEditModule(false)
-  //   }
-  //   const handleSelectChange = (selectedOption) => {
-  //     if (selectedOption) {
-  //         setSelectedOption(selectedOption)
-  //         setColumnId(selectedOption.value)
-  //     } else {
-  //         setSelectedOption(null)
-  //         setColumnId(null)
-  //     }
-  //   }
-  //   const handleAcceptButton = () => {
-  //     const data = {
-  //         id: link.id,
-  //         name: name,
-  //         path: path,
-  //         url: url,
-  //         position: position,
-  //         footerColumnID: columnId
-  //     }
-  //     props.putData(link.id,data)
-  //     handleCloseModule()
-  // } 
-  // useEffect(() => {
-  //   const fetchAllData = async () => {
-  //     await getFooterColumns();
-  //     await getItem(props.editedID);
-  //   };
-  //   fetchAllData();
-  // }, []);
-  
-  // useEffect(() => {
-  //   const selected = columns.find((col) => col.value === columnId);
-  //   if (selected) {
-  //     setSelectedOption(selected);
-  //   }
-  // }, [columns, columnId]);
+function EditBook({setShowNewModule, postData}) {
+    // const getAuthors = async () => {
+    //     try{
+    //       const response = await axiosClient.get(`/Author`)
+    //       const options = response.data.map(item => ({
+    //         value: item.id,
+    //         label: item.name + " " + item.surname
+    //       }))
+    //       setAuthorOptions(options)
+    //     }catch(err){
+    //       console.error(err)
+    //     }
+    // }
+    // const getCategories = async () => {
+    //     try{
+    //       const response = await axiosClient.get(`/Category`)
+    //       const options = response.data.map(item => ({
+    //         value: item.id,
+    //         label: item.name
+    //       }))
+    //       setCategoryOptions(options)
+    //     }catch(err){
+    //       console.error(err)
+    //     }
+    // }
+    // const getLanguages = async () => {
+    //     try{
+    //       const response = await axiosClient.get(`/Language`)
+    //       const options = response.data.map(item => ({
+    //         value: item.id,
+    //         label: item.name
+    //       }))
+    //       setLanguageOptions(options)
+    //     }catch(err){
+    //       console.error(err)
+    //     }
+    // }
+    // const getPublishers = async () => {
+    //     try{
+    //       const response = await axiosClient.get(`/Publisher`)
+    //       const options = response.data.map(item => ({
+    //         value: item.id,
+    //         label: item.name
+    //       }))
+    //       setPublisherOptions(options)
+    //     }catch(err){
+    //       console.error(err)
+    //     }
+    // }
+    // const getItem = async (id) => {
+    //   try{
+    //     const response = await axiosClient.get(`/Book/${id}`)
+    //     setBook(response.data)
+    //     setTitle(response.data.title)
+    //     setDescription(response.data.description)
+    //     setPath(response.data.path)
+    //     setUrl(response.data.url)
+    //     setColumnId(response.data.footerColumnID)
+        
+    //   }catch(err){
+    //     console.error(err)
+    //   }
+    // }
+    // const [book,setBook] = useState([])
+    // const [title, setTitle] = useState('')
+    // const [imageTitle, setImageTitle] = useState('')
+    // const [imageURL, setImageURL] = useState('')
+    // const [description, setDescription] = useState('')
+    
+    // const [selectedLanguage, setSelectedLanguage] = useState(null)
+    // const [selectedPublisher, setSelectedPublisher] = useState(null)
+    // const [selectedCategories, setSelectedCategories] = useState([])
+    // const [selectedAuthors, setSelectedAuthors] = useState([])
+    // const [selectedImages, setSelectedImages] = useState([])
+
+    // const [languageOptions, setLanguageOptions] = useState([])
+    // const [publisherOptions, setPublisherOptions] = useState([])
+    // const [categoryOptions, setCategoryOptions] = useState([])
+    // const [authorOptions, setAuthorOptions] = useState([])
+
+    // const handleImageTitleInput = (e) => {
+    //   setImageTitle(e.target.value)
+    // }
+    // const handleImageURLInput = (e) => {
+    //   setImageURL(e.target.value)
+    // }
+    // const handleTitleInput = (e) => {
+    //     setTitle(e.target.value)
+    // }
+    // const handleDescriptionInput = (e) => {
+    //     setDescription(e.target.value)
+    // }
+    // const handleLanguageInput = (selectedLanguage) => {
+    //     setSelectedLanguage(selectedLanguage)
+    // }
+    // const handlePublisherInput = (selectedPublisher) => {
+    //     setSelectedPublisher(selectedPublisher)
+    // }
+    // const handleCategoriesChange = (selectedCategories) => {
+    //     setSelectedCategories(selectedCategories)
+    // }
+    // const handleAuthorsChange = (selectedAuthors) => {
+    //     setSelectedAuthors(selectedAuthors)
+    // }
+    // const handleImagesChange = (selectedImages) => {
+    //   setSelectedImages(selectedImages)
+    // }
+    // const handleCloseModule = () => {
+    //     setShowNewModule(false)
+    // }   
+    // const handleDeleteImage = (index) => {
+    //   const updatedImages = selectedImages.filter((_,i) => i !== index)
+    //   setSelectedImages(updatedImages)
+    // }
+    // const handleAddPhoto = () => {
+    //   setSelectedImages([...selectedImages,{title: imageTitle, imageURL: imageURL}])
+    //   setImageTitle('')
+    //   setImageURL('')
+    //   console.log(selectedImages);
+    // }
+    // const handleAcceptButton = () => {
+    //     const authors = selectedAuthors.map(item => (
+    //         {
+    //             id: item.value
+    //         }
+    //     ))
+    //     const categories = selectedCategories.map(item => (
+    //         {
+    //             id: item.value
+    //         }
+    //     ))
+    //     const data = {
+    //         title: title,
+    //         description: description,
+    //         originalLanguageID: selectedLanguage.value,
+    //         publisherID: selectedPublisher.value,
+    //         listOfBookAuthors: authors,
+    //         listOfBookCategories: categories,
+    //         listOfBookImages: selectedImages
+    //     }
+    //     console.log(data)
+    //     postData(data)
+    //     handleCloseModule()
+    // } 
+    // useEffect(() => {
+    //     const fetchAll = async () => {
+    //         try{
+    //             getAuthors()
+    //             getPublishers()
+    //             getCategories()
+    //             getLanguages()
+    //         }catch(error){
+    //             console.error(error)
+    //         }
+    //     }
+    //     fetchAll()
+    // },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
-        <div className='module-window'>
-            {/* <CloseWindowButton handleCloseModule={handleCloseModule} /> */}
-            <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj link stopki</h1>
-                {/* <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handlePositionInput} type='number' value={position} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handlePathInput} type='text' value={path} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handleUrlInput} type='text' value={url} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <Select onChange={handleSelectChange} value={selectedOption} options={columns} isClearable={true} className="my-react-select-container mx-3 w-[300px]" classNamePrefix="my-react-select" placeholder='Wybierz opcję..'/>
-                <button onClick={handleAcceptButton} className='bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600'>Akceptuj</button> */}
-            </div>
-        </div>
-    </div>
+    <></>
+    // <div className='module-wrapper' style={backgroundOverlayModule}>
+    //     <div className='module-window'>
+    //         <div className='module-content-wrapper'>
+    //             <div className='module-header-row'>
+    //               <h1 className='module-header'>Dodaj nową książkę</h1>
+    //               <CloseWindowButton handleCloseModule={handleCloseModule} />
+    //             </div>
+    //             <input onChange={handleTitleInput} type='text' placeholder='Tytuł książki' className='module-input-text'/>
+    //             <textarea onChange={handleDescriptionInput} placeholder='Opis książki' rows={5} className='module-input-textarea'/>
+    //             <div className='grid grid-cols-2 gap-2'>
+    //               <Select onChange={handleLanguageInput} maxMenuHeight={100} value={selectedLanguage} options={languageOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
+    //               <Select onChange={handlePublisherInput} maxMenuHeight={100} value={selectedPublisher} options={publisherOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Wydawnictwo'/>
+    //             </div>
+    //             <div className='grid grid-cols-2 gap-2'>
+    //               <Select onChange={handleAuthorsChange} maxMenuHeight={100} value={selectedAuthors} options={authorOptions} isClearable={true} isSearchable={true} isMulti={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Autor/autorzy'/>
+    //               <Select onChange={handleCategoriesChange} maxMenuHeight={100} value={selectedCategories} options={categoryOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kategorie'/>
+    //             </div>
+    //             <div className='divider'></div>
+    //             <p className='w-full text-sm mt-1 mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki:</p>
+    //             {selectedImages && 
+    //             <div className='flex flex-row flex-wrap'>
+    //             <div className='grid grid-cols-3 gap-2 my-2'>
+    //               {selectedImages.map((item,index)=>(
+    //                 <div key={index} className='flex flex-col rounded-md bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
+    //                   <div className='relative'>
+    //                   <img src={item.imageURL} className='w-full h-auto object-contain rounded-t-md' />
+    //                   <button onClick={() => handleDeleteImage(index)} className='module-minus-button'><FiMinus/></button>
+    //                   </div>
+    //                   <h3 className='p-2 text-xs'>{item.title}</h3>
+    //                 </div>
+    //               ))}
+    //             </div>
+    //             </div>}
+    //             <div className='flex flex-row items-center'>
+    //               <div className='grid grid-cols-[1fr_2fr] gap-2'>
+    //                 <input onChange={handleImageTitleInput} value={imageTitle} type='text' placeholder='Tytuł zdjęcia' className='module-input-text'/>
+    //                 <input onChange={handleImageURLInput} value={imageURL} type='text' placeholder='Adres URL' className='module-input-text'/>
+    //               </div>
+    //               <button className='module-round-button' onClick={handleAddPhoto}><FiPlus/></button>
+    //             </div>
+    //             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
+    //         </div>
+    //     </div>
+    // </div>
   )
 }
 

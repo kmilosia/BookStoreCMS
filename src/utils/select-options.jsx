@@ -2,6 +2,11 @@ export const dictionarySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
+export const numericSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
+    {value: 'price', label: 'Cena', type: 'number'}
+]
 export const imageSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'imageURL', label: 'URL', type: 'string'}

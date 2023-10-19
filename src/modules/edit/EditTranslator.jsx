@@ -40,11 +40,13 @@ function EditTranslator(props) {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj translatora</h1>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Edytuj translatora</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>
                 <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
                 <input onChange={handleSurnameInput} type='text' value={surname} className='module-input-text'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>

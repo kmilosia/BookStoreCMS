@@ -4,19 +4,17 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 
-function EditAuthor(props) {
+function EditRentalType(props) {
     const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [description, setDescription] = useState('')
-    const [author,setAuthor] = useState({})
+    const [price, setPrice] = useState('')
+    const [type,setType] = useState({})
 
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Author/${id}`)
-          setAuthor(response.data)
+          const response = await axiosClient.get(`/RentalType/${id}`)
+          setType(response.data)
           setName(response.data.name)
-          setSurname(response.data.surname)
-          setDescription(response.data.description)
+          setPrice(response.data.price)
         }catch(err){
           console.error(err)
         }
@@ -24,21 +22,17 @@ function EditAuthor(props) {
     const handleNameInput = (e) => {
         setName(e.target.value)
     }
-    const handleSurnameInput = (e) => {
-        setSurname(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
+    const handlePriceInput = (e) => {
+        setPrice(e.target.value)
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
-        author.name = name
-        author.surname = surname
-        author.description = description
-        props.putData(author.id, author)
+        type.name = name
+        type.price = price
+        props.putData(type.id, type)
         props.setEditedID(null)
         props.setShowEditModule(false)
   }
@@ -50,12 +44,11 @@ function EditAuthor(props) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                  <h1 className='module-header'>Edytuj autora</h1>
+                  <h1 className='module-header'>Edytuj typ wypożyczenia</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handleSurnameInput} type='text' value={surname} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} value={description} rows={4} className='module-input-text'/>
+                <input onChange={handlePriceInput} type='number' value={price} className='module-input-text'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>
@@ -63,4 +56,4 @@ function EditAuthor(props) {
   )
 }
 
-export default EditAuthor
+export default EditRentalType

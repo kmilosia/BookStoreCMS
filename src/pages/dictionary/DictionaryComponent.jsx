@@ -33,17 +33,17 @@ const handleDeleteClick = (id) => {
 }
   return (
     <>
-    <div className='h-full grid grid-rows-[max-content_auto] px-6 py-6 bg-slate-200 dark:bg-dracula-900'>
+    <div className='main-wrapper'>
       <div className='flex flex-col'>
         <h1 className='main-header'>{props.title}</h1>    
-        <div className='flex flex-row justify-end my-4'>
+        <div className='filter-panel'>
           <SortBar options={dictionarySortOptions} setSelectedOption={props.setSelectedOption} selectedOption={props.selectedOption} isAscending={props.isAscending} setIsAscending={props.setIsAscending}/>
           <Searchbar setSearchValue={props.setSearchValue} searchValue={props.searchValue} />         
           <AddNewButton setShowNewModule={props.setShowNewModule} title={props.title}/>                   
         </div>
         <ListHeader  columnNames={dictionaryColumns}/>
       </div>
-      <div className='w-full overflow-auto scrollbar-default'>
+      <div className='main-list-wrapper'>
             {props.filteredItems.map(item => (             
               <div key={item.id} className='table-row-wrapper'>
                 <p className='px-2'>{item.id}</p>

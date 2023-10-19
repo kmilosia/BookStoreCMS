@@ -23,15 +23,22 @@ function ViewImage(props) {
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='module-content-wrapper dark:text-gray-100'>
-                <h1 className='module-header'>Informacje o zdjęciu</h1>
-                <div className='my-1 flex items-center justify-center'>
+            <div className='module-content-wrapper '>
+            <div className='module-header-row'>
+                    <h1 className='module-header'>{image.title}</h1>
+                    <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>               
+                 <div className='my-2 flex items-center justify-center'>
                     <img src={image.imageURL} alt='Zdjęcie' className='w-full object-contain h-auto'/>
                 </div>
-                <div className='flex flex-row my-1'>
-                    <p className='font-semibold'>URL:</p>
-                    <h2 className='mx-2 break-all'>{image.imageURL}</h2>
+                <div className='divider'/>
+                <div className='flex flex-col my-1'>
+                    <p className='column-info-title'>Tytuł</p>
+                    <h2 className='column-info-text'>{image.title}</h2>
+                </div>
+                <div className='flex flex-col my-1'>
+                    <p className='column-info-title'>Opis</p>
+                    <h2 className='column-info-text break-all'>{image.imageURL}</h2>
                 </div>                        
             </div>
         </div>

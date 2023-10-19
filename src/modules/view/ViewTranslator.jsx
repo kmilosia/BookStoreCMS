@@ -21,22 +21,26 @@ function ViewTranslator(props) {
         getItem(props.editedID)
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
-        <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='module-content-wrapper dark:text-gray-100'>
-                <h1 className='module-header'>Informacje o translatorze</h1>
-                <div className='flex flex-row my-1'>
-                    <p className='font-semibold'>Imię:</p>
-                    <h2 className='mx-2'>{translator.name}</h2>
-                </div>
-                <div className='flex flex-row my-1'>
-                    <p className='font-semibold'>Nazwisko:</p>
-                    <h2 className='mx-2'>{translator.surname}</h2>
-                </div>               
-            </div>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-window'>
+        <div className='module-content-wrapper'>
+        <div className='module-header-row'>
+                <h1 className='module-header'>{translator.name} {translator.surname}</h1>
+                <CloseWindowButton handleCloseModule={handleCloseModule} />
+            </div>  
+            <div className='grid grid-cols-2 gap-2'>
+                    <div className='flex flex-col'>
+                        <p className='column-info-title'>Imię</p>
+                        <h2 className='column-info-text'>{translator.name}</h2>
+                    </div>
+                    <div className='flex flex-col'>
+                        <p className='column-info-title'>Nazwisko</p>
+                        <h2 className='column-info-text'>{translator.surname}</h2>
+                    </div>
+                </div>              
         </div>
     </div>
+</div>
   )
 }
 

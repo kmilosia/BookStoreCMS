@@ -40,13 +40,15 @@ function EditPublisher(props) {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj wydawnictwo</h1>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Edytuj wydawnictwo</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>
                 <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} row={4} value={description} className='module-input-text'/>
+                <textarea onChange={handleDescriptionInput} value={description} rows={4} className='module-input-text'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>

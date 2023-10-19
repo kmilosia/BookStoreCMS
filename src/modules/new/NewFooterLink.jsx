@@ -59,7 +59,6 @@ function NewFooterLink({setShowNewModule, postData}) {
             position: position,
             footerColumnID: columnId
         }
-        // console.log(selectedOption);
         postData(data)
         handleCloseModule()
     } 
@@ -67,17 +66,19 @@ function NewFooterLink({setShowNewModule, postData}) {
         getFooterColumns()
     },[])
   return (
-    <div className='absolute h-full w-full top-0 left-0 flex items-center justify-center' style={backgroundOverlayModule}>
-        <div className='rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/5'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='p-4 flex flex-col'>
-                <h1 className='text-2xl font-semibold mb-2 text-dracula-900 dark:text-dracula-100'>Dodaj nowego translatora</h1>
-                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handlePositionInput} type='number' placeholder='Pozycja' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handlePathInput} type='text' placeholder='Ścieżka' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handleUrlInput} type='text' placeholder='URL' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <Select onChange={handleSelectChange} value={selectedOption} options={columns} isClearable={true} className="my-react-select-container mx-3 w-[300px]" classNamePrefix="my-react-select" placeholder='Wybierz opcję..'/>
-                <button onClick={handleAcceptButton} className='bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600'>Akceptuj</button>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+        <div className='module-window'>
+            <div className='module-content-wrapper'>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Dodaj nowy link footera</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>                
+                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className='module-input-text'/>
+                <input onChange={handlePositionInput} type='text' placeholder='Pozycja' className='module-input-text'/>
+                <input onChange={handlePathInput} type='text' placeholder='Ścieżka' className='module-input-text'/>
+                <input onChange={handleUrlInput} type='text' placeholder='URL' className='module-input-text'/>
+                <Select onChange={handleSelectChange} maxMenuHeight={100} value={selectedOption} options={columns} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kolumna'/>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

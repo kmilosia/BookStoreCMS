@@ -3,12 +3,12 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 
-function ViewAuthor(props) {
-    const [author, setAuthor] = useState({})
+function ViewRentalType(props) {
+    const [type, setType] = useState({})
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Author/${id}`)
-          setAuthor(response.data)
+          const response = await axiosClient.get(`/RentalType/${id}`)
+          setType(response.data)
         }catch(err){
           console.error(err)
         }
@@ -25,28 +25,23 @@ function ViewAuthor(props) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                    <h1 className='module-header'>{author.name} {author.surname}</h1>
+                    <h1 className='module-header'>{type.name}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-4'>
                 <div className='flex flex-col'>
-                    <p className='column-info-title'>Imię</p>
-                    <h2 className='column-info-text'>{author.name}</h2>
+                    <p className='column-info-title'>Nazwa</p>
+                    <h2 className='column-info-text'>{type.name}</h2>
                 </div>
                 <div className='flex flex-col'>
-                    <p className='column-info-title'>Nazwisko</p>
-                    <h2 className='column-info-text'>{author.surname}</h2>
+                    <p className='column-info-title'>Cena</p>
+                    <h2 className='column-info-text'>{type.price} PLN</h2>
                 </div>
-                </div>
-                <div className='divider'></div>           
-                <div className='flex flex-col my-1'>
-                    <p className='column-info-title'>Opis</p>
-                    <h2 className='column-info-text'>{author.description}</h2>
-                </div> 
+                </div>         
             </div>
         </div>
     </div>
   )
 }
 
-export default ViewAuthor
+export default ViewRentalType

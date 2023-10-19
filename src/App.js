@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 import Payment from './pages/dictionary/Payment';
@@ -11,7 +11,8 @@ function App() {
      
       <Router>
         <Routes>
-          <Route path='/' element={<Navigate to={isLogged ? '/dashboard' : '/login'} replace/>}/>
+          {/* <Route path='/' element={<Navigate to={isLogged ? '/dashboard' : '/login'} replace/>}/> */}
+          <Route path='/' element={<Navigate to={ '/dashboard'}/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route element={<Layout />}>
             <Route path='/dashboard' element={<Home />}/>
@@ -34,6 +35,7 @@ function App() {
             <Route path='/publisher' element={<Publisher />}/>
             <Route path='/order-status' element={<OrderStatus />}/>
             <Route path='/rental-status' element={<RentalStatus />}/>
+            <Route path='/rental-type' element={<RentalType />}/>
             <Route path='/shipping-status' element={<ShippingStatus />}/>
             <Route path='/transaction-status' element={<TransactionStatus />}/>
             <Route path='/payment-method' element={<PaymentMethod />}/>

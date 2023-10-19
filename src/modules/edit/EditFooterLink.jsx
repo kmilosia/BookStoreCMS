@@ -93,17 +93,19 @@ function EditFooterLink(props) {
     }
   }, [columns, columnId]);
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edytuj link stopki</h1>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Edytuj link footera</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>                
                 <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handlePositionInput} type='number' value={position} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handlePathInput} type='text' value={path} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handleUrlInput} type='text' value={url} className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <Select onChange={handleSelectChange} value={selectedOption} options={columns} isClearable={true} className="my-react-select-container mx-3 w-[300px]" classNamePrefix="my-react-select" placeholder='Wybierz opcję..'/>
-                <button onClick={handleAcceptButton} className='bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600'>Akceptuj</button>
+                <input onChange={handlePositionInput} type='text' value={position} className='module-input-text'/>
+                <input onChange={handlePathInput} type='text' value={path} className='module-input-text'/>
+                <input onChange={handleUrlInput} type='text' value={url} className='module-input-text'/>
+                <Select onChange={handleSelectChange} maxMenuHeight={100} value={selectedOption} options={columns} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kolumna'/>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

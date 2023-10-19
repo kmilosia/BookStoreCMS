@@ -81,17 +81,17 @@ function Translator() {
       
   return (
     <>
-    <div className='h-full grid grid-rows-[max-content_auto] px-6 py-6 bg-slate-200 dark:bg-dracula-900'>
+    <div className='main-wrapper'>
       <div className='flex flex-col'>
         <h1 className='main-header'>Translator</h1>    
-        <div className='flex flex-row justify-end my-4'>
+        <div className='filter-panel'>
           <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Translatora"/>                   
         </div>
         <ListHeader  columnNames={personColumns}/>
       </div>
-      <div className='w-full overflow-auto scrollbar-default'>
+      <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
                 <p className='px-2'>{item.id}</p>                       

@@ -29,15 +29,17 @@ function NewFooterColumn({setShowNewModule, postData}) {
         handleCloseModule()
     } 
   return (
-    <div className='absolute h-full w-full top-0 left-0 flex items-center justify-center' style={backgroundOverlayModule}>
-        <div className='rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/5'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
-            <div className='p-4 flex flex-col'>
-                <h1 className='text-2xl font-semibold mb-2 text-dracula-900 dark:text-dracula-100'>Dodaj nową kolumnę w footerze</h1>
-                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handlePositionInput} type='number' placeholder='Pozycja' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <input onChange={handleHtmlObjectInput} type='text' placeholder='HTML Tag' className=' focus:border-dracula-500 focus:outline-none text-dracula-900 bg-dracula-200 resize-none rounded-md my-2 px-3 py-2 w-full border-[2px] border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400'/>
-                <button onClick={handleAcceptButton} className='bg-orange-500 w-[100%] rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600'>Akceptuj</button>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+        <div className='module-window'>
+            <div className='module-content-wrapper'>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Dodaj nową kolumnę footera</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>                
+                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className='module-input-text'/>
+                <input onChange={handlePositionInput} type='text' placeholder='Pozycja' className='module-input-text'/>
+                <input onChange={handleHtmlObjectInput} type='text' placeholder='HTML Obiekt' className='module-input-text'/>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

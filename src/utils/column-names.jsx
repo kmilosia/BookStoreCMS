@@ -40,3 +40,8 @@ export const bookColumns = [
     { name: 'Tytuł'},
     { name: 'Wydawnictwo'},
 ]
+export const numericColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+    { name: 'Cena'},
+]

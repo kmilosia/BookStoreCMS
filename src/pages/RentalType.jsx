@@ -5,20 +5,19 @@ import AddNewButton from '../components/AddNewButton'
 import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { imageSortOptions, personSortOptions } from '../utils/select-options'
+import { numericSortOptions, personSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { imageColumns, personColumns } from '../utils/column-names'
+import { numericColumns, personColumns } from '../utils/column-names'
+import NewRentalType from '../modules/new/NewRentalType'
+import EditRentalType from '../modules/edit/EditRentalType'
+import ViewRentalType from '../modules/view/ViewRentalType'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
-import NewImage from '../modules/new/NewImage'
-import EditImage from '../modules/edit/EditImage'
-import ViewImage from '../modules/view/ViewImage'
-import {truncate} from '../utils/truncate-text'
 
-function Image() {
+function RentalType() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -33,7 +32,7 @@ function Image() {
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Images`)
+          const response = await axiosClient.get(`/RentalType`)
           setData(response.data)
       }catch(err){
           console.error(err)
@@ -41,7 +40,7 @@ function Image() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Images`, object)
+          const response = await axiosClient.post(`/RentalType`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -49,7 +48,7 @@ function Image() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Images/${id}`)
+          const response = await axiosClient.delete(`/RentalType/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -57,7 +56,7 @@ function Image() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Images/${id}`, object)
+          const response = await axiosClient.put(`/RentalType/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
@@ -69,8 +68,8 @@ function Image() {
        setShowEditModule(true)
     }
     const handleDeleteClick = (itemID) => {
-        deleteData(itemID)
-      }
+      deleteData(itemID)
+    }
     const handleViewClick = (itemID) => {
       setEditedID(itemID)
       setShowViewModule(true)
@@ -84,20 +83,20 @@ function Image() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Zdjęcie</h1>    
+        <h1 className='main-header'>Typ Wypożyczenia</h1>    
         <div className='filter-panel'>
-          <SortBar options={imageSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
+          <SortBar options={numericSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Zdjęcie"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Typ Wypożyczenia"/>                   
         </div>
-        <ListHeader  columnNames={imageColumns}/>
+        <ListHeader  columnNames={numericColumns}/>
       </div>
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
-                <p className='px-2'>{item.id}</p>
-                <img className='px-2 w-3/5 aspect-video object-cover' src={item.imageURL}/>                     
-                <p className='px-2 break-all'>{truncate(item.imageURL, 10, 40)}</p>
+                <p className='px-2'>{item.id}</p>                       
+                <p className='px-2'>{item.name}</p>
+                <p className='px-2'>{item.price}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -107,11 +106,11 @@ function Image() {
         ))}
       </div>
         </div>
-    {showNewModule && <NewImage postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditImage putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewImage editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewRentalType postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditRentalType putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewRentalType editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
 
-export default Image
+export default RentalType
