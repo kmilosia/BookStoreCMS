@@ -7,6 +7,12 @@ export const numericSortOptions = [
     {value: 'name', label: 'Nazwa', type: 'string'},
     {value: 'price', label: 'Cena', type: 'number'}
 ]
+export const discountSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'title', label: 'Tytuł', type: 'string'},
+    {value: 'percentOfDiscount', label: 'Wartość Promocji', type: 'number'},
+    {value: 'isAvailable', label: 'Dostępność', type: 'string'},
+]
 export const imageSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'imageURL', label: 'URL', type: 'string'}
@@ -31,4 +37,10 @@ export const bookSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'publisherName', label: 'Wydawnictwo', type: 'string'},
     {value: 'title', label: 'Tytuł', type: 'string'}
+]
+export const bookItemSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'bookTitle', label: 'Tytuł', type: 'string'},
+    {value: 'nettoPrice', label: 'Cena', type: 'number'},
+    {value: 'formName', label: 'Format', type: 'string'},
 ]

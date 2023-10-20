@@ -45,3 +45,16 @@ export const numericColumns = [
     { name: 'Nazwa'},
     { name: 'Cena'},
 ]
+export const discountColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Wartość Promocji'},
+    { name: 'Dostępność'},
+]
+export const bookItemColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Format'},
+    { name: 'ISBN'},
+    { name: 'Cena Netto'},
+]

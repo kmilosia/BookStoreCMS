@@ -131,10 +131,9 @@ function EditBook({setShowEditModule, putData, editedID}) {
       setSelectedImages(updatedImages)
     }
     const handleAddPhoto = () => {
-      setSelectedImages([...selectedImages,{title: imageTitle, imageURL: imageURL}])
+      setSelectedImages([...selectedImages,{title: imageTitle, imageURL: imageURL, id:0}])
       setImageTitle('')
       setImageURL('')
-      console.log(selectedImages);
     }
     const handleAcceptButton = () => {
         const authors = selectedAuthors.map(item => (
@@ -157,8 +156,9 @@ function EditBook({setShowEditModule, putData, editedID}) {
             listOfBookCategories: categories,
             listOfBookImages: selectedImages
         }
+        // console.log(selectedImages);
         console.log(data)
-        putData(data)
+        putData(book.id,data)
         handleCloseModule()
     } 
     useEffect(() => {

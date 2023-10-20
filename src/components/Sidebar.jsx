@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BiUser, BiPackage, BiBook, BiBookBookmark} from 'react-icons/bi'
 import {AiOutlineClose, AiOutlineLogout} from 'react-icons/ai'
-import {MdMiscellaneousServices} from 'react-icons/md'
+import {TbDiscount2} from 'react-icons/tb'
+import {FaBook} from 'react-icons/fa'
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import {FiSettings,FiLayout, FiMis} from 'react-icons/fi'
 import hannahAvatar from '../assets/hannah.jpg'
@@ -74,6 +75,20 @@ function Sidebar() {
             <span>Książka</span>
           </div>
         </button>
+
+        <Link to="/book-item" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <FaBook className='text-xl mx-1'/>
+            <span>Egzemplarz</span>
+          </div>
+        </Link>
+
+        <Link to="/book-item" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <TbDiscount2 className='text-xl mx-1'/>
+            <span>Promocja</span>
+          </div>
+        </Link>
                
 
       </div>
