@@ -17,8 +17,14 @@ function Sidebar() {
   const [isSideMenuExpanded, setIsSideMenuExpanded] = useState(false)
   const [sideMenu, setSideMenu] = useState(null)
   const toggleSideMenu = (menu) => {
+    if(isSideMenuExpanded && sideMenu === menu){
+      setIsSideMenuExpanded(false)
+      setSideMenu(null)
+    }
+    else{
     setSideMenu(menu)
     setIsSideMenuExpanded(true)
+    }
   }
   const toggleTheme = () => {
     setIsDarkTheme((prevTheme) => {

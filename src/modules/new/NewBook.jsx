@@ -97,9 +97,6 @@ function NewBook({setShowNewModule, postData}) {
     const handleAuthorsChange = (selectedAuthors) => {
         setSelectedAuthors(selectedAuthors)
     }
-    const handleImagesChange = (selectedImages) => {
-      setSelectedImages(selectedImages)
-    }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
@@ -112,6 +109,9 @@ function NewBook({setShowNewModule, postData}) {
       setImageTitle('')
       setImageURL('')
       console.log(selectedImages);
+    }
+    const handleClearAllPhotos = () => {
+      setSelectedImages([])
     }
     const handleAcceptButton = () => {
         const authors = selectedAuthors.map(item => (
@@ -151,7 +151,7 @@ function NewBook({setShowNewModule, postData}) {
         fetchAll()
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper shadow-module' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
                 <div className='module-header-row'>
@@ -169,14 +169,20 @@ function NewBook({setShowNewModule, postData}) {
                   <Select onChange={handleCategoriesChange} maxMenuHeight={100} value={selectedCategories} options={categoryOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kategorie'/>
                 </div>
                 <div className='divider'></div>
-                <p className='w-full text-sm mt-1 mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki:</p>
-                {selectedImages && 
+                <div className="flex flex-row justify-between items-center my-1">
+                  <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki:</p>
+                  {selectedImages.length > 0 && 
+                  <button onClick={handleClearAllPhotos} className="text-xs px-3 py-1 rounded-sm text-dracula-100 bg-orange-400 hover:bg-orange-500">Wyczyść wszystko</button>
+                  }
+                </div>
+                {selectedImages.length > 0 && 
                 <div className='flex flex-row flex-wrap'>
                 <div className='grid grid-cols-3 gap-2 my-2'>
                   {selectedImages.map((item,index)=>(
-                    <div key={index} className='flex flex-col rounded-md bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
+                    <div key={index} className='flex flex-col rounded-sm bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
                       <div className='relative'>
-                      <img src={item.imageURL} className='w-full h-auto object-contain rounded-t-md' />
+                      <img src={item.imageURL} className='w-full h-auto object-cover rounded-t-md aspect-video' />
+                      <div className='image-top-gradient image-gradient-position'/>
                       <button onClick={() => handleDeleteImage(index)} className='module-minus-button'><FiMinus/></button>
                       </div>
                       <h3 className='p-2 text-xs'>{item.title}</h3>

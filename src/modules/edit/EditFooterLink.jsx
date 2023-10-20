@@ -90,6 +90,7 @@ function EditFooterLink(props) {
     const selected = columns.find((col) => col.value === columnId);
     if (selected) {
       setSelectedOption(selected);
+      console.log(selectedOption);
     }
   }, [columns, columnId]);
   return (

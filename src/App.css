@@ -9,6 +9,10 @@
     .default-text{
       @apply text-dracula-900 dark:text-dracula-100;
     }
+    /* image */
+    .image-gradient-position{
+      @apply w-full h-full absolute top-0 right-0 z-20;
+    }
     /* object table list */
     .table-row-wrapper{
       @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-sm border-t-2 border-dracula-200 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
@@ -21,7 +25,7 @@
       @apply absolute h-full w-full py-6 top-0 left-0 px-2 overflow-auto scrollbar-default scrollbar-rounded;
     }
     .module-window{
-      @apply rounded-sm bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-1/2 mx-auto;
+      @apply rounded-sm bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-1/2 mx-auto shadow-lg shadow-dracula-900 dark:shadow-dracula-600;
     }
     .module-content-wrapper{
       @apply p-4 mr-1 flex flex-col;
@@ -45,7 +49,7 @@
       @apply bg-orange-500 hover:bg-orange-600 rounded-3xl text-2xl text-dracula-100 p-1 ml-2;
     }
     .module-minus-button{
-      @apply absolute top-2 right-2 bg-orange-400 hover:bg-orange-500 h-5 w-5 items-center flex justify-center rounded-3xl text-dracula-100;
+      @apply absolute top-2 right-2 z-30 bg-orange-400 hover:bg-orange-500 h-5 w-5 items-center flex justify-center rounded-3xl text-dracula-100;
     }
     /* info module */
     .info-grid{
@@ -121,7 +125,7 @@
         @apply rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
       }
       .my-react-select-module-container .my-react-select-module__menu {
-        @apply scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
+        @apply z-50 scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
       }
       .my-react-select-container .my-react-select__option {
         @apply  text-dracula-500 dark:text-dracula-200 bg-dracula-100 hover:bg-dracula-300 dark:bg-dracula-700 dark:hover:bg-dracula-800;
@@ -158,4 +162,11 @@
 .hidden-scroll::-webkit-scrollbar{
     width: 0;
     height: 0;
+}
+.image-top-gradient{
+  background: rgb(0,0,0);
+  background: -moz-linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#000000",GradientType=1);
 }

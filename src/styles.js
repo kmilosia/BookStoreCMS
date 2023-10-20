@@ -1,3 +1,3 @@
 export const backgroundOverlayModule = {
-    background: 'hsla(0,0%,0%,0.5)',
+    background: 'hsla(0,0%,0%,0.8)',
 }

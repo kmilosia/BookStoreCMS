@@ -2,20 +2,20 @@ import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/AddNewButton'
-import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { bookSortOptions, dictionarySortOptions, personSortOptions } from '../utils/select-options'
+import { bookSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { bookColumns, dictionaryColumns, personColumns } from '../utils/column-names'
+import { bookColumns } from '../utils/column-names'
 import NewBook from '../modules/new/NewBook'
 import EditBook from '../modules/edit/EditBook'
 import ViewBook from '../modules/view/ViewBook'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
+import Spinner from '../components/Spinner'
 
 function Book() {
     const [data, setData] = useState([])
@@ -26,14 +26,17 @@ function Book() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/Book`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -59,10 +62,21 @@ function Book() {
       try{
           const response = await axiosClient.put(`/Book/${id}`, object)
           getAllData()
-      }catch(err){
-        console.error(err)
-      }
-  }
+        } catch (err) {
+          if (err.response) {
+            // Request made and server responded with a status code
+            console.error('Error Status:', err.response.status);
+            console.error('Error Data:', err.response.data);
+            console.error('Request Payload:', object);
+          } else if (err.request) {
+            // The request was made but no response was received
+            console.error('Error Request:', err.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error Message:', err.message);
+          }
+        }
+      };  
 
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
@@ -92,6 +106,9 @@ function Book() {
         </div>
         <ListHeader  columnNames={bookColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map((item) => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
@@ -106,6 +123,7 @@ function Book() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewBook postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditBook putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

@@ -46,7 +46,7 @@ function ViewBook(props) {
                 <div className='divider'></div>           
                 <div className='flex flex-col my-1'>
                     <p className='column-info-title'>Opis</p>
-                    <h2 className='column-info-text'>{book.description}</h2>
+                    <h2 className='column-info-text break-all'>{book.description}</h2>
                 </div>    
                 <div className='divider'></div>
                 <div className='flex flex-col my-1'>
