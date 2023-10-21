@@ -20,7 +20,7 @@ function DictionaryLinks() {
         <Link to='/payment-method' className='sidemenu-link'>Forma Płatności</Link>  
         <Link to='/permission' className='sidemenu-link'>Przywileje</Link>  
         <Link to='/transaction-status' className='sidemenu-link'>Status Transakcji</Link>  
-        <Link to='/shipping-status' className='sidemenu-link'>Status Dostawy</Link>
+        <Link to='/shipping-status' className='sidemenu-link'>Status Wysyłki</Link>
         <Link to='/rental-status' className='sidemenu-link'>Status Wypożyczenia</Link>       
         <Link to='/rental-type' className='sidemenu-link'>Typ Wypożyczenia</Link>       
      

@@ -5,13 +5,14 @@ import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
 import { useEffect } from 'react'
+import {convertDate} from '../../utils/convertDate'
 
 function NewBookItem({setShowNewModule, postData}) {
     const [vat, setVat] = useState(0)
     const [netto, setNetto] = useState(0)
     const [ISBN, setISBN] = useState('')
     const [pages, setPages] = useState(0)
-    const [publishingDate, setPublishingDate] = useState(null)
+    const [publishingDate, setPublishingDate] = useState(new Date())
     const [translator, setTranslator] = useState(null)
     const [language, setLanguage] = useState(null)
     const [edition, setEdition] = useState(null)
@@ -114,16 +115,16 @@ function NewBookItem({setShowNewModule, postData}) {
         }
     }
     const handleVat = (e) => {
-        setVat(e.target.value)
+        setVat(Number(e.target.value))
     }
     const handleNetto = (e) => {
-        setNetto(e.target.value)
+        setNetto(Number(e.target.value))
     }
     const handleISBN = (e) => {
         setISBN(e.target.value)
     }
     const handlePages = (e) => {
-        setPages(e.target.value)
+        setPages(Number(e.target.value))
     }
     const handlePublishingDate = (e) => {
         setPublishingDate(e.target.value)
@@ -153,12 +154,13 @@ function NewBookItem({setShowNewModule, postData}) {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
+        const covertedDate = convertDate(publishingDate)
         const data = {
             vat: vat,
             nettoPrice: netto,
             isbn: ISBN,
             pages: pages,
-            publishingDate: publishingDate,
+            publishingDate: covertedDate,
             translatorId: translator.value,
             languageId: language.value,
             editionId: edition.value,
@@ -167,6 +169,7 @@ function NewBookItem({setShowNewModule, postData}) {
             availabilityId: availability.value,
             bookId: book.value,
         }
+        console.log(data);
         postData(data)
         handleCloseModule()
     } 
