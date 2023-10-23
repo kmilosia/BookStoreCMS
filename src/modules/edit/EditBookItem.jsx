@@ -5,6 +5,7 @@ import CloseWindowButton from '../../components/CloseWindowButton'
 import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
+import { convertDateToInput } from '../../utils/convertDate'
 
 function EditBookItem({setShowEditModule, putData, editedID}) {
     const [item, setItem] = useState([])
@@ -47,7 +48,8 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
           setNetto(response.data.nettoPrice)
           setISBN(response.data.isbn)
           setPages(response.data.pages)
-          setPublishingDate(response.data.publishingDate)
+          const pubDate = new Date(response.data.publishingDate)
+          setPublishingDate(convertDateToInput(pubDate))
           setTranslator(response.data.translatorId)
           setLanguage(response.data.languageId)
           setBook(response.data.bookId)
@@ -55,6 +57,7 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
           setFileFormat(response.data.fileFormatId)
           setForm(response.data.formId)
           setAvailability(response.data.availabilityId)
+          console.log(response.data);
         }catch(err){
           console.error(err)
         }
@@ -268,7 +271,7 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
         }
       },[bookOptions,book])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
     <div className='module-window'>
         <div className='module-content-wrapper'>
         <div className='module-header-row'>

@@ -9,18 +9,18 @@ import { discountSortOptions, personSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { discountColumns, personColumns } from '../utils/column-names'
-import NewAuthor from '../modules/new/NewAuthor'
-import EditAuthor from '../modules/edit/EditAuthor'
+import { discountColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import ViewAuthor from '../modules/view/ViewAuthor'
 import axiosClient from '../api/apiClient'
 import NewDiscount from '../modules/new/NewDiscount'
 import ViewDiscount from '../modules/view/ViewDiscount'
 import EditDiscount from '../modules/edit/EditDiscount'
+import EditDiscountCode from '../modules/edit/EditDiscountCode'
+import ViewDiscountCode from '../modules/view/ViewDiscountCode'
+import NewDiscountCode from '../modules/new/NewDiscountCode'
 
-function Discount() {
+function DiscountCode() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -35,7 +35,7 @@ function Discount() {
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Discount`)
+          const response = await axiosClient.get(`/DiscountCodes`)
           setData(response.data)
       }catch(err){
           console.error(err)
@@ -43,7 +43,7 @@ function Discount() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Discount`, object)
+          const response = await axiosClient.post(`/DiscountCodes`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -51,7 +51,7 @@ function Discount() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Discount/${id}`)
+          const response = await axiosClient.delete(`/DiscountCodes/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -59,7 +59,7 @@ function Discount() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Discount/${id}`, object)
+          const response = await axiosClient.put(`/DiscountCodes/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
@@ -86,11 +86,11 @@ function Discount() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Promocja</h1>    
+        <h1 className='main-header'>Kod Rabatowy</h1>    
         <div className='filter-panel'>
           <SortBar options={discountSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Promocję"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Kod Rabatowy"/>                   
         </div>
         <ListHeader  columnNames={discountColumns}/>
       </div>
@@ -98,9 +98,9 @@ function Discount() {
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
-                <p className='px-2'>{item.title}</p>
+                <p className='px-2'>{item.code}</p>
                 <p className='px-2'>{item.percentOfDiscount}%</p>
-                <p className='px-2'>{item.isAvailable ? "dostępna" : "niedostępna"}</p>
+                <p className='px-2'>{item.isAvailable ? "Dostępny" : "Niedostępny"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -110,11 +110,11 @@ function Discount() {
         ))}
       </div>
         </div>
-    {showNewModule && <NewDiscount postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditDiscount putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewDiscount editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewDiscountCode postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditDiscountCode putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewDiscountCode editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
 
-export default Discount
+export default DiscountCode

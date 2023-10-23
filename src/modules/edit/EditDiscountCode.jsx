@@ -5,10 +5,9 @@ import CloseWindowButton from '../../components/CloseWindowButton'
 import Select from 'react-select'
 import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
-import { FiMinus, FiPlus } from 'react-icons/fi'
 import { convertDateToInput } from '../../utils/convertDate'
 
-function EditDiscount({setShowEditModule, putData, editedID}) {
+function EditDiscountCode({setShowEditModule, putData, editedID}) {
   const getBooks = async () => {
     try{
       const response = await axiosClient.get(`/BookItems`)
@@ -23,9 +22,9 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
   }
     const getItem = async (id) => {
       try{
-        const response = await axiosClient.get(`/Discount/2`)
+        const response = await axiosClient.get(`/DiscountCodes/2`)
         setDiscount(response.data)
-        setTitle(response.data.title)
+        setCode(response.data.code)
         setDescription(response.data.description)
         const expDate = new Date(response.data.expiryDate)
         const startDate = new Date(response.data.startingDate)
@@ -33,24 +32,23 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
         setStartingDate(convertDateToInput(startDate))
         setPercent(response.data.percentOfDiscount)
         setBooks(response.data.listOfBookItems)
-        console.log(response.data);
       }catch(err){
         console.error(err)
       }
     }
     const [discount, setDiscount] = useState([])
-    const [title, setTitle] = useState('')
+    const [code, setCode] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState(new Date())
-    const [startingDate, setStartingDate] = useState(new Date())
-    const [percent, setPercent] = useState(null)
+    const [expirationDate, setExpirationDate] = useState('')
+    const [startingDate, setStartingDate] = useState('')
+    const [percent, setPercent] = useState('')
     const [selectedBooks, setSelectedBooks] = useState([])
     const [bookOptions, setBookOptions] = useState([])
     const [books, setBooks] = useState([])
 
 
-    const handleTitleInput = (e) => {
-      setTitle(e.target.value)
+    const handleCodeInput = (e) => {
+      setCode(e.target.value)
   }
   const handleDescriptionInput = (e) => {
       setDescription(e.target.value)
@@ -78,7 +76,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
         ))
         const data = {
             id: discount.id,
-            title: title,
+            code: code,
             description: description,
             percentOfDiscount: percent,
             expiryDate: expirationDate,
@@ -102,25 +100,23 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
     },[])
 
     useEffect(() => {
-      const updatedSelectedBooks = books.reduce((selectedBooks, item) => {
-        const selected = bookOptions.find((option) => option.value === item.bookId);
-        if (selected) {
-          return [...selectedBooks, selected];
-        }
-        return selectedBooks;
-      }, []);
-      setSelectedBooks(updatedSelectedBooks);
-    }, [books, bookOptions]);
+        console.log(bookOptions);
+        console.log(books);
+        const updatedSelectedBooks = books.map((item) => {
+          return bookOptions.find((option) => option.value === item.bookId);
+        });
+        setSelectedBooks(updatedSelectedBooks);
+      }, [books]);
 
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
                 <div className='module-header-row'>
-                  <h1 className='module-header'>Edytuj promocję</h1>
+                  <h1 className='module-header'>Edytuj kod rabatowy</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleTitleInput} type='text' value={title} className='module-input-text'/>
+                <input onChange={handleCodeInput} type='text' value={code} className='module-input-text'/>
                 <input onChange={handlePercent} type='number' value={percent} className='module-input-text'/>
                 <textarea onChange={handleDescriptionInput} value={description} rows={5} className='module-input-textarea'/>
                 <input onChange={handleExpirationDate} type='date' value={expirationDate} className='module-input-text'/>
@@ -133,4 +129,4 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
   )
 }
 
-export default EditDiscount
+export default EditDiscountCode

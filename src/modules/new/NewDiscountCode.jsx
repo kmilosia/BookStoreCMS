@@ -6,14 +6,13 @@ import {convertDate}  from '../../utils/convertDate'
 import { useEffect } from 'react'
 import Select from 'react-select'
 import axiosClient from '../../api/apiClient'
-import TextInput from '../../components/forms/TextInput'
 
-function NewDiscount({setShowNewModule, postData}) {
-    const [title, setTitle] = useState('')
+function NewDiscountCode({setShowNewModule, postData}) {
+    const [code, setCode] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState('')
-    const [startingDate, setStartingDate] = useState('')
-    const [percent, setPercent] = useState('')
+    const [expirationDate, setExpirationDate] = useState(new Date())
+    const [startingDate, setStartingDate] = useState(new Date())
+    const [percent, setPercent] = useState(null)
     const [selectedBooks, setSelectedBooks] = useState([])
     const [bookOptions, setBookOptions] = useState([])
     const getBooks = async () => {
@@ -28,8 +27,8 @@ function NewDiscount({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const handleTitleInput = (e) => {
-        setTitle(e.target.value)
+    const handleCodeInput = (e) => {
+        setCode(e.target.value)
     }
     const handleDescriptionInput = (e) => {
         setDescription(e.target.value)
@@ -58,7 +57,7 @@ function NewDiscount({setShowNewModule, postData}) {
             }
         ))
         const data = {
-            title: title,
+            code: code,
             description: description,
             percentOfDiscount: percent,
             expiryDate: convertedExpDate,
@@ -71,22 +70,17 @@ function NewDiscount({setShowNewModule, postData}) {
     } 
     useEffect(() => {
         getBooks()
-        console.log(bookOptions);
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                  <h1 className='module-header'>Dodaj nową promocję</h1>
+                  <h1 className='module-header'>Dodaj nowy kod rabatowy</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <div className='p-2 border-2 my-1'>
-                    <label className='absolute top-[-10px] left-[10px] bg-white text-xs px-1' for='name'>Nazwa</label>
-                    <input name='name' onChange={handleTitleInput} type='text' placeholder='Nazwa' className=''/>
-                </div>
-                <TextInput label="Nazwa" handle={handleTitleInput}/>        
-                <input onChange={handlePercent} type='number' placeholder='Wartość promocji (liczba)' className='module-input-text'/>
+                <input onChange={handleCodeInput} type='text' placeholder='Kod' className='module-input-text'/>
+                <input onChange={handlePercent} type='number' placeholder='Wartość przeceny (liczba)' className='module-input-text'/>
                 <textarea onChange={handleDescriptionInput} placeholder='Opis' rows={5} className='module-input-textarea'/>
                 <input onChange={handleExpirationDate} type='date' className='module-input-text'/>
                 <input onChange={handleStartingDate} type='date' className='module-input-text'/>
@@ -98,4 +92,4 @@ function NewDiscount({setShowNewModule, postData}) {
   )
 }
 
-export default NewDiscount
+export default NewDiscountCode

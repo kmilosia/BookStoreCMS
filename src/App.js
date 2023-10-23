@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 import Payment from './pages/dictionary/Payment';
@@ -27,6 +27,8 @@ function App() {
             <Route path='/permission' element={<Permission />}/>
             <Route path='/availability' element={<Availability />}/>
             <Route path='/category' element={<Category />}/>
+            <Route path='/discount' element={<Discount />}/>
+            <Route path='/discount-code' element={<DiscountCode />}/>
             <Route path='/edition' element={<Edition />}/>
             <Route path='/file-format' element={<FileFormat />}/>
             <Route path='/form' element={<Form />}/>

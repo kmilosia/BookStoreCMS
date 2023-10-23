@@ -28,8 +28,12 @@ function ViewBookItem(props) {
       }
     useEffect(()=>{
         getItem(props.editedID)
-        getBook(item.bookId)
     },[])
+    useEffect(() => {
+      if (item.bookId) {
+        getBook(item.bookId);
+      }
+    }, [item]);
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>

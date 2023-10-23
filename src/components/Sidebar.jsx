@@ -83,10 +83,17 @@ function Sidebar() {
           </div>
         </Link>
 
-        <Link to="/book-item" className={primaryLinkStyle}>
+        <Link to="/discount" className={primaryLinkStyle}>
         <div className='flex flex-row items-center'>
             <TbDiscount2 className='text-xl mx-1'/>
             <span>Promocja</span>
+          </div>
+        </Link>
+        
+        <Link to="/discount-code" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <TbDiscount2 className='text-xl mx-1'/>
+            <span>Kod Rabatowy</span>
           </div>
         </Link>
                
