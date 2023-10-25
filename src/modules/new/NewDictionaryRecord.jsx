@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewDictionaryRecord({setShowNewModule,postData,title}) {
     const [nameValue, setNameValue] = useState('')
@@ -23,7 +24,7 @@ function NewDictionaryRecord({setShowNewModule,postData,title}) {
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
                 <h1 className='module-header'>Dodaj {title}</h1>
-                <input onChange={handleValueChange} type='text' placeholder='Nazwa' className='module-input-text'/>
+                <DefaultInput onChange={handleValueChange} type='text' placeholder='Nazwa' title='Nazwa'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

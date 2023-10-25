@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axiosClient from '../../api/apiClient'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import { backgroundOverlayModule } from '../../styles'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditFooterColumn(props) {
     const [name, setName] = useState('')
@@ -53,9 +54,11 @@ function EditFooterColumn(props) {
               <h1 className='module-header'>Edytuj kolumnę footera</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>                
-            <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-            <input onChange={handlePositionInput} type='text' value={position} className='module-input-text'/>
-            <input onChange={handleHTMLObjectInput} type='text' value={htmlObject} className='module-input-text'/>
+            <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput value={position} onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                </div>
+                <DefaultInput value={htmlObject} onChange={handleHTMLObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
             <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
         </div>
     </div>

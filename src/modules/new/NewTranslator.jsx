@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewTranslator({setShowNewModule, postData}) {
     const [name, setName] = useState('')
@@ -31,8 +32,10 @@ function NewTranslator({setShowNewModule, postData}) {
               <h1 className='module-header'>Dodaj nowego translatora</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <input onChange={handleNameInput} type='text' placeholder='Imię' className='module-input-text'/>
-            <input onChange={handleSurnameInput} type='text' placeholder='Nazwisko' className='module-input-text'/>
+            <div className='grid grid-cols-2 gap-2'>
+                <DefaultInput onChange={handleNameInput} type='text' placeholder='Imię' title='Imię translatora' />
+                <DefaultInput onChange={handleSurnameInput} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
+            </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>

@@ -7,6 +7,9 @@ import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { convertDateToInput } from '../../utils/convertDate'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditDiscount({setShowEditModule, putData, editedID}) {
   const getBooks = async () => {
@@ -120,12 +123,16 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
                   <h1 className='module-header'>Edytuj promocję</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleTitleInput} type='text' value={title} className='module-input-text'/>
-                <input onChange={handlePercent} type='number' value={percent} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} value={description} rows={5} className='module-input-textarea'/>
-                <input onChange={handleExpirationDate} type='date' value={expirationDate} className='module-input-text'/>
-                <input onChange={handleStartingDate} type='date' value={startingDate} className='module-input-text'/>
-                <Select onChange={handleBooks} maxMenuHeight={100} value={selectedBooks} options={bookOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Egzemplarze książek'/>
+                <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput value={title} onChange={handleTitleInput} type='text' placeholder='Tytuł' title="Tytuł promocji"/>
+                <DefaultInput value={percent} onChange={handlePercent} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
+                </div>
+                <DefaultTextarea value={description} onChange={handleDescriptionInput} placeholder='Opis' title="Opis promocji"/>
+                <div className='grid grid-cols-2 gap-2'>
+                <DefaultInput onChange={handleStartingDate} value={startingDate} type='date' title='Data rozpoczęcia'/>
+                <DefaultInput onChange={handleExpirationDate} value={expirationDate} type='date' title="Termin ważności"/>
+                </div>
+                <DefaultSelect onChange={handleBooks} value={selectedBooks} options={bookOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

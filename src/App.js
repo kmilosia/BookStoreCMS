@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, StockAmount } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 import Payment from './pages/dictionary/Payment';
@@ -40,6 +40,7 @@ function App() {
             <Route path='/rental-status' element={<RentalStatus />}/>
             <Route path='/rental-type' element={<RentalType />}/>
             <Route path='/shipping-status' element={<ShippingStatus />}/>
+            <Route path='/stock-amount' element={<StockAmount />}/>
             <Route path='/transaction-status' element={<TransactionStatus />}/>
             <Route path='/payment-method' element={<PaymentMethod />}/>
             <Route path='/delivery-method' element={<DeliveryMethod />}/>

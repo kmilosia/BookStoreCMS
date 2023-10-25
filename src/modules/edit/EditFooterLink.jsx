@@ -4,6 +4,8 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditFooterLink(props) {
   const [name, setName] = useState('')
@@ -101,11 +103,15 @@ function EditFooterLink(props) {
                   <h1 className='module-header'>Edytuj link footera</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>                
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handlePositionInput} type='text' value={position} className='module-input-text'/>
-                <input onChange={handlePathInput} type='text' value={path} className='module-input-text'/>
-                <input onChange={handleUrlInput} type='text' value={url} className='module-input-text'/>
-                <Select onChange={handleSelectChange} maxMenuHeight={100} value={selectedOption} options={columns} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kolumna'/>
+                <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput value={position} onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                </div>
+                <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput value={path} onChange={handlePathInput} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
+                <DefaultInput value={url} onChange={handleUrlInput} type='text' placeholder='URL' title="Adres URL linku"/>
+                </div>
+                <DefaultSelect onChange={handleSelectChange} value={selectedOption} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewRentalType({setShowNewModule, postData}) {
     const [name, setName] = useState('')
@@ -31,8 +32,8 @@ function NewRentalType({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nowy typ wypożyczenia</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className='module-input-text'/>
-                <input onChange={handlePriceInput} type='number' placeholder='Cena' className='module-input-text'/>
+                <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput onChange={handlePriceInput} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

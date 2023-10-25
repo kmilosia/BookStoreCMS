@@ -280,19 +280,32 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               <h1 className='module-header'>Edytuj egzemplarz książki</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <input onChange={handleVat} type='number' value={vat} className='module-input-text'/>
-            <input onChange={handleNetto} type='number' value={netto} className='module-input-text'/>
-            <input onChange={handleISBN} type='text' value={ISBN} className='module-input-text'/>
-            <input onChange={handlePages} type='number' value={pages} className='module-input-text'/>
-            <input onChange={handlePublishingDate} type='date' value={publishingDate} className='module-input-text'/>
-            <Select onChange={handleTranslator} maxMenuHeight={100} value={selectedTranslator} options={translatorOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleLanguage} maxMenuHeight={100} value={selectedLanguage} options={languageOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleEdition} maxMenuHeight={100} value={selectedEdition} options={editionOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleFileFormat} maxMenuHeight={100} value={selectedFileFormat} options={fileFormatOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleForm} maxMenuHeight={100} value={selectedForm} options={formOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleAvailability} maxMenuHeight={100} value={selectedAvailablity} options={availabilityOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-            <Select onChange={handleBook} maxMenuHeight={100} value={selectedBook} options={bookOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-
+            <div className='grid grid-cols-2 gap-2'>
+              <DefaultInput value={vat} onChange={handleVat} placeholder="VAT" type="number" title="VAT"/>
+              <DefaultInput value={netto} onChange={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
+              <DefaultInput value={pages} onChange={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
+              <DefaultInput value={ISBN} onChange={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
+              <DefaultInput onChange={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-2 gap-2'>
+              <DefaultSelect onChange={handleLanguage} placeholder="Język" options={languageOptions} value={selectedLanguage} title="Język"/>
+              <DefaultSelect onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={selectedTranslator} title="Translator"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-[2fr_1fr] gap-2'>
+              <DefaultSelect onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={selectedBook} title="Podstawowa książka"/>
+              <DefaultSelect onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={selectedAvailablity} title="Dostępność"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-3 gap-2'>
+              <DefaultSelect onChange={handleForm} placeholder="Format książki" options={formOptions} value={selectedForm} title="Format książki"/>
+              <DefaultSelect onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={selectedEdition} title="Edycja okładki"/>
+              <DefaultSelect onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={selectedFileFormat} title="Format pliku"/>
+            </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>

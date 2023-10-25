@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewFooterColumn({setShowNewModule, postData}) {
     const [name, setName] = useState('')
@@ -36,9 +37,11 @@ function NewFooterColumn({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nową kolumnę footera</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>                
-                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className='module-input-text'/>
-                <input onChange={handlePositionInput} type='text' placeholder='Pozycja' className='module-input-text'/>
-                <input onChange={handleHtmlObjectInput} type='text' placeholder='HTML Obiekt' className='module-input-text'/>
+                <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                </div>
+                <DefaultInput onChange={handleHtmlObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

@@ -43,7 +43,7 @@
       @apply focus:border-dracula-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-[2px] dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-input-textarea{
-      @apply scrollbar-rounded focus:border-dracula-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm my-2 px-3 py-2 w-full border-[2px] dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply scrollbar-rounded focus:border-dracula-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-[2px] dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-button{
       @apply bg-orange-500 w-[100%] rounded-sm py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-orange-600;

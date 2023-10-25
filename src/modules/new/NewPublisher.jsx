@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
 
 function NewPublisher({setShowNewModule, postData}) {
     const [name, setName] = useState('')
@@ -31,8 +33,8 @@ function NewPublisher({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nowe wydawnictwo</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' placeholder='Nazwa' className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} placeholder='Opis' rows={5} className='module-input-textarea'/>
+                <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa wydawnictwa'/>
+                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title='Opis wydawnictwa'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

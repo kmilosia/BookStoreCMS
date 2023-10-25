@@ -2,6 +2,12 @@ export const dictionarySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
+export const stockSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'bookItemID', label: 'ID Egzemplarza', type: 'number'},
+    {value: 'amount', label: 'Ilość', type: 'number'},
+    {value: 'bookTitle', label: 'Tytuł', type: 'string'}
+]
 export const numericSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'},

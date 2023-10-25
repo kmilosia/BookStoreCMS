@@ -1,29 +1,56 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import axiosClient from '../../api/apiClient'
+import DefaultInput from '../../components/forms/DefaultInput'
 
-function EditDeliveryMethod({setShowNewModule}) {
+function EditDeliveryMethod(props) {
     const [name, setName] = useState('')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState('')
+    const [method,setMethod] = useState({})
+
+    const getItem = async (id) => {
+        try{
+          const response = await axiosClient.get(`/DeliveryMethod/${id}`)
+          setMethod(response.data)
+          setName(response.data.name)
+          setPrice(response.data.price)
+        }catch(err){
+          console.error(err)
+        }
+    }
     const handleNameInput = (e) => {
         setName(e.target.value)
-    } 
+    }
     const handlePriceInput = (e) => {
         setPrice(e.target.value)
-    }  
-    const handleCloseModule = () => {
-        setShowNewModule(false)
     }
+    const handleCloseModule = () => {
+      props.setEditedID(null)
+      props.setShowEditModule(false)
+    }
+    const handleSaveClick = () => {
+        method.name = name
+        method.price = price
+        props.putData(method.id, method)
+        props.setEditedID(null)
+        props.setShowEditModule(false)
+  }
+  useEffect(()=> {
+    getItem(props.editedID)
+  },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Edit delivery method</h1>
-                <input onChange={handleNameInput} type='text' value='Name' className='module-input-text'/>
-                <input onChange={handlePriceInput} type='number' value='$86.00' className='module-input-text'/>
-                <button className='module-button'>Accept</button>
+            <div className='module-header-row'>
+                  <h1 className='module-header'>Edytuj formę dostawy</h1>
+                  <CloseWindowButton handleCloseModule={handleCloseModule} />
+                </div>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput value={price} onChange={handlePriceInput} type='number' placeholder='Cena' title='Cena dostawy'/>
+                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

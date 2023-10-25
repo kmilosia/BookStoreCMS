@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditAuthor(props) {
     const [name, setName] = useState('')
@@ -53,9 +55,11 @@ function EditAuthor(props) {
                   <h1 className='module-header'>Edytuj autora</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handleSurnameInput} type='text' value={surname} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} value={description} rows={4} className='module-input-text'/>
+                <div className='grid grid-cols-2 gap-2'>
+                    <DefaultInput onChange={handleNameInput} value={name} type='text' placeholder='Imię' title='Imię autora'/>
+                    <DefaultInput onChange={handleSurnameInput} value={surname} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
+                </div>
+                <DefaultTextarea onChange={handleDescriptionInput} value={description} placeholder='Opis' title="Opis autora"/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>

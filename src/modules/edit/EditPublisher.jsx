@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
 
 function EditPublisher(props) {
     const [name, setName] = useState('')
@@ -47,8 +49,8 @@ function EditPublisher(props) {
                   <h1 className='module-header'>Edytuj wydawnictwo</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} value={description} rows={4} className='module-input-text'/>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa wydawnictwa'/>
+                <DefaultTextarea value={description} onChange={handleDescriptionInput} placeholder='Opis' title='Opis wydawnictwa'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>

@@ -58,3 +58,9 @@ export const bookItemColumns = [
     { name: 'ISBN'},
     { name: 'Cena Netto'},
 ]
+export const stockItemsColumns = [
+    { name: 'ID'},
+    { name: 'ID Egzemplarza'},
+    { name: 'Tytuł'},
+    { name: 'Ilość'},
+]

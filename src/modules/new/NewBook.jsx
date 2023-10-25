@@ -2,10 +2,12 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
-import Select from 'react-select'
 import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import { FiMinus, FiPlus } from 'react-icons/fi'
+import DefaultSelect from '../../components/forms/DefaultSelect'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
 
 
 function NewBook({setShowNewModule, postData}) {
@@ -158,19 +160,18 @@ function NewBook({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nową książkę</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleTitleInput} type='text' placeholder='Tytuł książki' className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} placeholder='Opis książki' rows={5} className='module-input-textarea'/>
+                <DefaultInput onChange={handleTitleInput} type='text' placeholder='Tytuł' title='Tytuł książki'/>
+                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title='Opis książki'/>
+                <div className='divider' />
                 <div className='grid grid-cols-2 gap-2'>
-                  <Select onChange={handleLanguageInput} maxMenuHeight={100} value={selectedLanguage} options={languageOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język oryginału'/>
-                  <Select onChange={handlePublisherInput} maxMenuHeight={100} value={selectedPublisher} options={publisherOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Wydawnictwo'/>
+                  <DefaultSelect onChange={handleLanguageInput} value={selectedLanguage} options={languageOptions} title='Język oryginalny' placeholder='Język'/>
+                  <DefaultSelect onChange={handlePublisherInput} value={selectedPublisher} options={publisherOptions} title='Wydawnictwo' placeholder='Wydawnictwo'/>
                 </div>
-                <div className='grid grid-cols-2 gap-2'>
-                  <Select onChange={handleAuthorsChange} maxMenuHeight={100} value={selectedAuthors} options={authorOptions} isClearable={true} isSearchable={true} isMulti={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Autor/autorzy'/>
-                  <Select onChange={handleCategoriesChange} maxMenuHeight={100} value={selectedCategories} options={categoryOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Kategorie'/>
-                </div>
+                <DefaultSelect isMulti={true} onChange={handleAuthorsChange} value={selectedAuthors} options={authorOptions} title='Autorzy' placeholder='Autorzy'/>
+                <DefaultSelect isMulti={true} onChange={handleCategoriesChange} value={selectedCategories} options={categoryOptions} title='Kategorie' placeholder='Kategorie'/>
                 <div className='divider'></div>
                 <div className="flex flex-row justify-between items-center my-1">
-                  <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki:</p>
+                  <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki</p>
                   {selectedImages.length > 0 && 
                   <button onClick={handleClearAllPhotos} className="text-xs px-3 py-1 rounded-sm text-dracula-100 bg-orange-400 hover:bg-orange-500">Wyczyść wszystko</button>
                   }
@@ -190,12 +191,13 @@ function NewBook({setShowNewModule, postData}) {
                   ))}
                 </div>
                 </div>}
+                <div className='divider' />
                 <div className='flex flex-row items-center'>
                   <div className='grid grid-cols-[1fr_2fr] gap-2'>
-                    <input onChange={handleImageTitleInput} value={imageTitle} type='text' placeholder='Tytuł zdjęcia' className='module-input-text'/>
-                    <input onChange={handleImageURLInput} value={imageURL} type='text' placeholder='Adres URL' className='module-input-text'/>
+                    <DefaultInput onChange={handleImageTitleInput} value={imageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                    <DefaultInput onChange={handleImageURLInput} value={imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
                   </div>
-                  <button className='module-round-button' onClick={handleAddPhoto}><FiPlus/></button>
+                  <button className='module-round-button mt-4' onClick={handleAddPhoto}><FiPlus/></button>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

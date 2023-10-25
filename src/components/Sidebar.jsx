@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BiUser, BiPackage, BiBook, BiBookBookmark} from 'react-icons/bi'
+import { BiUser, BiPackage, BiBook, BiBookBookmark,BiBox} from 'react-icons/bi'
 import {AiOutlineClose, AiOutlineLogout} from 'react-icons/ai'
 import {TbDiscount2} from 'react-icons/tb'
 import {FaBook} from 'react-icons/fa'
-import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
+import {PiBooks} from 'react-icons/pi'
+import {MdOutlineDiscount} from 'react-icons/md'
+import {BsMoonStarsFill, BsSunFill,BsPerson} from 'react-icons/bs'
 import {FiSettings,FiLayout, FiMis} from 'react-icons/fi'
 import hannahAvatar from '../assets/hannah.jpg'
 import { checkTheme } from '../utils/theme'
@@ -78,14 +80,14 @@ function Sidebar() {
 
         <Link to="/book-item" className={primaryLinkStyle}>
         <div className='flex flex-row items-center'>
-            <FaBook className='text-xl mx-1'/>
+            <PiBooks className='text-xl mx-1'/>
             <span>Egzemplarz</span>
           </div>
         </Link>
 
         <Link to="/discount" className={primaryLinkStyle}>
         <div className='flex flex-row items-center'>
-            <TbDiscount2 className='text-xl mx-1'/>
+            <MdOutlineDiscount className='text-xl mx-1'/>
             <span>Promocja</span>
           </div>
         </Link>
@@ -94,6 +96,20 @@ function Sidebar() {
         <div className='flex flex-row items-center'>
             <TbDiscount2 className='text-xl mx-1'/>
             <span>Kod Rabatowy</span>
+          </div>
+        </Link>
+
+        <Link to="/stock-amount" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <BiBox className='text-xl mx-1'/>
+            <span>Magazyn</span>
+          </div>
+        </Link>
+
+        <Link to="/customer" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <BiBox className='text-xl mx-1'/>
+            <span>Klient</span>
           </div>
         </Link>
                

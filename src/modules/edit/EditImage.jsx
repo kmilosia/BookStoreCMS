@@ -4,6 +4,7 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import { FiPlus } from 'react-icons/fi'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditImage(props) {
     const [title, setTitle] = useState('')
@@ -40,7 +41,7 @@ function EditImage(props) {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
     <div className='module-window'>
         <div className='module-content-wrapper'>
         <div className='module-header-row'>
@@ -49,9 +50,9 @@ function EditImage(props) {
             </div>
             <img src={imageURL} className='w-full object-contain h-auto my-1' />
             <div className='flex flex-row items-center'>
-              <div className='grid grid-cols-[1fr_2fr] gap-2'>
-                <input onChange={handleTitleInput} value={title} type='text' placeholder='Tytuł zdjęcia' className='module-input-text'/>
-                <input onChange={handleURLInput} value={imageURL} type='text' placeholder='Adres URL' className='module-input-text'/>
+              <div className='grid grid-cols-[1fr_2fr] gap-2 mt-2'>
+              <DefaultInput onChange={handleTitleInput} value={title} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+              <DefaultInput onChange={handleURLInput} value={imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
               </div>
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>

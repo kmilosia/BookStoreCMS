@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
-import Select from 'react-select'
 import { useEffect } from 'react'
 import {convertDate} from '../../utils/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
@@ -201,30 +200,30 @@ function NewBookItem({setShowNewModule, postData}) {
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultInput handle={handleVat} placeholder="VAT" type="number" title="VAT"/>
-              <DefaultInput handle={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
+              <DefaultInput onChange={handleVat} placeholder="VAT" type="number" title="VAT"/>
+              <DefaultInput onChange={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
-              <DefaultInput handle={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
-              <DefaultInput handle={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
-              <DefaultInput handle={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
+              <DefaultInput onChange={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
+              <DefaultInput onChange={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
+              <DefaultInput onChange={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultSelect handle={handleLanguage} placeholder="Język" options={languageOptions} multi={false} value={language} title="Język"/>
-              <DefaultSelect handle={handleTranslator} placeholder="Translator" options={translatorOptions} multi={false} value={translator} title="Translator"/>
+              <DefaultSelect onChange={handleLanguage} placeholder="Język" options={languageOptions} value={language} title="Język"/>
+              <DefaultSelect onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={translator} title="Translator"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[2fr_1fr] gap-2'>
-              <DefaultSelect handle={handleBook} placeholder="Podstawowa książka" options={bookOptions} multi={false} value={book} title="Podstawowa książka"/>
-              <DefaultSelect handle={handleAvailability} placeholder="Dostępność" options={availabilityOptions} multi={false} value={availability} title="Dostępność"/>
+              <DefaultSelect onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={book} title="Podstawowa książka"/>
+              <DefaultSelect onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={availability} title="Dostępność"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-3 gap-2'>
-              <DefaultSelect handle={handleForm} placeholder="Format książki" options={formOptions} multi={false} value={form} title="Format książki"/>
-              <DefaultSelect handle={handleEdition} placeholder="Edycja Okładki" options={editionOptions} multi={false} value={edition} title="Edycja okładki"/>
-              <DefaultSelect handle={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} multi={false} value={fileFormat} title="Format pliku"/>
+              <DefaultSelect onChange={handleForm} placeholder="Format książki" options={formOptions} value={form} title="Format książki"/>
+              <DefaultSelect onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={edition} title="Edycja okładki"/>
+              <DefaultSelect onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={fileFormat} title="Format pliku"/>
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>

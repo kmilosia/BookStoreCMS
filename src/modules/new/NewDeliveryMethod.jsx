@@ -2,8 +2,9 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
 
-function NewDeliveryMethod({setShowNewModule}) {
+function NewDeliveryMethod({setShowNewModule,postData}) {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const handleNameInput = (e) => {
@@ -15,15 +16,23 @@ function NewDeliveryMethod({setShowNewModule}) {
     const handleCloseModule = () => {
         setShowNewModule(false)
     }
+    const handleAcceptButton = () => {
+        const data = {
+            name: name,
+            price: price,
+        }
+        postData(data)
+        handleCloseModule()
+    }
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <CloseWindowButton handleCloseModule={handleCloseModule} />
             <div className='module-content-wrapper'>
-                <h1 className='module-header'>Add new rental option</h1>
-                <input onChange={handleNameInput} type='text' placeholder='Name' className='module-input-text'/>
-                <input onChange={handlePriceInput} type='number' placeholder='Cost' className='module-input-text'/>
-                <button className='module-button'>Accept</button>
+                <h1 className='module-header'>Dodaj nową formę dostawy</h1>
+                <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput onChange={handlePriceInput} type='number' placeholder='Cena' title='Cena dostawy'/>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

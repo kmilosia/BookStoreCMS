@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditRentalType(props) {
     const [name, setName] = useState('')
@@ -47,8 +48,8 @@ function EditRentalType(props) {
                   <h1 className='module-header'>Edytuj typ wypożyczenia</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handlePriceInput} type='number' value={price} className='module-input-text'/>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput value={price} onChange={handlePriceInput} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>

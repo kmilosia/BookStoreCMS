@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
 
 function NewAuthor({setShowNewModule, postData}) {
     const [name, setName] = useState('')
@@ -36,9 +38,11 @@ function NewAuthor({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nowego autora</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' placeholder='Imię' className='module-input-text'/>
-                <input onChange={handleSurnameInput} type='text' placeholder='Nazwisko' className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} placeholder='Opis autora' rows={5} className='module-input-textarea'/>
+                <div className='grid grid-cols-2 gap-2'>
+                    <DefaultInput onChange={handleNameInput} type='text' placeholder='Imię' title='Imię autora'/>
+                    <DefaultInput onChange={handleSurnameInput} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
+                </div>
+                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title="Opis autora"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

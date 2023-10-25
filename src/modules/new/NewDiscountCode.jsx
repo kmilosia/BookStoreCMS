@@ -4,8 +4,10 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import {convertDate}  from '../../utils/convertDate'
 import { useEffect } from 'react'
-import Select from 'react-select'
 import axiosClient from '../../api/apiClient'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultSelect from '../../components/forms/DefaultSelect'
+import DefaultTextarea from '../../components/forms/DefaultTextarea'
 
 function NewDiscountCode({setShowNewModule, postData}) {
     const today = new Date().toISOString().split('T')[0];
@@ -80,12 +82,16 @@ function NewDiscountCode({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nowy kod rabatowy</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleCodeInput} type='text' placeholder='Kod' className='module-input-text uppercase'/>
-                <input onChange={handlePercent} type='number' placeholder='Wartość rabatu (%)' className='module-input-text'/>
-                <textarea onChange={handleDescriptionInput} placeholder='Opis' rows={5} className='module-input-textarea'/>
-                <input onChange={handleStartingDate} value={startingDate} type='date' className='module-input-text'/>
-                <input onChange={handleExpirationDate} value={expirationDate} type='date' className='module-input-text'/>
-                <Select onChange={handleBooks} maxMenuHeight={100} value={selectedBooks} options={bookOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Egzemplarze książek'/>
+                <div className='grid grid-cols-[2fr_1fr] gap-2'>
+                <DefaultInput onChange={handleCodeInput} type='text' placeholder='Kod' title="Kod rabatu"/>
+                <DefaultInput onChange={handlePercent} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
+                </div>
+                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title="Opis kodu"/>
+                <div className='grid grid-cols-2 gap-2'>
+                <DefaultInput onChange={handleStartingDate} value={startingDate} type='date' title='Data rozpoczęcia'/>
+                <DefaultInput onChange={handleExpirationDate} value={expirationDate} type='date' title="Termin ważności"/>
+                </div>
+                <DefaultSelect onChange={handleBooks} value={selectedBooks} options={bookOptions} isMulti={true} title="Egzemplarze objęte kodem rabatowym" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

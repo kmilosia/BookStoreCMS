@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditTranslator(props) {
     const [name, setName] = useState('')
@@ -47,8 +48,8 @@ function EditTranslator(props) {
                   <h1 className='module-header'>Edytuj translatora</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleNameInput} type='text' value={name} className='module-input-text'/>
-                <input onChange={handleSurnameInput} type='text' value={surname} className='module-input-text'/>
+                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Imię' title='Imię translatora' />
+                <DefaultInput value={surname} onChange={handleSurnameInput} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>
