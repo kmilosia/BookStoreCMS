@@ -15,7 +15,7 @@
     }
     /* object table list */
     .table-row-wrapper{
-      @apply grid grid-cols-3 gap-0 items-center bg-white px-6 py-4 rounded-sm border-t-2 border-dracula-200 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
+      @apply grid grid-cols-3 gap-1 items-center bg-white px-6 py-4 rounded-sm border-t-2 border-dracula-200 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
     }
     .table-button{
       @apply rounded-3xl bg-saphire-100 p-3 mx-2 hover:bg-saphire-200 dark:text-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900;
@@ -68,11 +68,8 @@
       @apply bg-orange-400 text-dracula-100 rounded-sm cursor-default px-3 py-1 mr-2 flex flex-row flex-wrap;
     }
     /* sidebar style */
-    .sidebar-link{
-      @apply flex flex-row my-2 transition-all p-2 rounded-3xl text-gray-700 hover:bg-saphire-500 hover:text-gray-200;
-    }
     .sidemenu-link{
-      @apply flex flex-row items-center py-2 text-sm hover:text-orange-500;
+      @apply flex flex-row items-center pb-3 text-sm hover:text-orange-500;
     }
     /* main view */
     .main-wrapper{
@@ -96,10 +93,13 @@
     
      /* scrollbar */
      .scrollbar-default{
-      @apply scrollbar-thin pr-[0rem] scrollbar-track-dracula-300 scrollbar-thumb-dracula-400 dark:scrollbar-track-dracula-900 dark:scrollbar-thumb-dracula-800 ;
+      @apply scrollbar-thin pr-[0rem] scrollbar-track-dracula-200 scrollbar-thumb-slate-300 dark:scrollbar-track-dracula-800 dark:scrollbar-thumb-black ;
     }
     .scrollbar-rounded{
       @apply scrollbar-default scrollbar-thumb-rounded-md scrollbar-track-rounded-md;
+    }
+    .sidebar-scrollbar{
+      @apply scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thin scrollbar-track-dracula-200 scrollbar-thumb-slate-300 dark:scrollbar-track-dracula-800 dark:scrollbar-thumb-dracula-900;
     }
     /* extras */
     .divider{
