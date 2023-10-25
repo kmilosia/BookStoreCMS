@@ -9,6 +9,7 @@ import { AiFillEdit } from 'react-icons/ai'
 import { FaSave } from 'react-icons/fa'
 import { BsTrash3Fill } from 'react-icons/bs'
 import { useState } from 'react'
+import Spinner from '../../components/Spinner'
 
 function DictionaryComponent(props) {
 const [nameValue, setNameValue] = useState('')
@@ -43,6 +44,9 @@ const handleDeleteClick = (id) => {
         </div>
         <ListHeader  columnNames={dictionaryColumns}/>
       </div>
+      {props.isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
             {props.filteredItems.map(item => (             
               <div key={item.id} className='table-row-wrapper'>
@@ -59,6 +63,7 @@ const handleDeleteClick = (id) => {
               </div>            
             ))}
       </div>
+      }
         </div>
         </>
   )

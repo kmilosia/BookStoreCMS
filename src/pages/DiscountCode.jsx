@@ -19,6 +19,7 @@ import EditDiscount from '../modules/edit/EditDiscount'
 import EditDiscountCode from '../modules/edit/EditDiscountCode'
 import ViewDiscountCode from '../modules/view/ViewDiscountCode'
 import NewDiscountCode from '../modules/new/NewDiscountCode'
+import Spinner from '../components/Spinner'
 
 function DiscountCode() {
     const [data, setData] = useState([])
@@ -29,14 +30,17 @@ function DiscountCode() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/DiscountCodes`)
-          setData(response.data)
+        setIsDataLoading(true)
+        const response = await axiosClient.get(`/DiscountCodes`)
+        setData(response.data)
+        setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -94,13 +98,16 @@ function DiscountCode() {
         </div>
         <ListHeader  columnNames={discountColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.code}</p>
                 <p className='px-2'>{item.percentOfDiscount}%</p>
-                <p className='px-2'>{item.isAvailable ? "Dostępny" : "Niedostępny"}</p>
+                <p className='px-2'>{item.isAvailable ? "Aktywny" : "Nieaktywny"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -109,6 +116,7 @@ function DiscountCode() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewDiscountCode postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditDiscountCode putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

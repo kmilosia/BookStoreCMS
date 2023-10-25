@@ -17,6 +17,7 @@ import NewImage from '../modules/new/NewImage'
 import EditImage from '../modules/edit/EditImage'
 import ViewImage from '../modules/view/ViewImage'
 import {truncate} from '../utils/truncate-text'
+import Spinner from '../components/Spinner'
 
 function Image() {
     const [data, setData] = useState([])
@@ -27,14 +28,17 @@ function Image() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/Images`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -92,6 +96,9 @@ function Image() {
         </div>
         <ListHeader  columnNames={imageColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
@@ -106,6 +113,7 @@ function Image() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewImage postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditImage putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

@@ -14,15 +14,17 @@ function Payment() {
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
 
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/PaymentMethod`)
-          console.log(response.data);
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -80,7 +82,8 @@ function Payment() {
       getAllData,
       postData,
       deleteData,
-      putData
+      putData,
+      isDataLoading
   };
   return (
     <>

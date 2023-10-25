@@ -8,10 +8,11 @@ import Select from 'react-select'
 import axiosClient from '../../api/apiClient'
 
 function NewDiscountCode({setShowNewModule, postData}) {
+    const today = new Date().toISOString().split('T')[0];
     const [code, setCode] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState(new Date())
-    const [startingDate, setStartingDate] = useState(new Date())
+    const [expirationDate, setExpirationDate] = useState(today)
+    const [startingDate, setStartingDate] = useState(today)
     const [percent, setPercent] = useState(null)
     const [selectedBooks, setSelectedBooks] = useState([])
     const [bookOptions, setBookOptions] = useState([])
@@ -28,7 +29,7 @@ function NewDiscountCode({setShowNewModule, postData}) {
         }
     }
     const handleCodeInput = (e) => {
-        setCode(e.target.value)
+        setCode(e.target.value.toUpperCase())
     }
     const handleDescriptionInput = (e) => {
         setDescription(e.target.value)
@@ -72,18 +73,18 @@ function NewDiscountCode({setShowNewModule, postData}) {
         getBooks()
     },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
                   <h1 className='module-header'>Dodaj nowy kod rabatowy</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <input onChange={handleCodeInput} type='text' placeholder='Kod' className='module-input-text'/>
-                <input onChange={handlePercent} type='number' placeholder='Wartość przeceny (liczba)' className='module-input-text'/>
+                <input onChange={handleCodeInput} type='text' placeholder='Kod' className='module-input-text uppercase'/>
+                <input onChange={handlePercent} type='number' placeholder='Wartość rabatu (%)' className='module-input-text'/>
                 <textarea onChange={handleDescriptionInput} placeholder='Opis' rows={5} className='module-input-textarea'/>
-                <input onChange={handleExpirationDate} type='date' className='module-input-text'/>
-                <input onChange={handleStartingDate} type='date' className='module-input-text'/>
+                <input onChange={handleStartingDate} value={startingDate} type='date' className='module-input-text'/>
+                <input onChange={handleExpirationDate} value={expirationDate} type='date' className='module-input-text'/>
                 <Select onChange={handleBooks} maxMenuHeight={100} value={selectedBooks} options={bookOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

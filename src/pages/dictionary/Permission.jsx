@@ -13,13 +13,17 @@ function Permission() {
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
+
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/Permission`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -76,7 +80,8 @@ function Permission() {
       getAllData,
       postData,
       deleteData,
-      putData
+      putData,
+      isDataLoading
   };
   return (
     <>

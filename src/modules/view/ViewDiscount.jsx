@@ -10,7 +10,7 @@ function ViewDiscount(props) {
     const [startingDate, setStartingDate] = useState(null)
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Discount/2`)
+          const response = await axiosClient.get(`/Discount/${id}`)
           setDiscount(response.data)
         }catch(err){
           console.error(err)

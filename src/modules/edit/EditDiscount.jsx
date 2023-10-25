@@ -23,7 +23,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
   }
     const getItem = async (id) => {
       try{
-        const response = await axiosClient.get(`/Discount/2`)
+        const response = await axiosClient.get(`/Discount/${id}`)
         setDiscount(response.data)
         setTitle(response.data.title)
         setDescription(response.data.description)

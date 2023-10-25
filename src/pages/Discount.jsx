@@ -2,23 +2,20 @@ import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/AddNewButton'
-import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { discountSortOptions, personSortOptions } from '../utils/select-options'
+import { discountSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { discountColumns, personColumns } from '../utils/column-names'
-import NewAuthor from '../modules/new/NewAuthor'
-import EditAuthor from '../modules/edit/EditAuthor'
+import { discountColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
-import ViewAuthor from '../modules/view/ViewAuthor'
 import axiosClient from '../api/apiClient'
 import NewDiscount from '../modules/new/NewDiscount'
 import ViewDiscount from '../modules/view/ViewDiscount'
 import EditDiscount from '../modules/edit/EditDiscount'
+import Spinner from '../components/Spinner'
 
 function Discount() {
     const [data, setData] = useState([])
@@ -29,14 +26,17 @@ function Discount() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
-          const response = await axiosClient.get(`/Discount`)
-          setData(response.data)
+        setIsDataLoading(true)
+        const response = await axiosClient.get(`/Discount`)
+        setData(response.data)
+        setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -94,13 +94,16 @@ function Discount() {
         </div>
         <ListHeader  columnNames={discountColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.title}</p>
                 <p className='px-2'>{item.percentOfDiscount}%</p>
-                <p className='px-2'>{item.isAvailable ? "dostępna" : "niedostępna"}</p>
+                <p className='px-2'>{item.isAvailable ? "Aktywna" : "Nieaktywna"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -109,6 +112,7 @@ function Discount() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewDiscount postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditDiscount putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

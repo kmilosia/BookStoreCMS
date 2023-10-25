@@ -2,23 +2,20 @@ import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/AddNewButton'
-import { fetchAll } from '../api/fetchAPI'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { dictionarySortOptions, personSortOptions } from '../utils/select-options'
+import { dictionarySortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { dictionaryColumns, personColumns } from '../utils/column-names'
-import NewTranslator from '../modules/new/NewTranslator'
-import EditTranslator from '../modules/edit/EditTranslator'
-import ViewTranslator from '../modules/view/ViewTranslator'
+import { dictionaryColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import NewFooterLink from '../modules/new/NewFooterLink'
 import EditFooterLink from '../modules/edit/EditFooterLink'
 import ViewFooterLink from '../modules/view/ViewFooterLink'
+import Spinner from '../components/Spinner'
 
 function FooterLinks() {
     const [data, setData] = useState([])
@@ -29,14 +26,17 @@ function FooterLinks() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/FooterLinks`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -94,6 +94,9 @@ function FooterLinks() {
         </div>
         <ListHeader  columnNames={dictionaryColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-3'>
@@ -107,6 +110,7 @@ function FooterLinks() {
             </div>        
         ))}
       </div>
+      }
      </div>
     {showNewModule && <NewFooterLink postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditFooterLink putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

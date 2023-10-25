@@ -6,13 +6,16 @@ import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
 import { useEffect } from 'react'
 import {convertDate} from '../../utils/convertDate'
+import DefaultSelect from '../../components/forms/DefaultSelect'
+import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewBookItem({setShowNewModule, postData}) {
+  const today = new Date().toISOString().split('T')[0];
     const [vat, setVat] = useState(0)
     const [netto, setNetto] = useState(0)
     const [ISBN, setISBN] = useState('')
     const [pages, setPages] = useState(0)
-    const [publishingDate, setPublishingDate] = useState(new Date())
+    const [publishingDate, setPublishingDate] = useState(today)
     const [translator, setTranslator] = useState(null)
     const [language, setLanguage] = useState(null)
     const [edition, setEdition] = useState(null)
@@ -197,20 +200,32 @@ function NewBookItem({setShowNewModule, postData}) {
               <h1 className='module-header'>Dodaj nowy egzemplarz książki</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Informacje podstawowe</p>
-            <input onChange={handleVat} type='number' placeholder='Cena VAT' className='module-input-text'/>
-            <input onChange={handleNetto} type='number' placeholder='Cena NETTO' className='module-input-text'/>
-            <input onChange={handleISBN} type='text' placeholder='ISBN' className='module-input-text'/>
-            <input onChange={handlePages} type='number' placeholder='Ilość stron' className='module-input-text'/>
-            <input onChange={handlePublishingDate} type='date' className='module-input-text'/>
-            <Select onChange={handleTranslator} maxMenuHeight={100} value={translator} options={translatorOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Translator'/>
-            <Select onChange={handleLanguage} maxMenuHeight={100} value={language} options={languageOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Język'/>
-            <Select onChange={handleEdition} maxMenuHeight={100} value={edition} options={editionOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Edycja'/>
-            <Select onChange={handleFileFormat} maxMenuHeight={100} value={fileFormat} options={fileFormatOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Format Pliku'/>
-            <Select onChange={handleForm} maxMenuHeight={100} value={form} options={formOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Format'/>
-            <Select onChange={handleAvailability} maxMenuHeight={100} value={availability} options={availabilityOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Dostępność'/>
-            <Select onChange={handleBook} maxMenuHeight={100} value={book} options={bookOptions} isClearable={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Podstawowa książka'/>
-
+            <div className='grid grid-cols-2 gap-2'>
+              <DefaultInput handle={handleVat} placeholder="VAT" type="number" title="VAT"/>
+              <DefaultInput handle={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
+              <DefaultInput handle={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
+              <DefaultInput handle={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
+              <DefaultInput handle={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-2 gap-2'>
+              <DefaultSelect handle={handleLanguage} placeholder="Język" options={languageOptions} multi={false} value={language} title="Język"/>
+              <DefaultSelect handle={handleTranslator} placeholder="Translator" options={translatorOptions} multi={false} value={translator} title="Translator"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-[2fr_1fr] gap-2'>
+              <DefaultSelect handle={handleBook} placeholder="Podstawowa książka" options={bookOptions} multi={false} value={book} title="Podstawowa książka"/>
+              <DefaultSelect handle={handleAvailability} placeholder="Dostępność" options={availabilityOptions} multi={false} value={availability} title="Dostępność"/>
+            </div>
+            <div className='divider'/>
+            <div className='grid grid-cols-3 gap-2'>
+              <DefaultSelect handle={handleForm} placeholder="Format książki" options={formOptions} multi={false} value={form} title="Format książki"/>
+              <DefaultSelect handle={handleEdition} placeholder="Edycja Okładki" options={editionOptions} multi={false} value={edition} title="Edycja okładki"/>
+              <DefaultSelect handle={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} multi={false} value={fileFormat} title="Format pliku"/>
+            </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>

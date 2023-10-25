@@ -9,10 +9,11 @@ import axiosClient from '../../api/apiClient'
 import TextInput from '../../components/forms/TextInput'
 
 function NewDiscount({setShowNewModule, postData}) {
+    const today = new Date().toISOString().split('T')[0];
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState('')
-    const [startingDate, setStartingDate] = useState('')
+    const [expirationDate, setExpirationDate] = useState(today)
+    const [startingDate, setStartingDate] = useState(today)
     const [percent, setPercent] = useState('')
     const [selectedBooks, setSelectedBooks] = useState([])
     const [bookOptions, setBookOptions] = useState([])
@@ -81,15 +82,11 @@ function NewDiscount({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nową promocję</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <div className='p-2 border-2 my-1'>
-                    <label className='absolute top-[-10px] left-[10px] bg-white text-xs px-1' for='name'>Nazwa</label>
-                    <input name='name' onChange={handleTitleInput} type='text' placeholder='Nazwa' className=''/>
-                </div>
                 <TextInput label="Nazwa" handle={handleTitleInput}/>        
-                <input onChange={handlePercent} type='number' placeholder='Wartość promocji (liczba)' className='module-input-text'/>
+                <input onChange={handlePercent} type='number' placeholder='Wartość promocji (%)' className='module-input-text'/>
                 <textarea onChange={handleDescriptionInput} placeholder='Opis' rows={5} className='module-input-textarea'/>
-                <input onChange={handleExpirationDate} type='date' className='module-input-text'/>
-                <input onChange={handleStartingDate} type='date' className='module-input-text'/>
+                <input onChange={handleStartingDate} value={startingDate} type='date' className='module-input-text'/>
+                <input onChange={handleExpirationDate} value={expirationDate} type='date' className='module-input-text'/>
                 <Select onChange={handleBooks} maxMenuHeight={100} value={selectedBooks} options={bookOptions} isClearable={true} isMulti={true} isSearchable={true} className="my-react-select-module-container my-2 w-full" classNamePrefix="my-react-select-module" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

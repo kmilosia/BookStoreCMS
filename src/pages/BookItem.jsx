@@ -93,9 +93,6 @@ function BookItem() {
     useEffect(()=>{
         getAllData()
     },[])
-    useEffect(() => {
-      console.log(data);
-    },[data])
       
   return (
     <>

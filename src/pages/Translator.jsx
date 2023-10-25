@@ -16,6 +16,7 @@ import ViewTranslator from '../modules/view/ViewTranslator'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
+import Spinner from '../components/Spinner'
 
 function Translator() {
     const [data, setData] = useState([])
@@ -26,14 +27,17 @@ function Translator() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/Translator`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -91,6 +95,9 @@ function Translator() {
         </div>
         <ListHeader  columnNames={personColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
@@ -105,6 +112,7 @@ function Translator() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewTranslator postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditTranslator putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

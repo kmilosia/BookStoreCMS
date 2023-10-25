@@ -15,6 +15,7 @@ import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import ViewFooterColumn from '../modules/view/ViewFooterColumn'
 import axiosClient from '../api/apiClient'
+import Spinner from '../components/Spinner'
 
 function FooterColumns() {
     const [columns, setColumns] = useState([])
@@ -25,16 +26,18 @@ function FooterColumns() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(columns, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/FooterColumns`)
           setColumns(response.data)
-          console.log(response.data);
-      }catch(err){
+          setIsDataLoading(false)
+        }catch(err){
           console.error(err)
       }
     }
@@ -91,6 +94,9 @@ function FooterColumns() {
         </div>
         <ListHeader  columnNames={footerColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-5'>
@@ -106,6 +112,7 @@ function FooterColumns() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewFooterColumn postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditFooterColumn putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

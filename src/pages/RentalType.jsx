@@ -16,6 +16,7 @@ import ViewRentalType from '../modules/view/ViewRentalType'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
+import Spinner from '../components/Spinner'
 
 function RentalType() {
     const [data, setData] = useState([])
@@ -26,14 +27,17 @@ function RentalType() {
     const [showEditModule, setShowEditModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
+    const [isDataLoading, setIsDataLoading] = useState(false)
    
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
 
     const getAllData = async () => {
       try{
+        setIsDataLoading(true)
           const response = await axiosClient.get(`/RentalType`)
           setData(response.data)
+          setIsDataLoading(false)
       }catch(err){
           console.error(err)
       }
@@ -91,6 +95,9 @@ function RentalType() {
         </div>
         <ListHeader  columnNames={numericColumns}/>
       </div>
+      {isDataLoading ? 
+      <Spinner />
+      :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
@@ -105,6 +112,7 @@ function RentalType() {
             </div>        
         ))}
       </div>
+      }
         </div>
     {showNewModule && <NewRentalType postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditRentalType putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

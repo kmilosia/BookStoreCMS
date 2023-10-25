@@ -6,15 +6,17 @@ import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import Select from 'react-select'
 import { convertDateToInput } from '../../utils/convertDate'
+import DefaultInput from '../../components/forms/DefaultInput'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditBookItem({setShowEditModule, putData, editedID}) {
     const [item, setItem] = useState([])
 
-    const [vat, setVat] = useState(0)
-    const [netto, setNetto] = useState(0)
+    const [vat, setVat] = useState(null)
+    const [netto, setNetto] = useState(null)
     const [ISBN, setISBN] = useState('')
-    const [pages, setPages] = useState(0)
-    const [publishingDate, setPublishingDate] = useState(null)
+    const [pages, setPages] = useState(null)
+    const [publishingDate, setPublishingDate] = useState('')
     const [translator, setTranslator] = useState(null)
     const [language, setLanguage] = useState(null)
     const [edition, setEdition] = useState(null)
@@ -50,13 +52,13 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
           setPages(response.data.pages)
           const pubDate = new Date(response.data.publishingDate)
           setPublishingDate(convertDateToInput(pubDate))
-          setTranslator(response.data.translatorId)
-          setLanguage(response.data.languageId)
-          setBook(response.data.bookId)
-          setEdition(response.data.editionId)
-          setFileFormat(response.data.fileFormatId)
-          setForm(response.data.formId)
-          setAvailability(response.data.availabilityId)
+          setTranslator(response.data.translatorID)
+          setLanguage(response.data.languageID)
+          setBook(response.data.bookID)
+          setEdition(response.data.editionID)
+          setFileFormat(response.data.fileFormatID)
+          setForm(response.data.formID)
+          setAvailability(response.data.availabilityID)
           console.log(response.data);
         }catch(err){
           console.error(err)
@@ -148,40 +150,40 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
         }
     }
     const handleVat = (e) => {
-        setVat(e.target.value)
+        setVat(Number(e.target.value))
     }
     const handleNetto = (e) => {
-        setNetto(e.target.value)
+        setNetto(Number(e.target.value))
     }
     const handleISBN = (e) => {
         setISBN(e.target.value)
     }
     const handlePages = (e) => {
-        setPages(e.target.value)
+        setPages(Number(e.target.value))
     }
     const handlePublishingDate = (e) => {
         setPublishingDate(e.target.value)
     }
-    const handleTranslator = (translator) => {
-        setTranslator(translator)
+    const handleTranslator = (selectedTranslator) => {
+        setSelectedTranslator(selectedTranslator)
     }
-    const handleLanguage = (language) => {
-        setLanguage(language)
+    const handleLanguage = (selectedLanguage) => {
+        setSelectedLanguage(selectedLanguage)
     }
-    const handleEdition = (edition) => {
-        setEdition(edition)
+    const handleEdition = (selectedEdition) => {
+        setSelectedEdition(selectedEdition)
     }
-    const handleFileFormat = (fileFormat) => {
-        setFileFormat(fileFormat)
+    const handleFileFormat = (selectedFileFormat) => {
+        setSelectedFileFormat(selectedFileFormat)
     }
-    const handleForm = (form) => {
-        setForm(form)
+    const handleForm = (selectedForm) => {
+        setSelectedForm(selectedForm)
     }
-    const handleAvailability = (availability) => {
-        setAvailability(availability)
+    const handleAvailability = (selectedAvailablity) => {
+        setSelectedAvailability(setSelectedAvailability)
     }
-    const handleBook = (book) => {
-        setBook(book)
+    const handleBook = (selectedBook) => {
+        setSelectedBook(selectedBook)
     }
     const handleCloseModule = () => {
         setShowEditModule(false)
@@ -194,13 +196,13 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
             isbn: ISBN,
             pages: pages,
             publishingDate: publishingDate,
-            translatorId: translator.value,
-            languageId: language.value,
-            editionId: edition.value,
-            fileFormatId: fileFormat.value,
-            formId: form.value,
-            availabilityId: availability.value,
-            bookId: book.value,
+            translatorID: selectedTranslator.value,
+            languageID: selectedLanguage.value,
+            editionID: selectedEdition.value,
+            fileFormatID: selectedFileFormat.value,
+            formID: selectedForm.value,
+            availabilityID: selectedAvailablity.value,
+            bookID: selectedBook.value,
         }
         putData(item.id,data)
         handleCloseModule()
@@ -278,7 +280,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               <h1 className='module-header'>Edytuj egzemplarz książki</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Informacje podstawowe</p>
             <input onChange={handleVat} type='number' value={vat} className='module-input-text'/>
             <input onChange={handleNetto} type='number' value={netto} className='module-input-text'/>
             <input onChange={handleISBN} type='text' value={ISBN} className='module-input-text'/>
