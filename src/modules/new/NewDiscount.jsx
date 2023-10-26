@@ -74,7 +74,6 @@ function NewDiscount({setShowNewModule, postData}) {
     } 
     useEffect(() => {
         getBooks()
-        console.log(bookOptions);
     },[])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>

@@ -50,3 +50,9 @@ export const bookItemSortOptions = [
     {value: 'nettoPrice', label: 'Cena', type: 'number'},
     {value: 'formName', label: 'Format', type: 'string'},
 ]
+export const customerItemSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Imię', type: 'string'},
+    {value: 'surname', label: 'Nazwisko', type: 'string'},
+    {value: 'phoneNumber', label: 'Numer telefonu', type: 'string'},
+]

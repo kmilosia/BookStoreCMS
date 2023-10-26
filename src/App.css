@@ -69,7 +69,7 @@
     }
     /* sidebar style */
     .sidemenu-link{
-      @apply flex flex-row items-center pb-3 text-sm hover:text-orange-500;
+      @apply flex flex-row items-center pb-3 text-sm whitespace-nowrap hover:text-orange-500;
     }
     /* main view */
     .main-wrapper{

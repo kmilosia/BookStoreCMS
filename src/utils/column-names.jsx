@@ -3,6 +3,12 @@ export const personColumns = [
     { name: 'Imię'},
     { name: 'Nazwisko'}
  ]
+ export const customerColumns = [
+    { name: 'ID'},
+    { name: 'Imię'},
+    { name: 'Nazwisko'},
+    { name: 'Numer Telefonu'},
+ ]
 export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}

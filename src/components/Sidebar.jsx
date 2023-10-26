@@ -45,10 +45,10 @@ function Sidebar() {
   return (
     <div className='flex flex-row max-h-screen w-auto'>
 
-    <div style={{gridTemplateRows: 'max-content auto max-content'}} className='bg-dracula-100 max-h-full w-auto grid text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
+    <div style={{gridTemplateRows: 'max-content auto max-content'}} className='bg-dracula-100 max-h-full w-max grid text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
       
       <div className='flex flex-row items-center justify-between border-b-[1px] mb-2 dark:border-dracula-600 px-2 py-3'>
-        <Link className='flex flex-row items-center p-1 transition-all text-orange-600 hover:text-orange-700 dark:hover:text-orange-500'>
+        <Link to='/dashboard' className='flex flex-row items-center p-1 transition-all text-orange-600 hover:text-orange-700 dark:hover:text-orange-500'>
           <GiSecretBook className='text-3xl mx-1'/>
           <h1 className='text-lg font-semibold font-logo self-end'>Spellarium</h1>
         </Link> 
@@ -92,6 +92,13 @@ function Sidebar() {
           </div>
         </Link>
 
+        <Link to="/magazyn" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <BiBox className='text-xl mx-1'/>
+            <span>Magazyn</span>
+          </div>
+        </Link>
+
         <Link to="/promocja" className={primaryLinkStyle}>
         <div className='flex flex-row items-center'>
             <MdOutlineDiscount className='text-xl mx-1'/>
@@ -121,7 +128,7 @@ function Sidebar() {
         <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-1 hover:text-orange-500'>
           {isDarkTheme ? <><BsMoonStarsFill className='text-lg mx-2'/><span>Tryb nocny</span></> : <><BsSunFill className='text-xl mx-2'/><span>Tryb dzienny</span></>}
         </button>
-        <Link className='flex flex-row items-center py-1 hover:text-orange-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
+        <Link to='/konto' className='flex flex-row items-center py-1 hover:text-orange-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
         <button className='flex flex-row items-center py-1 hover:text-orange-500'><AiOutlineLogout className='text-xl mx-2 '/><span>Wyloguj się</span></button>      
       </div>
        <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>
@@ -150,7 +157,7 @@ function Sidebar() {
           : sideMenu === "clientapp" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
-            <h1 className='text-base font-semibold'>Strona Klienta</h1>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Strona Klienta</h1>
           </div>
           <ClientAppLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
           </>
