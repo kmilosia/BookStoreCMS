@@ -6,6 +6,7 @@ import {TbDiscount2} from 'react-icons/tb'
 import {FaBook,FaRegImage} from 'react-icons/fa'
 import {CgWebsite} from 'react-icons/cg'
 import {PiBooks} from 'react-icons/pi'
+import {RiTruckLine} from 'react-icons/ri'
 import {MdOutlineDiscount,MdOutlineAccountCircle} from 'react-icons/md'
 import {BsMoonStarsFill, BsSunFill,BsPerson} from 'react-icons/bs'
 import {FiSettings,FiLayout, FiMis} from 'react-icons/fi'
@@ -110,6 +111,13 @@ function Sidebar() {
         <div className='flex flex-row items-center'>
             <TbDiscount2 className='text-xl mx-1'/>
             <span className='whitespace-nowrap'>Kod Rabatowy</span>
+          </div>
+        </Link>
+
+        <Link to="/dostawca" className={primaryLinkStyle}>
+        <div className='flex flex-row items-center'>
+            <RiTruckLine className='text-xl mx-1'/>
+            <span className='whitespace-nowrap'>Dostawca</span>
           </div>
         </Link>
 

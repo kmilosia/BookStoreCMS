@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier } from './import'
 import { useState } from 'react';
 import { Layout } from './Layout';
 
@@ -35,6 +35,7 @@ function App() {
             <Route path='/translator' element={<Translator />}/>
             <Route path='/plec' element={<Gender />}/>
             <Route path='/wydawnictwo' element={<Publisher />}/>
+            <Route path='/dostawca' element={<Supplier />}/>
             <Route path='/status-zamowienia' element={<OrderStatus />}/>
             <Route path='/status-wypozyczenia' element={<RentalStatus />}/>
             <Route path='/typ-wypozyczenia' element={<RentalType />}/>

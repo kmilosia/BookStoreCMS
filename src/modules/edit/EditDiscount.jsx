@@ -2,24 +2,22 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/CloseWindowButton'
-import Select from 'react-select'
 import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
-import { FiMinus, FiPlus } from 'react-icons/fi'
 import { convertDateToInput } from '../../utils/convertDate'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditDiscount({setShowEditModule, putData, editedID}) {
-  const getBooks = async () => {
+  const getBookItems = async () => {
     try{
       const response = await axiosClient.get(`/BookItems`)
       const options = response.data.map(item => ({
         value: item.id,
         label: item.bookTitle
       }))
-      setBookOptions(options)
+      setBookItemOptions(options)
     }catch(err){
       console.error(err)
     }
@@ -35,21 +33,21 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
         setExpirationDate(convertDateToInput(expDate))
         setStartingDate(convertDateToInput(startDate))
         setPercent(response.data.percentOfDiscount)
-        setBooks(response.data.listOfBookItems)
-        console.log(response.data);
+        setBookItems(response.data.listOfBookItems)
       }catch(err){
         console.error(err)
       }
     }
+    const today = new Date().toISOString().split('T')[0];
     const [discount, setDiscount] = useState([])
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState(new Date())
-    const [startingDate, setStartingDate] = useState(new Date())
-    const [percent, setPercent] = useState(null)
-    const [selectedBooks, setSelectedBooks] = useState([])
-    const [bookOptions, setBookOptions] = useState([])
-    const [books, setBooks] = useState([])
+    const [expirationDate, setExpirationDate] = useState(today)
+    const [startingDate, setStartingDate] = useState(today)
+    const [percent, setPercent] = useState('')
+    const [selectedBookItems, setSelectedBookItems] = useState([])
+    const [bookItemOptions, setBookItemOptions] = useState([])
+    const [bookItems, setBookItems] = useState([])
 
 
     const handleTitleInput = (e) => {
@@ -67,14 +65,14 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
   const handlePercent = (e) => {
       setPercent(Number(e.target.value))
   }
-  const handleBooks = (selectedBooks) => {
-      setSelectedBooks(selectedBooks)
+  const handleBookItems = (selectedBookItems) => {
+      setSelectedBookItems(selectedBookItems)
   }
     const handleCloseModule = () => {
         setShowEditModule(false)
     }   
     const handleAcceptButton = () => {
-        const booksList = selectedBooks.map(item => (
+        const bookItemsList = selectedBookItems.map(item => (
             {
                 id: item.value
             }
@@ -86,7 +84,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
             percentOfDiscount: percent,
             expiryDate: expirationDate,
             startingDate: startingDate,
-            listOfBookItems: booksList,
+            listOfBookItems: bookItemsList,
         }
         console.log(data)
         putData(discount.id,data)
@@ -95,7 +93,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
     useEffect(() => {
         const fetchAll = async () => {
             try{
-                getBooks()
+                getBookItems()
                 getItem(editedID)
             }catch(error){
                 console.error(error)
@@ -103,17 +101,21 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
         }
         fetchAll()
     },[])
+    useEffect(() => {
+      console.log(bookItems);
+      console.log(bookItemOptions);
+    },[bookItems,setBookItems])
 
     useEffect(() => {
-      const updatedSelectedBooks = books.reduce((selectedBooks, item) => {
-        const selected = bookOptions.find((option) => option.value === item.bookId);
+      const updatedSelectedBookItems = bookItems.reduce((selectedBookItems, item) => {
+        const selected = bookItemOptions.find((option) => option.value === item.bookItemID);
         if (selected) {
-          return [...selectedBooks, selected];
+          return [...selectedBookItems, selected];
         }
-        return selectedBooks;
+        return selectedBookItems;
       }, []);
-      setSelectedBooks(updatedSelectedBooks);
-    }, [books, bookOptions]);
+      setSelectedBookItems(updatedSelectedBookItems);
+    }, [bookItems, bookItemOptions]);
 
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
@@ -132,7 +134,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
                 <DefaultInput onChange={handleStartingDate} value={startingDate} type='date' title='Data rozpoczęcia'/>
                 <DefaultInput onChange={handleExpirationDate} value={expirationDate} type='date' title="Termin ważności"/>
                 </div>
-                <DefaultSelect onChange={handleBooks} value={selectedBooks} options={bookOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
+                <DefaultSelect onChange={handleBookItems} value={selectedBookItems} options={bookItemOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

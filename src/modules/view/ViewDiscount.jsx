@@ -78,7 +78,7 @@ function ViewDiscount(props) {
                     <p className='column-info-title'>Książki objęte promocją</p>
                     <ul className='my-1 h-20 overflow-auto bg-dracula-300 dark:bg-dracula-700 rounded-sm px-2 py-2'>
                     {discount.listOfBookItems && discount.listOfBookItems.map(item => (                 
-                        <li key={item.bookId} className='border-b-[1px] py-1 border-dracula-200 dark:border-dracula-600 list-none my-1 text-sm text-dracula-950 dark:text-dracula-100'>{item.bookTitle}</li>
+                        <li key={item.bookItemID} className='border-b-[1px] py-1 border-dracula-200 dark:border-dracula-600 list-none my-1 text-sm text-dracula-950 dark:text-dracula-100'>{item.bookTitle}</li>
                     ))}
                 </ul> 
                 </div>                                                           

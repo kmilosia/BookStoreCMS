@@ -39,11 +39,12 @@ function EditDiscountCode({setShowEditModule, putData, editedID}) {
         console.error(err)
       }
     }
+    const today = new Date().toISOString().split('T')[0];
     const [discount, setDiscount] = useState([])
     const [code, setCode] = useState('')
     const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState('')
-    const [startingDate, setStartingDate] = useState('')
+    const [expirationDate, setExpirationDate] = useState(today)
+    const [startingDate, setStartingDate] = useState(today)
     const [percent, setPercent] = useState('')
     const [selectedBooks, setSelectedBooks] = useState([])
     const [bookOptions, setBookOptions] = useState([])
