@@ -28,7 +28,7 @@ function ViewFooterColumn(props) {
                     <h1 className='module-header'>{column.name}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <div className='grid grid-cols-3 gap-4'>
+                <div className='grid grid-cols-2 gap-4'>
                 <div className='flex flex-col'>
                     <p className='column-info-title'>Nazwa</p>
                     <h2 className='column-info-text'>{column.name}</h2>
@@ -40,6 +40,10 @@ function ViewFooterColumn(props) {
                 <div className='flex flex-col'>
                     <p className='column-info-title'>HTML Obiekt</p>
                     <h2 className='column-info-text'>{column.htmlObject}</h2>
+                </div>
+                <div className='flex flex-col'>
+                    <p className='column-info-title'>Kierunek wyświetlania</p>
+                    <h2 className='column-info-text'>{column.direction}</h2>
                 </div>
                 </div>
             </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
-import AddNewButton from '../components/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
 import { stockSortOptions } from '../utils/select-options'

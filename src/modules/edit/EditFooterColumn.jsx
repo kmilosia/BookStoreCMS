@@ -9,6 +9,7 @@ function EditFooterColumn(props) {
     const [name, setName] = useState('')
     const [position, setPosition] = useState('')
     const [htmlObject, setHtmlObject] = useState('')
+    const [direction, setDirection] = useState('')
     const [column,setColumn] = useState({})
 
     const getItem = async (id) => {
@@ -18,6 +19,7 @@ function EditFooterColumn(props) {
           setName(response.data.name)
           setPosition(response.data.position)
           setHtmlObject(response.data.htmlObject)
+          setDirection(response.data.direction)
         }catch(err){
           console.error(err)
         }
@@ -31,6 +33,9 @@ function EditFooterColumn(props) {
     const handleHTMLObjectInput = (e) => {
         setHtmlObject(e.target.value)
     }
+    const handleDirection = (e) => {
+      setDirection(e.target.value)
+  }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
@@ -39,6 +44,7 @@ function EditFooterColumn(props) {
         column.name = name
         column.position = position
         column.htmlObject = htmlObject
+        column.direction = direction
         props.putData(column.id, column)
         props.setEditedID(null)
         props.setShowEditModule(false)
@@ -58,8 +64,11 @@ function EditFooterColumn(props) {
                 <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
                 <DefaultInput value={position} onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
                 </div>
-                <DefaultInput value={htmlObject} onChange={handleHTMLObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
-            <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
+                <div className='grid grid-cols-2 gap-2'>
+                  <DefaultInput value={htmlObject} onChange={handleHTMLObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
+                  <DefaultInput value={direction} onChange={handleDirection} type='text' placeholder='Kierunek wyświetlania' title='Kierunek wyświetlania obiektów'/>
+                </div>
+                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
         </div>
     </div>
     </div>
