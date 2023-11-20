@@ -5,9 +5,7 @@ import { useState } from 'react';
 import { Layout } from './Layout';
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false)
   return (
-     
       <Router>
         <Routes>
           {/* <Route path='/' element={<Navigate to={isLogged ? '/dashboard' : '/login'} replace/>}/> */}
