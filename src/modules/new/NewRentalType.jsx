@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/CloseWindowButton'
+import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 
 function NewRentalType({setShowNewModule, postData}) {

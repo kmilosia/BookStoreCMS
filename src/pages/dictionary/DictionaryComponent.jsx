@@ -1,7 +1,7 @@
 import React from 'react'
 import SortBar from '../../components/SortBar'
 import Searchbar from '../../components/Searchbar'
-import AddNewButton from '../../components/AddNewButton'
+import AddNewButton from '../../components/buttons/AddNewButton'
 import { dictionarySortOptions } from '../../utils/select-options'
 import ListHeader from '../../components/ListHeader'
 import { dictionaryColumns } from '../../utils/column-names'

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/CloseWindowButton'
+import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
-import { convertDateToUserFormat } from '../../utils/convertDate'
+import { convertDateToUserFormat } from '../../utils/functions/convertDate'
 
 function ViewBookItem(props) {
     const [item, setItem] = useState({})

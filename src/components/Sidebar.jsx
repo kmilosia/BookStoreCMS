@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BiUser, BiBook, BiBookBookmark,BiBox} from 'react-icons/bi'
+import { BiUser, BiBook, BiBookBookmark,BiBox, BiSolidDashboard} from 'react-icons/bi'
 import {AiOutlineClose, AiOutlineLogout} from 'react-icons/ai'
 import {TbDiscount2} from 'react-icons/tb'
 import {FaRegImage} from 'react-icons/fa'
@@ -128,11 +128,12 @@ function Sidebar() {
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>
-        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-2 mx-2'>KONTO</span>       
+        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-2 mx-2'>KONTO</span>      
+        <Link to='/dashboard' className='flex flex-row items-center py-1 hover:text-purple-500'><BiSolidDashboard className='text-xl mx-2'/><span>Dashboard</span></Link>
+        <Link to='/konto' className='flex flex-row items-center py-1 hover:text-purple-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
         <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-1 hover:text-purple-500'>
           {isDarkTheme ? <><BsMoonStarsFill className='text-lg mx-2'/><span>Tryb nocny</span></> : <><BsSunFill className='text-xl mx-2'/><span>Tryb dzienny</span></>}
         </button>
-        <Link to='/konto' className='flex flex-row items-center py-1 hover:text-purple-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
         <LogoutButton />
       </div>
        <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>

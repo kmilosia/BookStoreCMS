@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/CloseWindowButton'
-import { useEffect } from 'react'
+import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import { FiPlus } from 'react-icons/fi'
 import DefaultInput from '../../components/forms/DefaultInput'
 

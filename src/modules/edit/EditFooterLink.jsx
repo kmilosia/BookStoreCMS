@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/CloseWindowButton'
+import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
-import Select from 'react-select'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 

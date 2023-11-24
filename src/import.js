@@ -21,6 +21,7 @@ export {default as TransactionStatus} from './pages/dictionary/TransactionStatus
 export {default as PaymentMethod} from './pages/dictionary/PaymentMethod'
 export {default as DeliveryMethod} from './pages/DeliveryMethod'
 export {default as DeliveryStatus} from './pages/dictionary/DeliveryStatus'
+export {default as AddressType} from './pages/dictionary/AddressType'
 export {default as City} from './pages/dictionary/City'
 export {default as Country} from './pages/dictionary/Country'
 export {default as Language} from './pages/dictionary/Language'

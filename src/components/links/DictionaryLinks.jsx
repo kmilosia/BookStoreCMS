@@ -24,6 +24,7 @@ function DictionaryLinks() {
         <Link to='/status-wysylki' className='sidemenu-link'>Status Wysyłki</Link>
         <Link to='/status-zamowienia' className='sidemenu-link'>Status Zamówienia</Link>
         <Link to='/translator' className='sidemenu-link'>Translator</Link>
+        <Link to='/typ-adresu' className='sidemenu-link'>Typ Adresu</Link>
         <Link to='/typ-wypozyczenia' className='sidemenu-link'>Typ Wypożyczenia</Link>       
         <Link to='/wydawnictwo' className='sidemenu-link'>Wydawnictwo</Link>
     </div>

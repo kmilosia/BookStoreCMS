@@ -115,6 +115,9 @@
     .scrollbar-rounded{
       @apply scrollbar-default scrollbar-thumb-rounded-md scrollbar-track-rounded-md;
     }
+    .page-scrollbar{
+      @apply scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thin scrollbar-track-dracula-200 scrollbar-thumb-slate-400 dark:scrollbar-track-dracula-900 dark:scrollbar-thumb-dracula-700; 
+    }
     .sidebar-scrollbar{
       @apply scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thin scrollbar-track-dracula-200 scrollbar-thumb-slate-300 dark:scrollbar-track-dracula-800 dark:scrollbar-thumb-dracula-900;
     }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { AiOutlineClose } from 'react-icons/ai'
-import { useRef } from 'react'
 
 function Searchbar(props) {
   //method for controlling changes in input value

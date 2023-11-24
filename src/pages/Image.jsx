@@ -1,7 +1,7 @@
 import React from 'react'
 import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
-import AddNewButton from '../components/AddNewButton'
+import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
 import { imageSortOptions } from '../utils/select-options'
@@ -15,7 +15,7 @@ import axiosClient from '../api/apiClient'
 import NewImage from '../modules/new/NewImage'
 import EditImage from '../modules/edit/EditImage'
 import ViewImage from '../modules/view/ViewImage'
-import {truncate} from '../utils/truncate-text'
+import {truncate} from '../utils/functions/truncate-text'
 import Spinner from '../components/Spinner'
 
 function Image() {

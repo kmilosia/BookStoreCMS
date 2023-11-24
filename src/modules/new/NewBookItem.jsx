@@ -1,10 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/CloseWindowButton'
+import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
-import {convertDate} from '../../utils/convertDate'
+import {convertDate} from '../../utils/functions/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 
