@@ -9,7 +9,7 @@ function SalesOverviewElement() {
       <GiCardboardBoxClosed />
     </div>
     <div className='flex flex-col mx-3 w-full cursor-default'>
-      <h1 className='text-2xl'>10</h1>
+      <h1 className='text-2xl font-medium'>10</h1>
       <h2 className='font-light'>Sprzedanych książek</h2>
     </div>
     </div>

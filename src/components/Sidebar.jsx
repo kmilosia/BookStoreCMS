@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BiUser, BiBook, BiBookBookmark,BiBox, BiSolidDashboard} from 'react-icons/bi'
-import {AiOutlineClose, AiOutlineLogout} from 'react-icons/ai'
+import {AiOutlineClose} from 'react-icons/ai'
 import {TbDiscount2} from 'react-icons/tb'
 import {FaRegImage} from 'react-icons/fa'
 import {CgWebsite} from 'react-icons/cg'
@@ -9,7 +9,6 @@ import {PiBooks} from 'react-icons/pi'
 import {RiTruckLine} from 'react-icons/ri'
 import {MdOutlineDiscount,MdOutlineAccountCircle} from 'react-icons/md'
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
-import hannahAvatar from '../assets/hannah.jpg'
 import { checkTheme } from '../utils/theme'
 import {GiSecretBook} from 'react-icons/gi'
 import DictionaryLinks from './links/DictionaryLinks'
@@ -137,13 +136,10 @@ function Sidebar() {
         <LogoutButton />
       </div>
        <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>
-        <div>
-          <img src={hannahAvatar} width={30} className='rounded-3xl'/>
-        </div>
-        <div className='flex flex-col mx-2'>
+        <Link to='/konto' className='flex flex-col mx-2'>
           <h1 className='text-xs font-semibold whitespace-nowrap'>Hannah Montana</h1>
           <p className='text-xs text-gray-500 dark:text-gray-400'>Admin</p>
-        </div>
+        </Link>
       </div>
       </div>
 
@@ -151,7 +147,6 @@ function Sidebar() {
     
     {isSideMenuExpanded &&
     <div className='grid grid-rows-[max-content_auto_max-content] max-h-screen px-4 py-2 border-l-[1px] w-max text-dracula-900 dark:text-dracula-100 dark:border-dracula-600 dark:bg-dracula-700'>
-          
           {sideMenu === 'dictionary' ? 
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>

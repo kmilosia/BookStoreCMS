@@ -57,10 +57,10 @@
       @apply m-0 text-xs font-medium text-dracula-400;
     }
     .module-input-text{
-      @apply focus:border-dracula-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply focus:border-purple-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-input-textarea{
-      @apply scrollbar-rounded focus:border-dracula-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply scrollbar-rounded focus:border-purple-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-button{
       @apply bg-purple-500 w-full rounded-sm py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-purple-600;
@@ -70,6 +70,12 @@
     }
     .module-minus-button{
       @apply absolute top-2 right-2 z-30 bg-purple-400 hover:bg-purple-500 h-5 w-5 items-center flex justify-center rounded-3xl text-dracula-100;
+    }
+    .input-label{
+      @apply font-semibold text-sm text-dracula-500 dark:text-dracula-400 mx-1 my-1;
+    }
+    .input-default{
+      @apply disabled:opacity-50 focus:border-purple-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-md mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     /* info module */
     .info-grid{

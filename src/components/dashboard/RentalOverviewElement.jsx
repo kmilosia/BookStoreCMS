@@ -9,7 +9,7 @@ function RentalOverviewElement() {
             <GiBookCover  />
           </div>
           <div className='flex flex-col mx-3 w-full cursor-default'>
-            <h1 className='text-2xl'>14</h1>
+            <h1 className='text-2xl font-medium'>14</h1>
             <h2 className='font-light'>Wypożyczeń</h2>
           </div>
           </div>
