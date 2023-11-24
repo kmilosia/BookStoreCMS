@@ -1,18 +1,24 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType } from './import'
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Layout } from './Layout';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkUserLogin } from './store/userSlice';
 
 function App() {
+  const dispatch = useDispatch()
+  const {isAuth} = useSelector((state) => state.user)
+  useEffect(() => {
+    dispatch(checkUserLogin()) 
+  },[isAuth])
   return (
       <Router>
         <Routes>
-          {/* <Route path='/' element={<Navigate to={isLogged ? '/dashboard' : '/login'} replace/>}/> */}
-          <Route path='/' element={<Navigate to={ '/dashboard'}/>}/>
           <Route path='/login' element={<Login/>}/>
-          <Route element={<Layout />}>
-            <Route path='/dashboard' element={<Home />}/>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<Home />}/>
+            <Route path='/dashboard' element={<Navigate to='/' />}/>
             <Route path='/autor' element={<Author />}/>
             <Route path='/konto' element={<Account />}/>
             <Route path='/ksiazka' element={<Book />}/>         
@@ -47,9 +53,8 @@ function App() {
             <Route path='/footer-link' element={<FooterLinks />}/>
             <Route path='/magazyn' element={<StockAmount />}/>
             <Route path='/klient' element={<Customer />}/>
-
-            <Route path='*' element={<PageNotFound />}/>
           </Route>
+          <Route path='*' element={<PageNotFound />}/>
         </Routes>
       </Router>
   );

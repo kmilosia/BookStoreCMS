@@ -40,9 +40,9 @@ function Login() {
   }
   useEffect(() => {
     if (isAuth) {
-      navigate('/');
+      navigate('/dashboard');
     }
-  }, [isAuth, navigate]);
+  }, [isAuth]);
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();
