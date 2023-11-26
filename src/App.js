@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Layout } from './Layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkUserLogin } from './store/userSlice';
+import Alert from './modules/Alert';
 
 function App() {
   const dispatch = useDispatch()
@@ -13,6 +14,8 @@ function App() {
     dispatch(checkUserLogin()) 
   },[isAuth])
   return (
+    <>
+    <Alert />
       <Router>
         <Routes>
           <Route path='/login' element={<Login/>}/>
@@ -57,6 +60,7 @@ function App() {
           <Route path='*' element={<PageNotFound />}/>
         </Routes>
       </Router>
+      </>
   );
 }
 

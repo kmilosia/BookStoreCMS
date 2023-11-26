@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../store/userSlice'
 import SubmitButton from '../components/buttons/SubmitButton'
 import { useNavigate } from 'react-router-dom'
-import ButtonSpinner from '../components/ButtonSpinner'
 
 function Login() {
   const dispatch = useDispatch()

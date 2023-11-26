@@ -121,6 +121,11 @@
     .main-list-wrapper{
       @apply w-full overflow-auto scrollbar-default;
     }
+    /* home */
+    .home-element-header{
+      @apply text-lg font-semibold text-dracula-600 dark:text-dracula-300 mt-3 cursor-default;
+    }
+    /* home */
     
      /* scrollbar */
      .scrollbar-default{

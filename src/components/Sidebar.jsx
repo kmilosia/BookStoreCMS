@@ -14,6 +14,7 @@ import {GiSecretBook} from 'react-icons/gi'
 import DictionaryLinks from './links/DictionaryLinks'
 import ClientAppLinks from './links/ClientAppLinks'
 import LogoutButton from './buttons/LogoutButton'
+import SidebarAccountElement from './SidebarAccountElement'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -39,8 +40,6 @@ function Sidebar() {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkTheme);
   }, [isDarkTheme]);
-
-  const primaryLinkStyle = 'flex flex-row items-center hover:text-purple-500 py-2 justify-between px-1'
 
   return (
     <div className='flex flex-row max-h-screen w-auto'>
@@ -135,12 +134,7 @@ function Sidebar() {
         </button>
         <LogoutButton />
       </div>
-       <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>
-        <Link to='/konto' className='flex flex-col mx-2'>
-          <h1 className='text-xs font-semibold whitespace-nowrap'>Hannah Montana</h1>
-          <p className='text-xs text-gray-500 dark:text-gray-400'>Admin</p>
-        </Link>
-      </div>
+       <SidebarAccountElement />
       </div>
 
     </div>

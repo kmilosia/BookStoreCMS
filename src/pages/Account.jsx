@@ -3,7 +3,8 @@ import ButtonSpinner from '../components/ButtonSpinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import ChangePassword from '../modules/user/ChangePassword'
-import { fetchUserData } from '../store/userSlice'
+import { editUserData, fetchUserData, resetState } from '../store/userSlice'
+import { showAlert } from '../store/alertSlice'
 
 function Account() {
   const dispatch = useDispatch()
@@ -27,8 +28,7 @@ function Account() {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    // dispatch(editUserData(userDetails))
-    console.log(userDetails);
+    dispatch(editUserData(userDetails))
     setIsEdited(false)
   }
   useEffect(() => {
@@ -37,16 +37,16 @@ function Account() {
   useEffect(() => {
     if (userData) {
       setUserDetails(userData);
-      console.log(userData);
     }
   },[userData])
-  // useEffect(() => {
-  //   if (success) {
-  //     dispatch(resetState())
-  //     dispatch(fetchUserData())
-  //     setIsEdited(false)
-  //   }
-  // }, [success])
+  useEffect(() => {
+    if (success) {
+      dispatch(resetState())
+      dispatch(fetchUserData())
+      setIsEdited(false)
+      dispatch(showAlert({ title: 'Dane użytkownika zostały zmienione!' }));
+    }
+  }, [success])
   return (
     <>
     <div className='main-wrapper overflow-y-auto page-scrollbar'>
