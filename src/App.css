@@ -5,12 +5,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @layer components{
+    /* buttons */
+    .default-button{
+      @apply my-2 w-full px-5 py-2 rounded-md text-white text-sm font-medium bg-purple-400 transition-all hover:bg-purple-500 flex items-center justify-center;
+    }
+    .default-border-button{
+      @apply font-medium my-2 border-2 text-sm border-purple-400 text-purple-400 rounded-md py-2 px-10 transition-all hover:text-white hover:bg-purple-400 flex items-center justify-center;
+    }
+    .default-red-button{
+      @apply font-medium my-2 border-2 text-sm border-red-500 text-red-500 rounded-md py-2 px-10 transition-all hover:text-white hover:bg-red-500;
+    }
+    /* buttons */
     /* texts */
     .default-text{
       @apply text-dracula-900 dark:text-dracula-100;
-    }
-    .default-button{
-      @apply my-2 w-full px-4 py-2 rounded-sm text-white text-sm font-medium bg-purple-400 transition-all hover:bg-purple-500;
     }
     .error-text{
       @apply text-red-500 text-base lg:text-xs font-medium;
@@ -24,14 +32,14 @@
     }
     /* object table list */
     .table-row-wrapper{
-      @apply grid grid-cols-3 gap-1 items-center bg-white px-6 py-4 rounded-sm border-t-2 border-dracula-200 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
+      @apply grid grid-cols-3 gap-1 items-center bg-white px-6 py-4 rounded-md border-t-2 border-dracula-200 dark:border-dracula-900 dark:bg-dracula-700 dark:text-gray-100;
     }
     .table-button{
       @apply rounded-3xl bg-saphire-100 p-3 mx-2 hover:bg-saphire-200 dark:text-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900;
     }
     /* forms */
     .floating-form-input{
-      @apply block px-2.5 pb-2.5 pt-4 w-full text-base lg:text-sm border-2 border-dracula-300 text-black bg-white rounded-sm appearance-none focus:outline-none focus:ring-0 focus:border-purple-400;
+      @apply block px-2.5 pb-2.5 pt-4 w-full text-base lg:text-sm border-2 border-dracula-300 text-black bg-white rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-purple-400;
   }
   .floating-form-label{
       @apply absolute text-base lg:text-sm text-dracula-400 duration-300 transform -translate-y-2 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-purple-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-2 left-1;
@@ -42,7 +50,7 @@
       @apply absolute h-full w-full py-6 top-0 left-0 px-2 overflow-auto scrollbar-default scrollbar-rounded;
     }
     .module-window{
-      @apply rounded-sm bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-1/2 mx-auto shadow-lg shadow-dracula-900 dark:shadow-dracula-600;
+      @apply rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-1/2 mx-auto shadow-lg shadow-dracula-900 dark:shadow-dracula-600;
     }
     .module-content-wrapper{
       @apply p-4 mr-1 flex flex-col;
@@ -57,16 +65,16 @@
       @apply m-0 text-xs font-medium text-dracula-400;
     }
     .module-input-text{
-      @apply focus:border-purple-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply focus:border-purple-400 focus:outline-none text-sm text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-md mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-input-textarea{
-      @apply scrollbar-rounded focus:border-purple-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-sm mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
+      @apply scrollbar-rounded focus:border-purple-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-md mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-button{
-      @apply bg-purple-500 w-full rounded-sm py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-purple-600;
+      @apply bg-purple-400 w-full rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-purple-500;
     }
     .module-round-button{
-      @apply bg-purple-500 hover:bg-purple-600 rounded-3xl text-2xl text-dracula-100 p-1 ml-2;
+      @apply bg-purple-400 hover:bg-purple-500 rounded-3xl text-2xl text-dracula-100 p-1 ml-2;
     }
     .module-minus-button{
       @apply absolute top-2 right-2 z-30 bg-purple-400 hover:bg-purple-500 h-5 w-5 items-center flex justify-center rounded-3xl text-dracula-100;
@@ -88,7 +96,7 @@
       @apply my-1 font-medium text-dracula-900 dark:text-dracula-100;
     }
     .info-button{
-      @apply bg-purple-400 text-dracula-100 rounded-sm cursor-default px-3 py-1 mr-2 flex flex-row flex-wrap;
+      @apply bg-purple-400 text-dracula-100 rounded-md cursor-default px-3 py-1 mr-2 flex flex-row flex-wrap;
     }
     /* sidebar style */
     .sidemenu-link{
@@ -105,7 +113,7 @@
       @apply flex flex-row my-4 justify-end;
     }
     .list-header{
-      @apply grid grid-cols-3 items-center bg-midnight-50 px-6 py-4 rounded-sm my-4 dark:bg-midnight-900 dark:text-gray-100;
+      @apply grid grid-cols-3 items-center bg-midnight-50 px-6 py-4 rounded-md my-4 dark:bg-midnight-900 dark:text-gray-100;
     }
     .list-header-p{
       @apply font-semibold px-2;

@@ -58,13 +58,11 @@ function Login() {
           <GiSecretBook className='text-3xl mx-1'/>
           <h1 className='text-lg font-semibold font-logo self-end'>Spellarium</h1>
         </div>
-      <img src='https://iili.io/JnvTECJ.png' className='h-5/6 w-5/6' alt='Login Illustration'/>
+      <img src='https://iili.io/JnvTECJ.png' className='h-5/6 w-5/6' alt='Login Vector'/>
       </div>
-
       <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center'>
         <div className='flex flex-col justify-center items-start w-2/3'>
         <h1 className='text-3xl my-2 font-semibold text-dracula-500 cursor-default'>Zaloguj się</h1>
-
         <div className='my-2 w-full'>
             <div className="relative">
               <input value={inputValues.username} onChange={handleChange} type="text" id='username' name='username' className="floating-form-input peer" placeholder=" " />
@@ -72,9 +70,9 @@ function Login() {
             </div>
             {errors.username && <span className='error-text'>{errors.username}</span>}
             </div>
-        <div className="my-2 w-full">
+          <div className="my-2 w-full">
             <div className="relative">
-              <ShowPasswordButton setShowPassword={setShowPassword} showPassword={showPassword} />
+              <ShowPasswordButton inputType='floating' setShowPassword={setShowPassword} showPassword={showPassword} />
               <input value={inputValues.password} onChange={handleChange} type={`${showPassword ? 'password' : 'text'}`} id='password' name='password' className="floating-form-input peer" placeholder=" " />
               <label htmlFor='password' className="floating-form-label">Hasło</label>
             </div>

@@ -5,6 +5,7 @@ import ShowPasswordButton from '../../components/buttons/ShowPasswordButton';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { backgroundOverlayModule } from '../../styles';
+import SubmitButton from '../../components/buttons/SubmitButton';
 
 function ChangePassword({setIsPasswordModule}) {
     const dispatch = useDispatch()
@@ -20,7 +21,8 @@ function ChangePassword({setIsPasswordModule}) {
     const handleChange = (e) => {
         setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
     }
-    const handleSaveClick = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
         const data = {
             oldPassword: userDetails.oldPassword,
             newPassword: userDetails.newPassword,
@@ -28,7 +30,6 @@ function ChangePassword({setIsPasswordModule}) {
         }
         console.log(data);
         setIsPasswordModule(false)
-
     }
     const handleClose = () => {
         setIsPasswordModule(false)
@@ -41,30 +42,32 @@ function ChangePassword({setIsPasswordModule}) {
               <h1 className='module-header'>Zmień hasło</h1>
               <CloseWindowButton handleCloseModule={handleClose} />
             </div>
+            <form onSubmit={handleSubmit}>
             <div className='grid grid-cols-1 gap-2'>
                 <div className='flex flex-col'>
                     <label htmlFor='oldPassword' className='input-label'>Stare hasło</label>
                     <div className='relative'>
                         <input onChange={handleChange} id='oldPassword' name='oldPassword' type={`${isHiddenOldPassword ? 'password' : 'text'}`} value={userDetails.oldPassword} className='module-input-text'/>
-                        <ShowPasswordButton setIsHiddenPassword={setIsHiddenOldPassword} isHiddenPassword={isHiddenOldPassword} />
+                        <ShowPasswordButton setShowPassword={setIsHiddenOldPassword} showPassword={isHiddenOldPassword} />
                     </div>
                 </div>
                 <div className='flex flex-col'>
                     <label htmlFor='newPassword' className='input-label'>Nowe hasło</label>
                     <div className='relative'>
                         <input onChange={handleChange} id='newPassword' name='newPassword' type={`${isHiddenPassword ? 'password' : 'text'}`} value={userDetails.newPassword} className='module-input-text'/>
-                        <ShowPasswordButton setIsHiddenPassword={setIsHiddenPassword} isHiddenPassword={isHiddenPassword} />
+                        <ShowPasswordButton setShowPassword={setIsHiddenPassword} showPassword={isHiddenPassword} />
                     </div>
                 </div>
                 <div className='flex flex-col'>
                     <label htmlFor='confirmPassword' className='input-label'>Powtórz nowe hasło</label>
                     <div className='relative'>
                         <input onChange={handleChange} id='confirmPassword' name='confirmPassword' type={`${isHiddenRepeatPassword ? 'password' : 'text'}`} value={userDetails.confirmPassword} className='module-input-text'/>
-                        <ShowPasswordButton setIsHiddenPassword={setIsHiddenRepeatPassword} isHiddenPassword={isHiddenRepeatPassword} />
+                        <ShowPasswordButton setShowPassword={setIsHiddenRepeatPassword} showPassword={isHiddenRepeatPassword} />
                     </div>
                 </div>
             </div>
-            <button onClick={handleSaveClick} className='default-button flex items-center justify-center'>{loading ? <ButtonSpinner size={6}/> : <span>Zmień hasło</span> }</button>
+            <SubmitButton loading={loading} title="Zmień hasło" />
+            </form>
         </div>
     </div>
 </div>
