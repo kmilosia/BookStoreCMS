@@ -45,7 +45,7 @@ function Sidebar() {
     <div className='flex flex-row max-h-screen w-auto'>
     <div className='bg-dracula-100 max-h-full w-max grid grid-rows-[max-content_auto_max-content] text-dracula-900 dark:text-dracula-100 dark:bg-dracula-700'>
       <div className='flex flex-row items-center justify-between border-b-[1px] mb-2 dark:border-dracula-600 px-2 py-3'>
-        <Link to='/dashboard' className='flex flex-row items-center p-1 transition-all text-purple-500 hover:text-purple-600'>
+        <Link to='/' className='flex flex-row items-center p-1 transition-all text-purple-500 hover:text-purple-600'>
           <GiSecretBook className='text-3xl mx-1'/>
           <h1 className='text-lg font-semibold font-logo self-end'>Spellarium</h1>
         </Link> 
@@ -127,7 +127,7 @@ function Sidebar() {
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>
         <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-2 mx-2'>KONTO</span>      
-        <Link to='/dashboard' className='flex flex-row items-center py-1 hover:text-purple-500'><BiSolidDashboard className='text-xl mx-2'/><span>Dashboard</span></Link>
+        <Link to='/' className='flex flex-row items-center py-1 hover:text-purple-500'><BiSolidDashboard className='text-xl mx-2'/><span>Dashboard</span></Link>
         <Link to='/konto' className='flex flex-row items-center py-1 hover:text-purple-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
         <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-1 hover:text-purple-500'>
           {isDarkTheme ? <><BsMoonStarsFill className='text-lg mx-2'/><span>Tryb nocny</span></> : <><BsSunFill className='text-xl mx-2'/><span>Tryb dzienny</span></>}

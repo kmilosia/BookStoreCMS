@@ -16,7 +16,9 @@ function SidebarAccountElement() {
         dispatch(fetchUserData())
     },[])
     useEffect(() => {
-      setUserDetails(userData)
+      if(userData){
+        setUserDetails(userData)
+      }
     },[userData])
   return (
     <div className='border-t-[1px] py-4 px-3 grid grid-cols-[max-content_max-content] items-center dark:border-dracula-600'>

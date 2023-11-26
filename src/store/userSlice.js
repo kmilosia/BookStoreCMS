@@ -21,7 +21,7 @@ export const checkTokenValidity = async (token) => {
   export const checkUserLogin = createAsyncThunk(
     'user/auth',
     async () => {
-    console.log("checking user login");
+    console.log("Authenticating..");
       const rawToken = localStorage.getItem('token');
       if (rawToken) {
         const token = rawToken.replace(/^"|"$/g, '');
@@ -106,9 +106,11 @@ const userSlice = createSlice({
     extraReducers:(builder) => {
         builder.addCase(loginUser.pending,(state)=>{
             state.loading = true
+            state.success = false
         }).addCase(loginUser.fulfilled,(state,action)=>{
             state.isAuth = true
             state.loading = false
+            state.success = true
         }).addCase(loginUser.rejected,(state,action)=>{
             state.loading = false
             state.error = "Nieudane logowanie!"

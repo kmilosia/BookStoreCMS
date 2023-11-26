@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType, WebsiteLayout } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,17 +12,18 @@ function App() {
   const {isAuth} = useSelector((state) => state.user)
   useEffect(() => {
     dispatch(checkUserLogin()) 
+    console.log(isAuth);
   },[isAuth])
   return (
     <>
     <Alert />
       <Router>
         <Routes>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/' element={<Layout />}>
+          <Route path='/login' element={isAuth ? <Navigate to='/' /> : <Login/>}/>
+          <Route path='/' element={isAuth ? <Layout /> : <Navigate to='/login' />}>
             <Route index element={<Home />}/>
-            <Route path='/dashboard' element={<Navigate to='/' />}/>
             <Route path='/autor' element={<Author />}/>
+            <Route path='/slownik' element={<Dictionary />}/>
             <Route path='/konto' element={<Account />}/>
             <Route path='/ksiazka' element={<Book />}/>         
             <Route path='/miasto' element={<City />}/>         
@@ -56,6 +57,7 @@ function App() {
             <Route path='/footer-link' element={<FooterLinks />}/>
             <Route path='/magazyn' element={<StockAmount />}/>
             <Route path='/klient' element={<Customer />}/>
+            <Route path='/strona-klienta' element={<WebsiteLayout />}/>
           </Route>
           <Route path='*' element={<PageNotFound />}/>
         </Routes>

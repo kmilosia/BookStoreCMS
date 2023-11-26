@@ -15,7 +15,9 @@ function HeaderElement() {
         dispatch(fetchUserData())
     },[])
     useEffect(() => {
-      setUserDetails(userData)
+      if(userData){
+        setUserDetails(userData)
+      }
     },[userData])
   return (
     <div className='flex w-full rounded-md bg-white dark:bg-dracula-700 px-10 py-10 shadow-md my-2 cursor-default'>

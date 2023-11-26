@@ -9,16 +9,12 @@ export const Layout = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {isAuth} = useSelector((state) => state.user)
-//   useEffect(() => {
-//     dispatch(checkUserLogin()) 
-//   },[isAuth])
-    useEffect(() => {
-    dispatch(checkUserLogin()) 
-    console.log(isAuth);
-        if (!isAuth) {
-          navigate('/login');
-        }
-    }, [isAuth])
+    // useEffect(() => {
+    // dispatch(checkUserLogin()) 
+    //     if (!isAuth) {
+    //       navigate('/login');
+    //     }
+    // }, [isAuth])
     return(
         <div className="flex flex-row h-screen w-screen">
             <Sidebar />

@@ -18,13 +18,13 @@ function Home() {
         </div>
         <h3 className='home-element-header'>Zarządzaj sklepem internetowym</h3>
         <div className='flex flex-col w-full'>         
-          <ManageContentElement path="/promocja" imgURL="https://iili.io/Jo1fKT7.png" title="Dodaj nową promocję" content='Dodaj zaplanowaną lub obecnie obowiązującą promocję na wybrane produkty.' />
-          <ManageContentElement path="/ksiazka" imgURL="https://iili.io/Jo1Io7a.png" title="Dodaj książkę" content='Dodaj nową książkę bazową a następnie dodaj egzemplarze książki.' />
-          <ManageContentElement path="/egzemplarz" imgURL="https://iili.io/Jo1Izmv.png" title="Dodaj egzemplarz książki" content='Dodaj egzemplarz książki, jeżeli książka ma różne formy dodaj oddzielny egzemplarz dla każdej.' />
-          <ManageContentElement path="/uzytkownik" imgURL="https://iili.io/Jo1IBrF.png" title="Zarządzaj klientem" content='Zarządzaj klientem naszej internetowej księgarni.' />
-          <ManageContentElement path="/magazyn" imgURL="https://iili.io/Jo1Indg.png" title="Zarządzaj stanem magazynu" content='Zarządzaj stanem naszego magazynu - zmień ilość dostępnych na magazynie książek.' />
-          <ManageContentElement path="/footer-link" imgURL="https://iili.io/Jo1IxkJ.png" title="Zarządzaj stroną" content='Zarządzaj elementami strony internetowej naszego sklepu.' />
-          <ManageContentElement path="/slownik" imgURL="https://iili.io/Jo1ITIR.png" title="Zarządzaj tabelami słownikowymi" content='Dodawaj nowe elementy do naszej tabeli słownikowej używanej zarówno w naszym CMS jak i w sklepie internetowym.' />
+          <ManageContentElement path="/promocja" imgURL="https://iili.io/Jo1fKT7.png" title="Promocje" content='Dodaj nową promocję lub zarządzaj obecnymi promocjami.' />
+          <ManageContentElement path="/ksiazka" imgURL="https://iili.io/Jo1Io7a.png" title="Książki" content='Dodaj nową książkę bazową a następnie dodaj egzemplarze książki.' />
+          <ManageContentElement path="/egzemplarz" imgURL="https://iili.io/Jo1Izmv.png" title="Egzemplarze książek" content='Dodaj egzemplarz książki, jeżeli książka ma różne formy dodaj oddzielny egzemplarz dla każdej.' />
+          <ManageContentElement path="/uzytkownik" imgURL="https://iili.io/Jo1IBrF.png" title="Klienci" content='Zarządzaj klientami naszej internetowej księgarni.' />
+          <ManageContentElement path="/magazyn" imgURL="https://iili.io/Jo1Indg.png" title="Stan magazynu" content='Zarządzaj stanem naszego magazynu - zmień ilość dostępnych na magazynie książek.' />
+          <ManageContentElement path="/strona-klienta" imgURL="https://iili.io/Jo1IxkJ.png" title="Strona internetowa" content='Zarządzaj elementami strony internetowej naszego sklepu.' />
+          <ManageContentElement path="/slownik" imgURL="https://iili.io/Jo1ITIR.png" title="Słownik" content='Dodawaj nowe elementy do naszej tabeli słownikowej używanej zarówno w naszym CMS jak i w sklepie internetowym.' />
         </div>
       </div>
     </div>

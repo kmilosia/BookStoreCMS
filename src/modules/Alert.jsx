@@ -11,13 +11,13 @@ const Alert = () => {
     if (showAlert) {
       setTimeout(() => {
         dispatch(hideAlert());
-      }, 5000);
+      }, 3000);
     }
   }, [showAlert, dispatch]);
 
   return (
     showAlert && (
-      <div className='fixed top-0 left-0 h-max w-screen grid grid-cols-[auto_max-content] py-5 bg-white dark:bg-dracula-900 px-5 shadow-md z-[10000]'>
+      <div className='fixed top-0 left-0 h-max w-screen grid grid-cols-[auto_max-content] py-5 bg-white dark:bg-dracula-800 px-5 shadow-md z-[10000]'>
         <div className='w-full flex justify-center items-center cursor-default'>
             <h1 className='font-medium text-midnight-900 dark:text-white'>{alertTitle}</h1>
         </div>

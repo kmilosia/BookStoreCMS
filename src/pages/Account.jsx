@@ -53,6 +53,7 @@ function Account() {
         <div className='flex flex-col'>
         <h1 className='main-header mx-0 my-2'>Konto</h1> 
           <div className='rounded-md bg-white dark:bg-dracula-700 flex flex-col px-5 py-5 w-full text-dracula-900 dark:text-white'>
+          <h2 className='text-xl font-semibold text-dracula-500 dark:text-gray-300 mb-2'>Informacje o użytkowniku</h2> 
           <form onSubmit={handleSubmit}>
             <div className='grid grid-cols-2 gap-2 w-full 2xl:w-2/3'>
             <div className='flex flex-col'>
@@ -88,12 +89,15 @@ function Account() {
             </div>
             </form>
           </div>      
-          <div className='rounded-md bg-white dark:bg-dracula-700 flex px-5 py-5 mt-3 w-full text-dracula-900 dark:text-white'>
+          <div className='rounded-md bg-white dark:bg-dracula-700 flex flex-col px-5 py-5 mt-3 w-full text-dracula-900 dark:text-white'>
+          <h2 className='text-xl font-semibold text-dracula-500 dark:text-gray-300 mb-2'>Dostęp</h2> 
+          <div className='flex'>
             <div className='flex flex-col w-full mr-2'>
               <label htmlFor='pass' className='input-label'>Hasło</label>
               <input disabled id='pass' name='pass' type="text" value='****' className='input-default w-full'/>
             </div>
             <button onClick={() => {setIsPasswordModule(true)}} type='button' className='font-medium text-sm border-2 mt-auto mb-2 whitespace-nowrap border-purple-400 text-purple-400 rounded-md py-2 w-max px-10 hover:text-white hover:bg-purple-400'>Zmień hasło</button>
+          </div>
           </div>
         </div>
     </div>

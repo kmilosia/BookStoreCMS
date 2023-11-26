@@ -107,7 +107,7 @@
       @apply h-full grid grid-rows-[max-content_auto] px-6 py-6 bg-slate-200 dark:bg-dracula-900;
     }
     .main-header{
-      @apply text-3xl mx-2 text-midnight-800 font-semibold dark:text-midnight-100;
+      @apply text-3xl mx-2 text-midnight-800 font-semibold dark:text-midnight-100 cursor-default;
     }
     .filter-panel{
       @apply flex flex-row my-4 justify-end;

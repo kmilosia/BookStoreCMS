@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import { GiSecretBook } from 'react-icons/gi'
-import ShowPasswordButton from '../components/buttons/ShowPasswordButton'
-import { loginValidate } from '../utils/validation/loginValidate'
+import ShowPasswordButton from '../../components/buttons/ShowPasswordButton'
+import { loginValidate } from '../../utils/validation/loginValidate'
 import { useEffect } from 'react'
-import TextLink from '../components/buttons/TextLink'
+import TextLink from '../../components/buttons/TextLink'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../store/userSlice'
-import SubmitButton from '../components/buttons/SubmitButton'
+import { loginUser, resetState } from '../../store/userSlice'
+import SubmitButton from '../../components/buttons/SubmitButton'
 import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {loading,error,isAuth} = useSelector((state) => state.user)
+  const {loading,error,isAuth,success} = useSelector((state) => state.user)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(true)
@@ -34,14 +34,19 @@ function Login() {
       password: inputValues.password,
       audience: 'www',
     }
-    console.log(data);
     dispatch(loginUser(data))
   }
-  useEffect(() => {
-    if (isAuth) {
-      navigate('/dashboard');
+  // useEffect(() => {
+  //   if (isAuth) {
+  //     navigate('/');
+  //   }
+  // }, [isAuth]);
+  useEffect(() =>{
+    if(success){
+    navigate('/')
+    dispatch(resetState())
     }
-  }, [isAuth]);
+  },[success])
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();
