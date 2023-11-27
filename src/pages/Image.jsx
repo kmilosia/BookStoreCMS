@@ -12,7 +12,6 @@ import { imageColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
-import NewImage from '../modules/new/NewImage'
 import EditImage from '../modules/edit/EditImage'
 import ViewImage from '../modules/view/ViewImage'
 import {truncate} from '../utils/functions/truncate-text'
@@ -38,14 +37,6 @@ function Image() {
           const response = await axiosClient.get(`/Images`)
           setData(response.data)
           setIsDataLoading(false)
-      }catch(err){
-          console.error(err)
-      }
-    }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/Images`, object)
-          getAllData()
       }catch(err){
           console.error(err)
       }
@@ -91,7 +82,6 @@ function Image() {
         <div className='filter-panel'>
           <SortBar options={imageSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Zdjęcie"/>                   
         </div>
         <ListHeader  columnNames={imageColumns}/>
       </div>
@@ -114,7 +104,6 @@ function Image() {
       </div>
       }
         </div>
-    {showNewModule && <NewImage postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditImage putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewImage editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>

@@ -4,32 +4,38 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import { personValidate } from '../../utils/validation/newValidate'
+import { useEffect } from 'react'
+import { showAlert } from '../../store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function NewAuthor({setShowNewModule, postData}) {
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [description, setDescription] = useState('')
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handleSurnameInput = (e) => {
-        setSurname(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [values,setValues] = useState({
+        name: '',
+        surname: '',
+        description: ''
+    })
+    const handleChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        const data = {
-            name: name,
-            surname: surname,
-            description: description,
-        }
-        postData(data)
-        handleCloseModule()
+        console.log(values);
+        setSubmitting(true)
+        setErrors(personValidate(values))
     } 
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+            postData(values)
+            handleCloseModule()
+            dispatch(showAlert({ title: 'Nowy autor został dodany!' }));
+        }
+      }, [errors])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
@@ -39,10 +45,10 @@ function NewAuthor({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput onChange={handleNameInput} type='text' placeholder='Imię' title='Imię autora'/>
-                    <DefaultInput onChange={handleSurnameInput} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
+                    <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Imię' title='Imię autora'/>
+                    <DefaultInput name="surname" error={errors.surname} onChange={handleChange} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
                 </div>
-                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title="Opis autora"/>
+                <DefaultTextarea name="description" onChange={handleChange} placeholder='Opis' title="Opis autora"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

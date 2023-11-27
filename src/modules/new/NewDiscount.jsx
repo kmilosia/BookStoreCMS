@@ -8,16 +8,27 @@ import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { useDispatch } from 'react-redux'
+import { showAlert } from '../../store/alertSlice'
+import { discountValidate } from '../../utils/validation/newValidate'
 
 function NewDiscount({setShowNewModule, postData}) {
     const today = new Date().toISOString().split('T')[0];
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState(today)
-    const [startingDate, setStartingDate] = useState(today)
-    const [percent, setPercent] = useState('')
-    const [selectedBooks, setSelectedBooks] = useState([])
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
     const [bookOptions, setBookOptions] = useState([])
+    const [values, setValues] = useState({
+      title: '',
+      description: '',
+      percent: '',
+      expirationDate: today,
+      startingDate: today,
+      selectedBooks: [],
+    })
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
+    }
     const getBooks = async () => {
         try{
           const response = await axiosClient.get(`/BookItems`)
@@ -30,47 +41,39 @@ function NewDiscount({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const handleTitleInput = (e) => {
-        setTitle(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
-    }
-    const handleExpirationDate = (e) => {
-        setExpirationDate(e.target.value)
-    }
-    const handleStartingDate = (e) => {
-        setStartingDate(e.target.value)
-    }
-    const handlePercent = (e) => {
-        setPercent(Number(e.target.value))
-    }
     const handleBooks = (selectedBooks) => {
-        setSelectedBooks(selectedBooks)
+        setValues({ ...values, selectedBooks });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        const convertedExpDate = convertDate(expirationDate)
-        const convertedStartDate = convertDate(startingDate)
-        const booksList = selectedBooks.map(item => (
-            {
-                id: item.value
-            }
-        ))
+        setSubmitting(true)
+        setErrors(discountValidate(values))
+      } 
+      const finishSubmit = () => {
+        const convertedExpDate = convertDate(values.expirationDate)
+        const convertedStartDate = convertDate(values.startingDate)
         const data = {
-            title: title,
-            description: description,
-            percentOfDiscount: percent,
-            expiryDate: convertedExpDate,
-            startingDate: convertedStartDate,
-            listOfBookItems: booksList,
+          title: values.title,
+          description: values.description,
+          percentOfDiscount: Number(values.percent),
+          expiryDate: convertedExpDate,
+          startingDate: convertedStartDate,
+          listOfBookItems: values.selectedBooks.map((item) => ({
+            id: item.value,
+          })),
+        };     
+          console.log(data)
+          postData(data)
+          handleCloseModule()
+          dispatch(showAlert({ title: 'Nowa promocja została dodana!' }));
+      }
+      useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+          finishSubmit()
         }
-        console.log(data);
-        postData(data)
-        handleCloseModule()
-    } 
+      }, [errors])
     useEffect(() => {
         getBooks()
     },[])
@@ -83,15 +86,15 @@ function NewDiscount({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput onChange={handleTitleInput} type='text' placeholder='Tytuł' title="Tytuł promocji"/>
-                <DefaultInput onChange={handlePercent} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
+                <DefaultInput name="title" error={errors.title} onChange={handleChange} type='text' placeholder='Tytuł' title="Tytuł promocji"/>
+                <DefaultInput name="percent" error={errors.percent} onChange={handleChange} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
                 </div>
-                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title="Opis promocji"/>
+                <DefaultTextarea name="description" error={errors.description} onChange={handleChange} placeholder='Opis' title="Opis promocji"/>
                 <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput onChange={handleStartingDate} value={startingDate} type='date' title='Data rozpoczęcia'/>
-                <DefaultInput onChange={handleExpirationDate} value={expirationDate} type='date' title="Termin ważności"/>
+                <DefaultInput name="startingDate" onChange={handleChange} value={values.startingDate} type='date' title='Data rozpoczęcia'/>
+                <DefaultInput name="expirationDate" onChange={handleChange} value={values.expirationDate} type='date' title="Termin ważności"/>
                 </div>
-                <DefaultSelect onChange={handleBooks} value={selectedBooks} options={bookOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
+                <DefaultSelect name="selectedBooks" error={errors.selectedBooks} onChange={handleBooks} value={values.selectedBooks} options={bookOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

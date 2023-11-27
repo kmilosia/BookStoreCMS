@@ -6,7 +6,9 @@ import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-
+import { useDispatch } from 'react-redux'
+import { showAlert } from '../../store/alertSlice'
+import { footerLinkValidate } from '../../utils/validation/newValidate'
 
 function NewFooterLink({setShowNewModule, postData}) {
     const getFooterColumns = async () => {
@@ -21,48 +23,47 @@ function NewFooterLink({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const [name, setName] = useState('')
-    const [position, setPosition] = useState(null)
-    const [path, setPath] = useState('')
-    const [url, setUrl] = useState('')
-    const [selectedOption, setSelectedOption] = useState(null)
-    const [columns, setColumns] = useState([])
-    const [columnId, setColumnId] = useState(null)
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handlePositionInput = (e) => {
-        setPosition(e.target.value)
-    }
-    const handlePathInput = (e) => {
-        setPath(e.target.value)
-    }
-    const handleUrlInput = (e) => {
-        setUrl(e.target.value)
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [values, setValues] = useState({
+        name: '',
+        path: '',
+        url: '',
+        position: '',
+        selectedOption: null,
+      })
+      const [columns, setColumns] = useState([])
+      const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
     }
     const handleSelectChange = (selectedOption) => {
-        if (selectedOption) {
-            setSelectedOption(selectedOption);
-            setColumnId(selectedOption.value); // Set the columnId state to the selected option's value
-        } else {
-            setSelectedOption(null);
-            setColumnId(null); // Reset columnId if no option is selected
-        }
-    };
+        setValues({ ...values, selectedOption });
+      }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
+        setSubmitting(true)
+        setErrors(footerLinkValidate(values))
+      } 
+      const finishSubmit = () => {
         const data = {
-            name: name,
-            path: path,
-            url: url,
-            position: position,
-            footerColumnID: columnId
+          name: values.name,
+          path: values.path,
+          url: values.url,
+          position: values.position,
+          footerColumnID: values.selectedOption.value, 
+        };     
+          postData(data)
+          handleCloseModule()
+          dispatch(showAlert({ title: 'Nowy footer link został dodany!' }));
+      }
+      useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+          finishSubmit()
         }
-        postData(data)
-        handleCloseModule()
-    } 
+      }, [errors]) 
     useEffect(() => {
         getFooterColumns()
     },[])
@@ -75,14 +76,14 @@ function NewFooterLink({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>                
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
-                <DefaultInput onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput name="position" error={errors.position} onChange={handleChange} type='number' placeholder='Pozycja' title="Pozycja linku"/>
                 </div>
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput onChange={handlePathInput} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
-                <DefaultInput onChange={handleUrlInput} type='text' placeholder='URL' title="Adres URL linku"/>
+                <DefaultInput name="path" error={errors.path} onChange={handleChange} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
+                <DefaultInput name="url" error={errors.url} onChange={handleChange} type='text' placeholder='URL' title="Adres URL linku"/>
                 </div>
-                <DefaultSelect onChange={handleSelectChange} value={selectedOption} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
+                <DefaultSelect name="selectedOption" error={errors.selectedOption} onChange={handleSelectChange} value={values.selectedOption} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

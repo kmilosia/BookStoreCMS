@@ -4,7 +4,7 @@ import ButtonSpinner from '../ButtonSpinner'
 function SubmitButton({loading,title}) {
   return (
     <button type='submit' className='default-button'>
-      {loading ? <ButtonSpinner size={6}/> : <span>{title}</span> }
+      {loading ? <ButtonSpinner/> : <span>{title}</span> }
     </button>
   )
 }

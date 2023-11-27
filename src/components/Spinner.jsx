@@ -11,9 +11,8 @@ function Spinner() {
       ariaLabel="blocks-loading"
       wrapperStyle={{}}
       wrapperClass="blocks-wrapper"
-      colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+      colors={['#a855f7', '#6b21a8', '#d8b4fe', '#3b0764', '#7e22ce']}
     />
-    {/* <h1 className='text-xl text-orange-400 font-light my-2'>Pobieranie danych...</h1> */}
     </div>
   )
 }

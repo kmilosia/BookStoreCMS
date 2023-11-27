@@ -5,13 +5,15 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { useDispatch } from 'react-redux'
+import {showAlert} from '../../store/alertSlice'
 
 function EditAuthor(props) {
+    const dispatch = useDispatch()
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [description, setDescription] = useState('')
     const [author,setAuthor] = useState({})
-
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Author/${id}`)
@@ -43,6 +45,7 @@ function EditAuthor(props) {
         props.putData(author.id, author)
         props.setEditedID(null)
         props.setShowEditModule(false)
+        dispatch(showAlert({ title: 'Autor został edytowany!' }));
   }
   useEffect(()=> {
     getItem(props.editedID)

@@ -7,22 +7,32 @@ import { useEffect } from 'react'
 import {convertDate} from '../../utils/functions/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { useDispatch } from 'react-redux'
+import { bookItemValidate } from '../../utils/validation/newValidate'
+import { showAlert } from '../../store/alertSlice'
 
 function NewBookItem({setShowNewModule, postData}) {
   const today = new Date().toISOString().split('T')[0];
-    const [vat, setVat] = useState(0)
-    const [netto, setNetto] = useState(0)
-    const [ISBN, setISBN] = useState('')
-    const [pages, setPages] = useState(0)
-    const [publishingDate, setPublishingDate] = useState(today)
-    const [translator, setTranslator] = useState(null)
-    const [language, setLanguage] = useState(null)
-    const [edition, setEdition] = useState(null)
-    const [fileFormat, setFileFormat] = useState(null)
-    const [form, setForm] = useState(null)
-    const [availability, setAvailability] = useState(null)
-    const [book, setBook] = useState(null)
-
+  const dispatch = useDispatch()
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [values, setValues] = useState({
+    vat: 0,
+    netto: 0,
+    ISBN: '',
+    pages: 0,
+    publishingDate: today,
+    translator: null,
+    language: null,
+    edition: null,
+    fileFormat: null,
+    form: null,
+    availability: null,
+    book: null,
+  })
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  }
     const [translatorOptions, setTranslatorOptions] = useState([])
     const [languageOptions, setLanguageOptions] = useState([])
     const [editionOptions, setEditionOptions] = useState([])
@@ -30,8 +40,6 @@ function NewBookItem({setShowNewModule, postData}) {
     const [formOptions, setFormOptions] = useState([])
     const [availabilityOptions, setAvailabilityOptions] = useState([])
     const [bookOptions, setBookOptions] = useState([])
-
-
     const getTranslators = async () => {
         try{
           const response = await axiosClient.get(`/Translator`)
@@ -116,65 +124,80 @@ function NewBookItem({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const handleVat = (e) => {
-        setVat(Number(e.target.value))
-    }
-    const handleNetto = (e) => {
-        setNetto(Number(e.target.value))
-    }
-    const handleISBN = (e) => {
-        setISBN(e.target.value)
-    }
-    const handlePages = (e) => {
-        setPages(Number(e.target.value))
-    }
-    const handlePublishingDate = (e) => {
-        setPublishingDate(e.target.value)
-    }
     const handleTranslator = (translator) => {
-        setTranslator(translator)
+      setValues({ ...values, translator });
     }
     const handleLanguage = (language) => {
-        setLanguage(language)
+      setValues({ ...values, language });
     }
     const handleEdition = (edition) => {
-        setEdition(edition)
+      setValues({ ...values, edition });
     }
     const handleFileFormat = (fileFormat) => {
-        setFileFormat(fileFormat)
+      setValues({ ...values, fileFormat });
     }
     const handleForm = (form) => {
-        setForm(form)
+      setValues({ ...values, form });
     }
     const handleAvailability = (availability) => {
-        setAvailability(availability)
+      setValues({ ...values, availability });
     }
     const handleBook = (book) => {
-        setBook(book)
+      setValues({ ...values, book });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
+    // const handleAcceptButton = () => {
+    //     const covertedDate = convertDate(publishingDate)
+    //     const data = {
+    //         vat: vat,
+    //         nettoPrice: netto,
+    //         isbn: ISBN,
+    //         pages: pages,
+    //         publishingDate: covertedDate,
+    //         translatorId: translator.value,
+    //         languageId: language.value,
+    //         editionId: edition.value,
+    //         fileFormatId: fileFormat.value,
+    //         formId: form.value,
+    //         availabilityId: availability.value,
+    //         bookId: book.value,
+    //     }
+    //     console.log(data);
+    //     postData(data)
+    //     handleCloseModule()
+    // } 
     const handleAcceptButton = () => {
-        const covertedDate = convertDate(publishingDate)
-        const data = {
-            vat: vat,
-            nettoPrice: netto,
-            isbn: ISBN,
-            pages: pages,
-            publishingDate: covertedDate,
-            translatorId: translator.value,
-            languageId: language.value,
-            editionId: edition.value,
-            fileFormatId: fileFormat.value,
-            formId: form.value,
-            availabilityId: availability.value,
-            bookId: book.value,
-        }
-        console.log(data);
+      setSubmitting(true)
+      setErrors(bookItemValidate(values))
+    } 
+    const finishSubmit = () => {
+      const covertedDate = convertDate(values.publishingDate)
+      const data = {
+        vat: Number(values.vat),
+        nettoPrice: Number(values.netto),
+        isbn: values.ISBN,
+        pages: Number(values.pages),
+        publishingDate: covertedDate,
+        translatorID: values.translator.value,
+        languageID: values.language.value,
+        editionID: values.edition.value,
+        fileFormatID: values.fileFormat.value,
+        formID: values.form.value,
+        availabilityID: values.availability.value,
+        bookID: values.book.value,
+        };     
+        console.log(data)
         postData(data)
         handleCloseModule()
-    } 
+        dispatch(showAlert({ title: 'Nowy egzemplarz został dodany!' }));
+    }
+    useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+        finishSubmit()
+      }
+    }, [errors])
     useEffect(() => {
         const fetchAll = async () => {
             try{
@@ -200,30 +223,30 @@ function NewBookItem({setShowNewModule, postData}) {
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultInput onChange={handleVat} placeholder="VAT" type="number" title="VAT"/>
-              <DefaultInput onChange={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
+              <DefaultInput name="vat" error={errors.vat} onChange={handleChange} placeholder="VAT" type="number" title="VAT"/>
+              <DefaultInput name="netto" error={errors.netto} onChange={handleChange} placeholder="Netto" type="number" title="NETTO"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
-              <DefaultInput onChange={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
-              <DefaultInput onChange={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
-              <DefaultInput onChange={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
+              <DefaultInput name="pages" error={errors.pages} onChange={handleChange} placeholder="Liczba stron" type="number" title="Strony"/>
+              <DefaultInput name="ISBN" error={errors.ISBN} onChange={handleChange} placeholder="ISBN" type="text" title="ISBN"/>
+              <DefaultInput name="publishingDate" error={errors.publishingDate} onChange={handleChange} placeholder="Data wydania" type="date" value={values.publishingDate} title="Data wydania"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultSelect onChange={handleLanguage} placeholder="Język" options={languageOptions} value={language} title="Język"/>
-              <DefaultSelect onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={translator} title="Translator"/>
+              <DefaultSelect name="language" error={errors.language} onChange={handleLanguage} placeholder="Język" options={languageOptions} value={values.language} title="Język"/>
+              <DefaultSelect name="translator" error={errors.translator} onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={values.translator} title="Translator"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[2fr_1fr] gap-2'>
-              <DefaultSelect onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={book} title="Podstawowa książka"/>
-              <DefaultSelect onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={availability} title="Dostępność"/>
+              <DefaultSelect name="book" error={errors.book} onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={values.book} title="Podstawowa książka"/>
+              <DefaultSelect name="availability" error={errors.availability} onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={values.availability} title="Dostępność"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-3 gap-2'>
-              <DefaultSelect onChange={handleForm} placeholder="Format książki" options={formOptions} value={form} title="Format książki"/>
-              <DefaultSelect onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={edition} title="Edycja okładki"/>
-              <DefaultSelect onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={fileFormat} title="Format pliku"/>
+              <DefaultSelect name="form" error={errors.form} onChange={handleForm} placeholder="Format książki" options={formOptions} value={values.form} title="Format książki"/>
+              <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={values.edition} title="Edycja okładki"/>
+              <DefaultSelect name="fileFormat" error={errors.fileFormat} onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={values.fileFormat} title="Format pliku"/>
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>

@@ -8,7 +8,9 @@ import { FiMinus, FiPlus } from 'react-icons/fi'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
-
+import { useDispatch } from 'react-redux'
+import { bookValidate } from '../../utils/validation/newValidate'
+import {showAlert} from '../../store/alertSlice'
 
 function NewBook({setShowNewModule, postData}) {
     const getAuthors = async () => {
@@ -59,86 +61,88 @@ function NewBook({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const [title, setTitle] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
-    const [description, setDescription] = useState('')
-    
-    const [selectedLanguage, setSelectedLanguage] = useState(null)
-    const [selectedPublisher, setSelectedPublisher] = useState(null)
-    const [selectedCategories, setSelectedCategories] = useState([])
-    const [selectedAuthors, setSelectedAuthors] = useState([])
-    const [selectedImages, setSelectedImages] = useState([])
-
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [values, setValues] = useState({
+      title: '',
+      imageTitle: '',
+      imageURL: '',
+      description: '',
+      selectedLanguage: null,
+      selectedPublisher: null,
+      selectedCategories: [],
+      selectedAuthors: [],
+      selectedImages: [],
+    })
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
+    }
     const [languageOptions, setLanguageOptions] = useState([])
     const [publisherOptions, setPublisherOptions] = useState([])
     const [categoryOptions, setCategoryOptions] = useState([])
     const [authorOptions, setAuthorOptions] = useState([])
 
-    const handleImageTitleInput = (e) => {
-      setImageTitle(e.target.value)
-    }
-    const handleImageURLInput = (e) => {
-      setImageURL(e.target.value)
-    }
-    const handleTitleInput = (e) => {
-        setTitle(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
-    }
     const handleLanguageInput = (selectedLanguage) => {
-        setSelectedLanguage(selectedLanguage)
+      setValues({ ...values, selectedLanguage });
     }
     const handlePublisherInput = (selectedPublisher) => {
-        setSelectedPublisher(selectedPublisher)
+      setValues({ ...values, selectedPublisher });
     }
     const handleCategoriesChange = (selectedCategories) => {
-        setSelectedCategories(selectedCategories)
+      setValues({ ...values, selectedCategories });
     }
     const handleAuthorsChange = (selectedAuthors) => {
-        setSelectedAuthors(selectedAuthors)
+      setValues({ ...values, selectedAuthors });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleDeleteImage = (index) => {
-      const updatedImages = selectedImages.filter((_,i) => i !== index)
-      setSelectedImages(updatedImages)
+      const updatedImages = [...values.selectedImages];
+      updatedImages.splice(index, 1);
+      setValues({ ...values, selectedImages: updatedImages });
     }
     const handleAddPhoto = () => {
-      setSelectedImages([...selectedImages,{title: imageTitle, imageURL: imageURL}])
-      setImageTitle('')
-      setImageURL('')
-      console.log(selectedImages);
+      const newImage = { title: values.imageTitle, imageURL: values.imageURL };
+      setValues({
+        ...values,
+        selectedImages: [...values.selectedImages, newImage],
+        imageTitle: '',
+        imageURL: '',
+      })
     }
     const handleClearAllPhotos = () => {
-      setSelectedImages([])
+      setValues({ ...values, selectedImages: [] });
     }
     const handleAcceptButton = () => {
-        const authors = selectedAuthors.map(item => (
-            {
-                id: item.value
-            }
-        ))
-        const categories = selectedCategories.map(item => (
-            {
-                id: item.value
-            }
-        ))
-        const data = {
-            title: title,
-            description: description,
-            originalLanguageID: selectedLanguage.value,
-            publisherID: selectedPublisher.value,
-            listOfBookAuthors: authors,
-            listOfBookCategories: categories,
-            listOfBookImages: selectedImages
-        }
+      setSubmitting(true)
+      setErrors(bookValidate(values))
+    } 
+    const finishSubmit = () => {
+      const data = {
+        title: values.title,
+        description: values.description,
+        originalLanguageID: values.selectedLanguage.value,
+        publisherID: values.selectedPublisher.value,
+        listOfBookAuthors: values.selectedAuthors.map((item) => ({
+          id: item.value,
+        })),
+        listOfBookCategories: values.selectedCategories.map((item) => ({
+          id: item.value,
+        })),
+        listOfBookImages: values.selectedImages,
+      };     
         console.log(data)
         postData(data)
         handleCloseModule()
-    } 
+        dispatch(showAlert({ title: 'Nowa książka została dodana!' }));
+    }
+    useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+        finishSubmit()
+      }
+    }, [errors])
     useEffect(() => {
         const fetchAll = async () => {
             try{
@@ -160,26 +164,26 @@ function NewBook({setShowNewModule, postData}) {
                   <h1 className='module-header'>Dodaj nową książkę</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <DefaultInput onChange={handleTitleInput} type='text' placeholder='Tytuł' title='Tytuł książki'/>
-                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title='Opis książki'/>
+                <DefaultInput error={errors.title} name='title' onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł książki'/>
+                <DefaultTextarea error={errors.description} name='description' onChange={handleChange} placeholder='Opis' title='Opis książki'/>
                 <div className='divider' />
                 <div className='grid grid-cols-2 gap-2'>
-                  <DefaultSelect onChange={handleLanguageInput} value={selectedLanguage} options={languageOptions} title='Język oryginalny' placeholder='Język'/>
-                  <DefaultSelect onChange={handlePublisherInput} value={selectedPublisher} options={publisherOptions} title='Wydawnictwo' placeholder='Wydawnictwo'/>
+                  <DefaultSelect error={errors.selectedLanguage} name='selectedLanguage' onChange={handleLanguageInput} value={values.selectedLanguage} options={languageOptions} title='Język oryginalny' placeholder='Język'/>
+                  <DefaultSelect error={errors.selectedPublisher} name='selectedPublisher' onChange={handlePublisherInput} value={values.selectedPublisher} options={publisherOptions} title='Wydawnictwo' placeholder='Wydawnictwo'/>
                 </div>
-                <DefaultSelect isMulti={true} onChange={handleAuthorsChange} value={selectedAuthors} options={authorOptions} title='Autorzy' placeholder='Autorzy'/>
-                <DefaultSelect isMulti={true} onChange={handleCategoriesChange} value={selectedCategories} options={categoryOptions} title='Kategorie' placeholder='Kategorie'/>
+                <DefaultSelect error={errors.selectedAuthors} name='selectedAuthors' isMulti={true} onChange={handleAuthorsChange} value={values.selectedAuthors} options={authorOptions} title='Autorzy' placeholder='Autorzy'/>
+                <DefaultSelect error={errors.selectedCategories} name='selectedCategories' isMulti={true} onChange={handleCategoriesChange} value={values.selectedCategories} options={categoryOptions} title='Kategorie' placeholder='Kategorie'/>
                 <div className='divider'></div>
                 <div className="flex flex-row justify-between items-center my-1">
                   <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki</p>
-                  {selectedImages.length > 0 && 
-                  <button onClick={handleClearAllPhotos} className="text-xs px-3 py-1 rounded-sm text-dracula-100 bg-orange-400 hover:bg-orange-500">Wyczyść wszystko</button>
+                  {values.selectedImages.length > 0 && 
+                  <button onClick={handleClearAllPhotos} className="text-xs px-3 py-1 rounded-sm text-dracula-100 bg-purple-400 hover:bg-purple-500">Wyczyść wszystko</button>
                   }
                 </div>
-                {selectedImages.length > 0 && 
+                {values.selectedImages.length > 0 && 
                 <div className='flex flex-row flex-wrap'>
                 <div className='grid grid-cols-3 gap-2 my-2'>
-                  {selectedImages.map((item,index)=>(
+                  {values.selectedImages.map((item,index)=>(
                     <div key={index} className='flex flex-col rounded-sm bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
                       <div className='relative'>
                       <img src={item.imageURL} className='w-full h-auto object-cover rounded-t-md aspect-video' />
@@ -194,8 +198,8 @@ function NewBook({setShowNewModule, postData}) {
                 <div className='divider' />
                 <div className='flex flex-row items-center'>
                   <div className='grid grid-cols-[1fr_2fr] gap-2'>
-                    <DefaultInput onChange={handleImageTitleInput} value={imageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
-                    <DefaultInput onChange={handleImageURLInput} value={imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
+                    <DefaultInput name='imageTitle' onChange={handleChange} value={values.imageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                    <DefaultInput name='imageURL' onChange={handleChange} value={values.imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
                   </div>
                   <button className='module-round-button mt-4' onClick={handleAddPhoto}><FiPlus/></button>
                 </div>

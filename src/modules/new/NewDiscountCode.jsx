@@ -8,16 +8,24 @@ import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import { discountCodeValidate } from '../../utils/validation/newValidate'
+import { useDispatch } from 'react-redux'
+import { showAlert } from '../../store/alertSlice'
 
 function NewDiscountCode({setShowNewModule, postData}) {
     const today = new Date().toISOString().split('T')[0];
-    const [code, setCode] = useState('')
-    const [description, setDescription] = useState('')
-    const [expirationDate, setExpirationDate] = useState(today)
-    const [startingDate, setStartingDate] = useState(today)
-    const [percent, setPercent] = useState(null)
-    const [selectedBooks, setSelectedBooks] = useState([])
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
     const [bookOptions, setBookOptions] = useState([])
+    const [values, setValues] = useState({
+      code: '',
+      description: '',
+      percent: '',
+      expirationDate: today,
+      startingDate: today,
+      selectedBooks: [],
+    })
     const getBooks = async () => {
         try{
           const response = await axiosClient.get(`/BookItems`)
@@ -30,47 +38,42 @@ function NewDiscountCode({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const handleCodeInput = (e) => {
-        setCode(e.target.value.toUpperCase())
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
-    }
-    const handleExpirationDate = (e) => {
-        setExpirationDate(e.target.value)
-    }
-    const handleStartingDate = (e) => {
-        setStartingDate(e.target.value)
-    }
-    const handlePercent = (e) => {
-        setPercent(Number(e.target.value))
-    }
+    const handleChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+      }
     const handleBooks = (selectedBooks) => {
-        setSelectedBooks(selectedBooks)
+        setValues({ ...values, selectedBooks });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
-    }   
+    }    
     const handleAcceptButton = () => {
-        const convertedExpDate = convertDate(expirationDate)
-        const convertedStartDate = convertDate(startingDate)
-        const booksList = selectedBooks.map(item => (
-            {
-                id: item.value
-            }
-        ))
+        setSubmitting(true)
+        setErrors(discountCodeValidate(values))
+      } 
+      const finishSubmit = () => {
+        const convertedExpDate = convertDate(values.expirationDate)
+        const convertedStartDate = convertDate(values.startingDate)
         const data = {
-            code: code,
-            description: description,
-            percentOfDiscount: percent,
-            expiryDate: convertedExpDate,
-            startingDate: convertedStartDate,
-            listOfBookItems: booksList,
+          code: values.code,
+          description: values.description,
+          percentOfDiscount: values.percent,
+          expiryDate: convertedExpDate,
+          startingDate: convertedStartDate,
+          listOfBookItems: values.booksList.map((item) => ({
+            id: item.value,
+          })),
+        };     
+          console.log(data)
+          postData(data)
+          handleCloseModule()
+          dispatch(showAlert({ title: 'Nowy kod rabatowy został dodany!' }));
+      }
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+          finishSubmit()
         }
-        console.log(data);
-        postData(data)
-        handleCloseModule()
-    } 
+      }, [errors])
     useEffect(() => {
         getBooks()
     },[])
@@ -83,15 +86,15 @@ function NewDiscountCode({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput onChange={handleCodeInput} type='text' placeholder='Kod' title="Kod rabatu"/>
-                <DefaultInput onChange={handlePercent} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
+                <DefaultInput name="code" error={errors.code} onChange={handleChange} type='text' placeholder='Kod' title="Kod rabatu"/>
+                <DefaultInput name="percent" error={errors.percent} onChange={handleChange} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
                 </div>
-                <DefaultTextarea onChange={handleDescriptionInput} placeholder='Opis' title="Opis kodu"/>
+                <DefaultTextarea name="description" error={errors.description} onChange={handleChange} placeholder='Opis' title="Opis kodu"/>
                 <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput onChange={handleStartingDate} value={startingDate} type='date' title='Data rozpoczęcia'/>
-                <DefaultInput onChange={handleExpirationDate} value={expirationDate} type='date' title="Termin ważności"/>
+                <DefaultInput name="startingDate" error={errors.startingDate} onChange={handleChange} value={values.startingDate} type='date' title='Data rozpoczęcia'/>
+                <DefaultInput name="expirationDate" error={errors.expirationDate} onChange={handleChange} value={values.expirationDate} type='date' title="Termin ważności"/>
                 </div>
-                <DefaultSelect onChange={handleBooks} value={selectedBooks} options={bookOptions} isMulti={true} title="Egzemplarze objęte kodem rabatowym" placeholder='Egzemplarze książek'/>
+                <DefaultSelect name="selectedBooks" error={errors.selectedBooks} onChange={handleBooks} value={values.selectedBooks} options={bookOptions} isMulti={true} title="Egzemplarze objęte kodem rabatowym" placeholder='Egzemplarze książek'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

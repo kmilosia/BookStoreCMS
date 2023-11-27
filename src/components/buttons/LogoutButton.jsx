@@ -12,7 +12,10 @@ function LogoutButton() {
         navigate('/login')
     }
   return (
-    <button onClick={handleClick} className='flex flex-row items-center py-1 hover:text-purple-500'><AiOutlineLogout className='text-xl mx-2 '/><span>Wyloguj się</span></button>      
+    <button onClick={handleClick} className='flex flex-row items-center py-1 hover:text-purple-500'>
+      <AiOutlineLogout className='text-xl mx-2 '/>
+      <span>Wyloguj się</span>
+    </button>      
   )
 }
 

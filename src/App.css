@@ -152,10 +152,10 @@
     }
     /* select style */
       .my-react-select-container .my-react-select__control {
-        @apply rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-100 dark:border-dracula-700 hover:border-dracula-300 dark:hover:border-dracula-500;
+        @apply rounded-md bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-100 dark:border-dracula-700 hover:border-dracula-300 dark:hover:border-dracula-500;
       }
       .my-react-select-module-container .my-react-select-module__control {
-        @apply scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-300 dark:border-dracula-600 hover:border-dracula-400 dark:hover:border-dracula-500;
+        @apply scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-md bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-300 dark:border-dracula-600 hover:border-dracula-400 dark:hover:border-dracula-500;
       }
       .my-react-select-container .my-react-select__control--is-focused {
         @apply border-dracula-400 hover:border-dracula-400 dark:border-dracula-500 shadow-none;
@@ -164,10 +164,10 @@
         @apply border-dracula-400 dark:border-dracula-500 shadow-none;
       }
       .my-react-select-container .my-react-select__menu {
-        @apply rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
+        @apply rounded-md bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
       }
       .my-react-select-module-container .my-react-select-module__menu {
-        @apply z-50 scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-sm bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
+        @apply z-50 scrollbar-thin scrollbar-track-rounded-md scrollbar-thumb-rounded-md rounded-md bg-dracula-100 dark:bg-dracula-700 border-2 border-dracula-400 dark:border-dracula-500;
       }
       .my-react-select-container .my-react-select__option {
         @apply  text-dracula-500 dark:text-dracula-200 bg-dracula-100 hover:bg-dracula-300 dark:bg-dracula-700 dark:hover:bg-dracula-800;

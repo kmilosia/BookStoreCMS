@@ -3,37 +3,41 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { useDispatch } from 'react-redux'
+import { showAlert } from '../../store/alertSlice'
+import { useEffect } from 'react'
+import { footerColumnValidate } from '../../utils/validation/newValidate'
 
 function NewFooterColumn({setShowNewModule, postData}) {
-    const [name, setName] = useState('')
-    const [position, setPosition] = useState('')
-    const [htmlObject, setHtmlObject] = useState('')
-    const [direction, setDirection] = useState('')
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handlePositionInput = (e) => {
-        setPosition(e.target.value)
-    }
-    const handleHtmlObjectInput = (e) => {
-        setHtmlObject(e.target.value)
-    }
-    const handleDirection = (e) => {
-        setDirection(e.target.value)
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [values, setValues] = useState({
+        name: '',
+        position: '',
+        htmlObject: '',
+        direction: '',
+      })
+      const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        const data = {
-            name: name,
-            position: position,
-            htmlObject: htmlObject,
-            direction: direction
+        setSubmitting(true)
+        setErrors(footerColumnValidate(values))
+      } 
+      const finishSubmit = () => {
+          postData(values)
+          handleCloseModule()
+          dispatch(showAlert({ title: 'Nowa footer kolumna została dodana!' }));
+      }
+      useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+          finishSubmit()
         }
-        postData(data)
-        handleCloseModule()
-    } 
+      }, [errors]) 
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
@@ -43,12 +47,12 @@ function NewFooterColumn({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>                
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                    <DefaultInput onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
-                    <DefaultInput onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                    <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput onChange={handleHtmlObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
-                    <DefaultInput onChange={handleDirection} type='text' placeholder='Kierunek wyświetlania' title='Kierunek wyświetlania obiektów'/>
+                    <DefaultInput name="htmlObject" error={errors.htmlObject} onChange={handleChange} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
+                    <DefaultInput name="direction" error={errors.direction} onChange={handleChange} type='text' placeholder='Kierunek wyświetlania' title='Kierunek wyświetlania obiektów'/>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

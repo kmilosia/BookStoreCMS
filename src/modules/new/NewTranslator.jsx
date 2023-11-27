@@ -3,27 +3,36 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { personValidate } from '../../utils/validation/newValidate'
+import { showAlert } from '../../store/alertSlice'
 
 function NewTranslator({setShowNewModule, postData}) {
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handleSurnameInput = (e) => {
-        setSurname(e.target.value)
+    const dispatch = useDispatch()
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [values,setValues] = useState({
+        name: '',
+        surname: '',
+    })
+    const handleChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        const data = {
-            name: name,
-            surname: surname,
-        }
-        postData(data)
-        handleCloseModule()
+        setSubmitting(true)
+        setErrors(personValidate(values))
     } 
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+            postData(values)
+            handleCloseModule()
+            dispatch(showAlert({ title: 'Nowy translator został dodany!' }));
+        }
+      }, [errors])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>
@@ -33,8 +42,8 @@ function NewTranslator({setShowNewModule, postData}) {
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
             <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput onChange={handleNameInput} type='text' placeholder='Imię' title='Imię translatora' />
-                <DefaultInput onChange={handleSurnameInput} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
+                <DefaultInput error={errors.name} name="name" onChange={handleChange} type='text' placeholder='Imię' title='Imię translatora' />
+                <DefaultInput error={errors.surname} name="surname" onChange={handleChange} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
