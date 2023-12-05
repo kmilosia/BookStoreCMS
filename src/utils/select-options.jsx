@@ -23,10 +23,32 @@ export const imageSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'imageURL', label: 'URL', type: 'string'}
 ]
+export const categoryElementSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'position', label: 'Pozycja', type: 'number'}
+]
 export const personSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Imię', type: 'string'},
     {value: 'surname', label: 'Nazwisko', type: 'string'}
+]
+export const bannerSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'title', label: 'Tytuł', type: 'string'},
+]
+export const newsSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'topic', label: 'Tytuł', type: 'string'},
+    {value: 'authorName', label: 'Autor', type: 'string'},
+]
+export const discountsBannerSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'header', label: 'Tytuł', type: 'string'},
+]
+export const navbarLinksSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
+    {value: 'position', label: 'Pozycja', type: 'number'},
 ]
 export const addressSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},

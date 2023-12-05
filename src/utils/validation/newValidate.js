@@ -15,6 +15,80 @@ export const personValidate = (values) => {
     } 
     return errors
 }
+export const publisherValidate = (values) => {
+    let errors = {}
+    if (!values.name) {
+        errors.name = "Wprowadź nazwę!"
+    } 
+    return errors
+}
+export const navbarValidate = (values) => {
+    let errors = {}
+    if (!values.name) {
+        errors.name = "Wprowadź imię!"
+    } 
+    if (!values.path) {
+        errors.path = "Wprowadź ścieżkę!"
+    } 
+    if (!values.position) {
+        errors.position = "Wprowadź pozycję linku!"
+    } 
+    return errors
+}
+export const categoryElementValidate = (values) => {
+    let errors = {}
+    if (!values.path) {
+        errors.path = "Wprowadź ścieżkę!"
+    } 
+    if (!values.imageTitle) {
+        errors.imageTitle = "Wprowadź tytuł!"
+    } 
+    if (!values.imageURL) {
+        errors.imageURL = "Wprowadź URL zdjęcia!"
+    } 
+    if (!values.position) {
+        errors.position = "Wprowadź pozycję!"
+    }
+    if (!values.content) {
+        errors.content = "Wprowadź treść!"
+    }
+    if (!values.logo) {
+        errors.logo = "Wprowadź logo kategorii!"
+    }
+    return errors
+}
+export const bannerValidate = (values) => {
+    let errors = {}
+    if (!values.path) {
+        errors.path = "Wprowadź ścieżkę!"
+    } 
+    if (!values.title) {
+        errors.title = "Wprowadź tytuł!"
+    } 
+    if (!values.imageTitle) {
+        errors.imageTitle = "Wprowadź tytuł zdjęcia!"
+    } 
+    if (!values.imageURL) {
+        errors.imageURL = "Wprowadź adres zdjęcia!"
+    }
+    return errors
+}
+export const discountsBannerValidate = (values) => {
+    let errors = {}
+    if (!values.header) {
+        errors.header = "Wprowadź tytuł!"
+    } 
+    if (!values.buttonTitle) {
+        errors.buttonTitle = "Wprowadź tytuł buttona!"
+    } 
+    if (!values.imageTitle) {
+        errors.imageTitle = "Wprowadź tytuł zdjęcia!"
+    } 
+    if (!values.imageURL) {
+        errors.imageURL = "Wprowadź adres zdjęcia!"
+    }
+    return errors
+}
 export const namePriceValidate = (values) => {
     let errors = {}
     if (!values.name) {
@@ -63,17 +137,12 @@ export const bookItemValidate = (values) => {
     if (!values.pages) {
         errors.pages = "Wprowadź ilość stron!"
     } 
-    if (values.translator === null) {
-        errors.translator = "Wybierz translatora!"
-    } 
     if (values.language === null) {
         errors.language = "Wybierz język!"
     } 
-    if (values.edition === null) {
-        errors.edition = "Wybierz edycję okładki!"
-    } 
-    if (values.fileFormat === null) {
-        errors.fileFormat = "Wybierz format pliku!"
+    if (values.edition === null && values.fileFormat === null) {
+        errors.edition = "Wybierz edycję okładki lub format pliku!"
+        errors.fileFormat = "Wybierz edycję okładki lub format pliku!"
     } 
     if (values.form === null) {
         errors.form = "Wybierz formę!"
@@ -183,5 +252,24 @@ export const footerColumnValidate = (values) => {
     if (!values.direction) {
         errors.direction = "Podaj kierunek wyświetlania obiektów!"
     } 
+    return errors
+}
+export const newsValidate = (values) => {
+    let errors = {}
+    if (!values.topic) {
+        errors.topic = "Wpisz temat wiadomości!"
+    } 
+    if (!values.content) {
+        errors.content = "Wprowadź treść wiadomości!"
+    } 
+    if (!values.imageTitle) {
+        errors.imageTitle = "Wprowadź tytuł zdjęcia!"
+    } 
+    if (!values.imageURL) {
+        errors.imageURL = "Wprowadź adres zdjęcia!"
+    }
+    if (!values.authorName) {
+        errors.authorName = "Wprowadź autora wiadomości!"
+    }
     return errors
 }

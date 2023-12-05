@@ -3,7 +3,36 @@ export const personColumns = [
     { name: 'Imię'},
     { name: 'Nazwisko'}
  ]
- export const customerColumns = [
+ export const bannerColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Ścieżka'},
+    { name: 'Zdjęcie'},
+ ]
+ export const newsColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Autor'},
+    { name: 'Zdjęcie'},
+ ]
+ export const discountsBannerColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Zdjęcie'},
+ ]
+ export const navbarLinksColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+    { name: 'Ścieżka'},
+    { name: 'Pozycja'},
+ ]
+ export const categoryElementColumns = [
+    { name: 'ID'},
+    { name: 'Logo'},
+    { name: 'Ścieżka'},
+    { name: 'Pozycja'},
+ ]
+export const customerColumns = [
     { name: 'ID'},
     { name: 'Imię'},
     { name: 'Nazwisko'},

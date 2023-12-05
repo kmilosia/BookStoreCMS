@@ -8,6 +8,7 @@ import {CgWebsite} from 'react-icons/cg'
 import {PiBooks} from 'react-icons/pi'
 import {RiTruckLine} from 'react-icons/ri'
 import {MdOutlineDiscount,MdOutlineAccountCircle} from 'react-icons/md'
+import { FaRegNewspaper } from "react-icons/fa6"
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import { checkTheme } from '../utils/theme'
 import {GiSecretBook} from 'react-icons/gi'
@@ -79,6 +80,13 @@ function Sidebar() {
         <div className='flex flex-row items-center'>
             <BiUser className='text-xl mx-1'/>
             <span>Klient</span>
+          </div>
+        </Link>
+
+        <Link to="/wiadomosci" className='default-link'>
+        <div className='flex flex-row items-center'>
+            <FaRegNewspaper className='text-xl mx-1'/>
+            <span>Wiadomości</span>
           </div>
         </Link>
 

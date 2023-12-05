@@ -3,19 +3,19 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import { bannerValidate, navbarValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { personValidate, publisherValidate } from '../../utils/validation/newValidate'
-import { useDispatch } from 'react-redux'
 import { showAlert } from '../../store/alertSlice'
+import { useDispatch } from 'react-redux'
 
-function NewPublisher({setShowNewModule, postData}) {
+function NewNavbarLink({setShowNewModule, postData}) {
     const dispatch = useDispatch()
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
+        path: '',
         name: '',
-        description: '',
+        position: '',
     })
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -25,13 +25,14 @@ function NewPublisher({setShowNewModule, postData}) {
     }   
     const handleAcceptButton = () => {
         setSubmitting(true)
-        setErrors(publisherValidate(values))
+        setErrors(navbarValidate(values))
     } 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
+            console.log(values);
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowe wydawnictwo zostało dodane!' }));
+            dispatch(showAlert({ title: 'Nowy link do navbaru został dodany!' }));
         }
       }, [errors])
   return (
@@ -39,11 +40,14 @@ function NewPublisher({setShowNewModule, postData}) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                  <h1 className='module-header'>Dodaj nowe wydawnictwo</h1>
+                  <h1 className='module-header'>Dodaj navbar link</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa wydawnictwa'/>
-                <DefaultTextarea name="description" onChange={handleChange} placeholder='Opis' title='Opis wydawnictwa'/>
+                <div className='grid grid-cols-2 gap-2'>
+                    <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa linku'/>
+                    <DefaultInput name="path" error={errors.path} onChange={handleChange} type='text' placeholder='Ścieżka' title='Ścieżka linku'/>
+                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='text' placeholder='Pozycja' title='Pozycja linku'/>
+                </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
@@ -51,4 +55,4 @@ function NewPublisher({setShowNewModule, postData}) {
   )
 }
 
-export default NewPublisher
+export default NewNavbarLink

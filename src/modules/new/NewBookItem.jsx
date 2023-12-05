@@ -148,26 +148,6 @@ function NewBookItem({setShowNewModule, postData}) {
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
-    // const handleAcceptButton = () => {
-    //     const covertedDate = convertDate(publishingDate)
-    //     const data = {
-    //         vat: vat,
-    //         nettoPrice: netto,
-    //         isbn: ISBN,
-    //         pages: pages,
-    //         publishingDate: covertedDate,
-    //         translatorId: translator.value,
-    //         languageId: language.value,
-    //         editionId: edition.value,
-    //         fileFormatId: fileFormat.value,
-    //         formId: form.value,
-    //         availabilityId: availability.value,
-    //         bookId: book.value,
-    //     }
-    //     console.log(data);
-    //     postData(data)
-    //     handleCloseModule()
-    // } 
     const handleAcceptButton = () => {
       setSubmitting(true)
       setErrors(bookItemValidate(values))
@@ -245,7 +225,7 @@ function NewBookItem({setShowNewModule, postData}) {
             <div className='divider'/>
             <div className='grid grid-cols-3 gap-2'>
               <DefaultSelect name="form" error={errors.form} onChange={handleForm} placeholder="Format książki" options={formOptions} value={values.form} title="Format książki"/>
-              <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={values.edition} title="Edycja okładki"/>
+              <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Okładka" options={editionOptions} value={values.edition} title="Edycja okładki"/>
               <DefaultSelect name="fileFormat" error={errors.fileFormat} onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={values.fileFormat} title="Format pliku"/>
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
