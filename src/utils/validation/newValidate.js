@@ -55,6 +55,9 @@ export const categoryElementValidate = (values) => {
     if (!values.logo) {
         errors.logo = "Wprowadź logo kategorii!"
     }
+    if (values.selectedCategory === null) {
+        errors.selectedCategory = "Wybierz kategorię!"
+    }
     return errors
 }
 export const bannerValidate = (values) => {
@@ -235,6 +238,19 @@ export const footerLinkValidate = (values) => {
     } 
     if (values.selectedOption === null) {
         errors.selectedOption = "Wybierz opcję!"
+    } 
+    return errors
+}
+export const newsletterValidate = (values) => {
+    let errors = {}
+    if (!values.title) {
+        errors.title = "Wprowadź tytuł!"
+    } 
+    if (!values.publicationDate) {
+        errors.publicationDate = "Wprowadź datę publikacji!"
+    } 
+    if (!values.content) {
+        errors.content = "Wpisz treść newslettera!"
     } 
     return errors
 }

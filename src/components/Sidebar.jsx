@@ -7,7 +7,7 @@ import {FaRegImage} from 'react-icons/fa'
 import {CgWebsite} from 'react-icons/cg'
 import {PiBooks} from 'react-icons/pi'
 import {RiTruckLine} from 'react-icons/ri'
-import {MdOutlineDiscount,MdOutlineAccountCircle} from 'react-icons/md'
+import {MdOutlineDiscount,MdOutlineAccountCircle, MdOutlineNewspaper} from 'react-icons/md'
 import { FaRegNewspaper } from "react-icons/fa6"
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import { checkTheme } from '../utils/theme'
@@ -82,6 +82,12 @@ function Sidebar() {
             <span>Klient</span>
           </div>
         </Link>
+        <Link to="/magazyn" className='default-link'>
+        <div className='flex flex-row items-center'>
+            <BiBox className='text-xl mx-1'/>
+            <span>Magazyn</span>
+          </div>
+        </Link>
 
         <Link to="/wiadomosci" className='default-link'>
         <div className='flex flex-row items-center'>
@@ -96,11 +102,10 @@ function Sidebar() {
             <span>Zdjęcia</span>
           </div>
         </Link>
-
-        <Link to="/magazyn" className='default-link'>
+        <Link to="/newsletter" className='default-link'>
         <div className='flex flex-row items-center'>
-            <BiBox className='text-xl mx-1'/>
-            <span>Magazyn</span>
+            <MdOutlineNewspaper className='text-xl mx-1'/>
+            <span>Newsletter</span>
           </div>
         </Link>
 

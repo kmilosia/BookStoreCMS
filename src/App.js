@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,6 +60,7 @@ function App() {
             <Route path='/klient' element={<Customer />}/>
             <Route path='/baner' element={<Banner />}/>
             <Route path='/navbar-link' element={<NavbarLink />}/>
+            <Route path='/newsletter' element={<Newsletter />}/>
             <Route path='/element-kategorii' element={<CategoryElement />}/>
             <Route path='/baner-promocyjny' element={<DiscountsBanner />}/>
             <Route path='/strona-klienta' element={<WebsiteLayout />}/>

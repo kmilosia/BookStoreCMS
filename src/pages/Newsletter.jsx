@@ -4,20 +4,20 @@ import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { categoryElementSortOptions } from '../utils/select-options'
+import { newsletterSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { categoryElementColumns } from '../utils/column-names'
+import { newsletterColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
-import NewCategoryElement from '../modules/new/NewCategoryElement'
-import EditCategoryElement from '../modules/edit/EditCategoryElement'
-import ViewCategoryElement from '../modules/view/ViewCategoryElement'
+import NewNewsletter from '../modules/new/NewNewsletter'
+import EditNewsletter from '../modules/edit/EditNewsletter'
+import ViewNewsletter from '../modules/view/ViewNewsletter'
 
-function CategoryElement() {
+function Newsletter() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -34,7 +34,7 @@ function CategoryElement() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/CategoryElements`)
+          const response = await axiosClient.get(`/Newsletter`)
           setData(response.data)
           setIsDataLoading(false)
 
@@ -44,7 +44,7 @@ function CategoryElement() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/CategoryElements`, object)
+          const response = await axiosClient.post(`/Newsletter/Create-New-Newsletter`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -52,7 +52,7 @@ function CategoryElement() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/CategoryElements/${id}`)
+          const response = await axiosClient.delete(`/Newsletter/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -60,13 +60,12 @@ function CategoryElement() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/CategoryElements/${id}`, object)
+          const response = await axiosClient.put(`/Newsletter/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
       }
   }
-
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -87,13 +86,13 @@ function CategoryElement() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Element Kategoria</h1>    
+        <h1 className='main-header'>Newsletter</h1>    
         <div className='filter-panel'>
-          <SortBar options={categoryElementSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
+          <SortBar options={newsletterSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Element Kategorii"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Newsletter"/>                   
         </div>
-        <ListHeader  columnNames={categoryElementColumns}/>
+        <ListHeader  columnNames={newsletterColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -102,9 +101,8 @@ function CategoryElement() {
       {filteredItems.map(item => (             
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
                 <p className='px-2'>{item.id}</p>                       
-                <img className='h-auto w-full object-contain' src={item.logo} />
-                <p className='px-2'>{item.path}</p>
-                <p className='px-2'>{item.position}</p>
+                <p className='px-2'>{item.title}</p>
+                <p className='px-2'>{item.publicationDate}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -115,11 +113,11 @@ function CategoryElement() {
       </div>
       }
         </div>
-    {showNewModule && <NewCategoryElement postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditCategoryElement putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewCategoryElement editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showNewModule && <NewNewsletter postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditNewsletter putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewNewsletter editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
 
-export default CategoryElement
+export default Newsletter

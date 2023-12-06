@@ -9,6 +9,11 @@ export const personColumns = [
     { name: 'Ścieżka'},
     { name: 'Zdjęcie'},
  ]
+ export const newsletterColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Data publikacji'},
+ ]
  export const newsColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},

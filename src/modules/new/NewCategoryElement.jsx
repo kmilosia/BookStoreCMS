@@ -4,15 +4,19 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
-import { categoryElementValidate, personValidate } from '../../utils/validation/newValidate'
+import { categoryElementValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
 import { showAlert } from '../../store/alertSlice'
 import { useDispatch } from 'react-redux'
+import axiosClient from '../../api/apiClient'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function NewCategoryElement({setShowNewModule, postData}) {
     const dispatch = useDispatch()
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
+    const [categoryOptions, setCategoryOptions] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null)
     const [values,setValues] = useState({
         path: '',
         logo: '',
@@ -21,9 +25,13 @@ function NewCategoryElement({setShowNewModule, postData}) {
         imageTitle: '',
         imageURL: '',
     })
+
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
     }
+    const handleCategory = (selectedCategory) => {
+        setSelectedCategory(selectedCategory);
+      }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
@@ -32,15 +40,36 @@ function NewCategoryElement({setShowNewModule, postData}) {
         setSubmitting(true)
         setErrors(categoryElementValidate(values))
     } 
+    const getCategories = async () => {
+        try{
+          const response = await axiosClient.get(`/Category`)
+          const options = response.data.map(item => ({
+            value: item.id,
+            label: item.name
+          }))
+          setCategoryOptions(options)
+        }catch(err){
+          console.error(err)
+        }
+    }
+    useEffect(() => {
+        getCategories()
+    },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            postData(values)
-            handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy element kategorii został dodany!' }));
+            const postData = {
+                ...values,
+                position: Number(values.position),
+                categoryID: selectedCategory.value
+            }
+            console.log(postData);
+            // postData(values)
+            // handleCloseModule()
+            // dispatch(showAlert({ title: 'Nowy element kategorii został dodany!' }));
         }
       }, [errors])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -50,10 +79,22 @@ function NewCategoryElement({setShowNewModule, postData}) {
                 <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput name="path" error={errors.path} onChange={handleChange} type='text' placeholder='Ścieżka' title='Ścieżka do kategorii'/>
                     <DefaultInput name="logo" error={errors.logo} onChange={handleChange} type='text' placeholder='Logo' title='Logo kategorii'/>
-                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='text' placeholder='Pozycja' title='Pozycja'/>
+                    {values.logo &&
+                    <div className='w-1/3 h-auto my-2 col-span-2'>
+                        <img src={values.logo} className='h-auto w-full object-contain' />
+                    </div>
+                    }
+                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='number' placeholder='Pozycja' title='Pozycja'/>
+                    <DefaultSelect name='selectedCategory' error={errors.selectedCategory} onChange={handleCategory} value={values.selectedCategory} options={categoryOptions} title='Kategoria' placeholder='Kategoria'/>
                     <DefaultInput name="imageURL" error={errors.imageURL} onChange={handleChange} type='text' placeholder='URL zdjęcia' title='Adres URL zdjęcia'/>
                     <DefaultInput name="imageTitle" error={errors.imageTitle} onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                    {values.imageURL &&
+                    <div className='w-1/3 h-auto my-2 col-span-2'>
+                        <img src={values.imageURL} className='h-auto w-full object-contain' />
+                    </div>
+                    }
                 </div>
+                
                 <DefaultTextarea name="content" onChange={handleChange} placeholder='Treść' title="Treść kategorii"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

@@ -41,6 +41,11 @@ export const newsSortOptions = [
     {value: 'topic', label: 'Tytuł', type: 'string'},
     {value: 'authorName', label: 'Autor', type: 'string'},
 ]
+export const newsletterSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'title', label: 'Tytuł', type: 'string'},
+    {value: 'publicationDate', label: 'Data publikacji', type: 'number'},
+]
 export const discountsBannerSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'header', label: 'Tytuł', type: 'string'},

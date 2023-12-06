@@ -22,6 +22,7 @@ function Home() {
           <ManageContentElement path="/ksiazka" imgURL="https://iili.io/Jo1Io7a.png" title="Książki" content='Dodaj nową książkę bazową a następnie dodaj egzemplarze książki.' />
           <ManageContentElement path="/egzemplarz" imgURL="https://iili.io/Jo1Izmv.png" title="Egzemplarze książek" content='Dodaj egzemplarz książki, jeżeli książka ma różne formy dodaj oddzielny egzemplarz dla każdej.' />
           <ManageContentElement path="/wiadomosci" imgURL="https://iili.io/JIoEFcl.png" title="Wiadomości" content='Dodawaj wiadomości ze świata książek aby nasi czytelnicy zagłębili się w ten świat.' />
+          <ManageContentElement path="/newsletter" imgURL="https://iili.io/JIlY4S9.png" title="Newsletter" content='Przesyłaj zapisanym osobom newslettery aby byli na bieżąco z tym co się dzieje w naszym sklepie.' />
           <ManageContentElement path="/uzytkownik" imgURL="https://iili.io/Jo1IBrF.png" title="Klienci" content='Zarządzaj klientami naszej internetowej księgarni.' />
           <ManageContentElement path="/magazyn" imgURL="https://iili.io/Jo1Indg.png" title="Stan magazynu" content='Zarządzaj stanem naszego magazynu - zmień ilość dostępnych na magazynie książek.' />
           <ManageContentElement path="/strona-klienta" imgURL="https://iili.io/Jo1IxkJ.png" title="Strona internetowa" content='Zarządzaj elementami strony internetowej naszego sklepu.' />
