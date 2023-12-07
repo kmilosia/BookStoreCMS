@@ -100,9 +100,9 @@ function CategoryElement() {
       :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-4'>
+            <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
-                <img className='h-auto w-full object-contain' src={item.logo} />
+                <img className='h-auto w-1/2 object-contain' src={item.logo} />
                 <p className='px-2'>{item.path}</p>
                 <p className='px-2'>{item.position}</p>
                 <div className='flex justify-end'>

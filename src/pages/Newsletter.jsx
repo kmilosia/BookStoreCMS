@@ -5,6 +5,7 @@ import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
 import { newsletterSortOptions } from '../utils/select-options'
+import { formatDisplayDate } from '../utils/functions/formatDisplayDate'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
@@ -65,7 +66,14 @@ function Newsletter() {
       }catch(err){
         console.error(err)
       }
-  }
+    }
+    const sendNewsletter = async () => {
+      try{
+          const response = await axiosClient.get(`/Newsletter/SEND`)
+      }catch(err){
+        console.error(err)
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +85,7 @@ function Newsletter() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
+   
     useEffect(()=>{
         getAllData()
     },[])
@@ -102,7 +110,7 @@ function Newsletter() {
             <div key={item.id} className='table-row-wrapper grid-cols-4'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.title}</p>
-                <p className='px-2'>{item.publicationDate}</p>
+                <p className='px-2'>{formatDisplayDate(item.publicationDate)}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -112,6 +120,7 @@ function Newsletter() {
         ))}
       </div>
       }
+      <button onClick={() => {sendNewsletter()}}>Send</button>
         </div>
     {showNewModule && <NewNewsletter postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditNewsletter putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}

@@ -7,11 +7,12 @@ import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { useDispatch } from 'react-redux'
 import {showAlert} from '../../store/alertSlice'
+import { convertDateToInput } from '../../utils/functions/convertDate'
 
 function EditNewsletter(props) {
     const dispatch = useDispatch()
     const [title, setTitle] = useState('')
-    const [publicationDate, setPublicationDate] = useState(null)
+    const [publicationDate, setPublicationDate] = useState('')
     const [content, setContent] = useState('')
     const [newsletter,setNewsletter] = useState({})
     const getItem = async (id) => {
@@ -19,7 +20,8 @@ function EditNewsletter(props) {
           const response = await axiosClient.get(`/Newsletter/${id}`)
           setNewsletter(response.data)
           setTitle(response.data.title)
-          setPublicationDate(response.data.publicationDate)
+          const newDate = new Date(response.data.publicationDate)
+          setPublicationDate(convertDateToInput(newDate))
           setContent(response.data.content)
         }catch(err){
           console.error(err)

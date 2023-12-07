@@ -3,11 +3,10 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import { convertDateToUserFormat } from '../../utils/functions/convertDate'
+import { formatDisplayDate } from '../../utils/functions/formatDisplayDate'
 
 function ViewDiscount(props) {
     const [discount, setDiscount] = useState({})
-    const [expirationDate, setExpirationDate] = useState(null)
-    const [startingDate, setStartingDate] = useState(null)
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Discount/${id}`)
@@ -23,18 +22,6 @@ function ViewDiscount(props) {
     useEffect(()=>{
         getItem(props.editedID)
     },[])
-    useEffect(() => {
-        if (discount.expiryDate) {
-            const expDate = new Date(discount.expiryDate);
-            setExpirationDate(expDate);
-        }
-    }, [discount.expiryDate]);
-    useEffect(() => {
-        if (discount.startingDate) {
-            const startDate = new Date(discount.startingDate);
-            setStartingDate(startDate);
-        }
-    }, [discount.startingDate]);
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
@@ -57,11 +44,11 @@ function ViewDiscount(props) {
                 <div className='info-grid'>
                     <div className='flex flex-col'>
                         <p className='column-info-title'>Data ropoczęcia</p>
-                        <h2 className='column-info-text'>{startingDate ? convertDateToUserFormat(startingDate) : ''}</h2>
+                        <h2 className='column-info-text'>{discount.startingDate && formatDisplayDate(discount.startingDate)}</h2>
                     </div>
                     <div className='flex flex-col'>
                         <p className='column-info-title'>Data zakończenia</p>
-                        <h2 className='column-info-text'>{expirationDate ? convertDateToUserFormat(expirationDate) : ''}</h2>
+                        <h2 className='column-info-text'>{discount.expirationDate && formatDisplayDate(discount.expirationDate)}</h2>
                     </div>
                     <div className='flex flex-col'>
                         <p className='column-info-title'>Aktywność</p>

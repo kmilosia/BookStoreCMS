@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import { formatDisplayDate } from '../../utils/functions/formatDisplayDate'
 
 function ViewNewsletter(props) {
     const [newsletter, setNewsletter] = useState({})
@@ -35,7 +36,7 @@ function ViewNewsletter(props) {
                 </div>
                 <div className='flex flex-col'>
                     <p className='column-info-title'>Data publikacji</p>
-                    <h2 className='column-info-text'>{newsletter.publicationDate}</h2>
+                    <h2 className='column-info-text'>{formatDisplayDate(newsletter.publicationDate)}</h2>
                 </div>
                 <div className='flex flex-col'>
                     <p className='column-info-title'>Treść</p>

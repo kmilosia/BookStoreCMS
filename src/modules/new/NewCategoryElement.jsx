@@ -57,15 +57,15 @@ function NewCategoryElement({setShowNewModule, postData}) {
     },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            const postData = {
+            const data = {
                 ...values,
                 position: Number(values.position),
                 categoryID: selectedCategory.value
             }
-            console.log(postData);
-            // postData(values)
-            // handleCloseModule()
-            // dispatch(showAlert({ title: 'Nowy element kategorii został dodany!' }));
+            console.log(data);
+            postData(data)
+            handleCloseModule()
+            dispatch(showAlert({ title: 'Nowy element kategorii został dodany!' }));
         }
       }, [errors])
   return (

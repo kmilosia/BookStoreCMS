@@ -37,7 +37,6 @@ function NewNewsletter({setShowNewModule, postData}) {
                 ...prevValues,
                 publicationDate: convertedDate,
               }));           
-              console.log(values);
             postData(values)
             handleCloseModule()
             dispatch(showAlert({ title: 'Nowy newsletter został dodany!' }));
