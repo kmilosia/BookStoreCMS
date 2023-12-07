@@ -48,9 +48,6 @@ function EditCategoryElement(props) {
         console.error(err)
       }
   }
-  useEffect(() => {
-      getCategories()
-  },[])
     const handlePath = (e) => {
         setPath(e.target.value)
     }
@@ -70,34 +67,53 @@ function EditCategoryElement(props) {
       setImageURL(e.target.value)
     }
     const handleSelect = (selectedCategory) => {
+      if (selectedCategory) {
           setSelectedCategory(selectedCategory)
+          setCategoryID(selectedCategory.value)
+      } else {
+          setSelectedCategory(null)
+          setCategoryID(null)
+      }
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
-        element.path = path
-        element.content = content
-        element.logo = logo
-        element.position = position
-        element.imageTitle = imageTitle
-        element.imageURL = imageURL
-        element.categoryID = selectedCategory.value
-        props.putData(element.id, element)
+      const data = {
+        id: element.id,
+        path: path,
+        content: content,
+        logo: logo,
+        position: position,
+        imageTitle: imageTitle,
+        imageURL: imageURL,
+        categoryID: categoryID
+    }
+        props.putData(element.id, data)
         props.setEditedID(null)
         props.setShowEditModule(false)
         dispatch(showAlert({ title: 'Element kategorii został edytowany!' }));
   }
-  useEffect(()=> {
-    getItem(props.editedID)
-  },[])
+  useEffect(() => {
+    const fetchAllData = async () => {
+      await getCategories()
+      await getItem(props.editedID)
+    }
+    fetchAllData()
+  }, [])
+  useEffect(() => {
+    const selected = categoryOptions.find((col) => col.value === categoryID);
+    if (selected) {
+      setSelectedCategory(selected);
+    }
+  }, [categoryOptions, categoryID]);
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                  <h1 className='module-header'>Edytuj autora</h1>
+                  <h1 className='module-header'>Edytuj element kategorii</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
@@ -109,17 +125,16 @@ function EditCategoryElement(props) {
                     </div>
                     }
                     <DefaultInput name="position" value={position} onChange={handlePosition} type='number' placeholder='Pozycja' title='Pozycja'/>
-                    <DefaultSelect name='selectedCategory' value={selectedCategory} onChange={handleSelect} options={categoryOptions} title='Kategoria' placeholder='Kategoria'/>
-                    <DefaultInput name="imageURL" value={imageURL} onChange={handleImageURL} type='text' placeholder='URL zdjęcia' title='Adres URL zdjęcia'/>
-                    <DefaultInput name="imageTitle" value={imageTitle} onChange={handleImageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                    <DefaultSelect value={selectedCategory} onChange={handleSelect} options={categoryOptions} title='Kategoria' placeholder='Kategoria'/>
                     {imageURL &&
-                    <div className='w-1/3 h-auto my-2 col-span-2'>
+                    <div className='w-1/3 h-auto col-span-2'>
                         <img src={imageURL} className='h-auto w-full object-contain' />
                     </div>
                     }
+                    <DefaultInput name="imageURL" value={imageURL} onChange={handleImageURL} type='text' placeholder='URL zdjęcia' title='Adres URL zdjęcia'/>
+                    <DefaultInput name="imageTitle" value={imageTitle} onChange={handleImageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
                 </div>
-                
-                <DefaultTextarea name="content" onChange={handleContent} placeholder='Treść' title="Treść kategorii"/>
+                <DefaultTextarea name="content" onChange={handleContent} value={content} placeholder='Treść' title="Treść kategorii"/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>
