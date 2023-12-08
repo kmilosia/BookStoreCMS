@@ -157,8 +157,10 @@ function EditBook({setShowEditModule, putData, editedID}) {
             publisherID: selectedPublisher.value,
             listOfBookAuthors: authors,
             listOfBookCategories: categories,
-            listOfBookImages: selectedImages
-        }
+            listOfBookImages: selectedImages.map((item, index) => ({
+              ...item,
+              position: index + 1,
+            })),        }
         // console.log(selectedImages);
         console.log(data)
         putData(book.id,data)

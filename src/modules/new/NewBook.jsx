@@ -131,7 +131,10 @@ function NewBook({setShowNewModule, postData}) {
         listOfBookCategories: values.selectedCategories.map((item) => ({
           id: item.value,
         })),
-        listOfBookImages: values.selectedImages,
+        listOfBookImages: values.selectedImages.map((item, index) => ({
+          ...item,
+          position: index + 1,
+        })),
       };     
         console.log(data)
         postData(data)
