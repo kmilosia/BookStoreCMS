@@ -95,12 +95,25 @@ export const discountsBannerValidate = (values) => {
 export const namePriceValidate = (values) => {
     let errors = {}
     if (!values.name) {
-        errors.name = "Wprowadź imię!"
+        errors.name = "Wprowadź nazwę!"
     } 
     if (!values.price) {
         errors.price = "Wprowadź cenę!"
     }else if (isNaN(values.price)) {
         errors.price = "Cena musi być liczbą!"
+    }
+    return errors
+}
+export const rentalTypeValidate = (values) => {
+    let errors = {}
+    if (!values.name) {
+        errors.name = "Wprowadź nazwę!"
+    } 
+    if (!values.days) {
+        errors.days = "Wprowadź dni wypożyczenia!"
+    } 
+    if (!values.price) {
+        errors.price = "Wprowadź cenę!"
     }
     return errors
 }

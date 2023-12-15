@@ -4,11 +4,11 @@ import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { numericSortOptions } from '../utils/select-options'
+import { numericSortOptions, rentalTypeSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { numericColumns } from '../utils/column-names'
+import { numericColumns, rentalTypeColumns } from '../utils/column-names'
 import NewRentalType from '../modules/new/NewRentalType'
 import EditRentalType from '../modules/edit/EditRentalType'
 import ViewRentalType from '../modules/view/ViewRentalType'
@@ -88,20 +88,21 @@ function RentalType() {
       <div className='flex flex-col'>
         <h1 className='main-header'>Typ Wypożyczenia</h1>    
         <div className='filter-panel'>
-          <SortBar options={numericSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
+          <SortBar options={rentalTypeSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Typ Wypożyczenia"/>                   
         </div>
-        <ListHeader  columnNames={numericColumns}/>
+        <ListHeader columnNames={rentalTypeColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-4'>
+            <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.name}</p>
+                <p className='px-2'>{item.days}</p>
                 <p className='px-2'>{item.price}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>

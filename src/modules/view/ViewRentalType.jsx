@@ -29,13 +29,17 @@ function ViewRentalType(props) {
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-4'>
-                <div className='flex flex-col'>
+                <div className='flex flex-col col-span-2'>
                     <p className='column-info-title'>Nazwa</p>
                     <h2 className='column-info-text'>{type.name}</h2>
                 </div>
                 <div className='flex flex-col'>
+                    <p className='column-info-title'>Dni wypożyczenia</p>
+                    <h2 className='column-info-text'>{type.days}</h2>
+                </div>
+                <div className='flex flex-col'>
                     <p className='column-info-title'>Cena</p>
-                    <h2 className='column-info-text'>{type.price} PLN</h2>
+                    <h2 className='column-info-text'>{type.price}zł</h2>
                 </div>
                 </div>         
             </div>

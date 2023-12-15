@@ -13,6 +13,12 @@ export const numericSortOptions = [
     {value: 'name', label: 'Nazwa', type: 'string'},
     {value: 'price', label: 'Cena', type: 'number'}
 ]
+export const rentalTypeSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
+    {value: 'price', label: 'Cena', type: 'number'},
+    {value: 'days', label: 'Dni', type: 'number'},
+]
 export const discountSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'title', label: 'Tytuł', type: 'string'},

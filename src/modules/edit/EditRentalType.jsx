@@ -7,6 +7,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 
 function EditRentalType(props) {
     const [name, setName] = useState('')
+    const [days, setDays] = useState('')
     const [price, setPrice] = useState('')
     const [type,setType] = useState({})
 
@@ -15,6 +16,7 @@ function EditRentalType(props) {
           const response = await axiosClient.get(`/RentalType/${id}`)
           setType(response.data)
           setName(response.data.name)
+          setDays(response.data.days)
           setPrice(response.data.price)
         }catch(err){
           console.error(err)
@@ -23,6 +25,9 @@ function EditRentalType(props) {
     const handleNameInput = (e) => {
         setName(e.target.value)
     }
+    const handleDaysInput = (e) => {
+      setDays(e.target.value)
+  }
     const handlePriceInput = (e) => {
         setPrice(e.target.value)
     }
@@ -33,6 +38,7 @@ function EditRentalType(props) {
     const handleSaveClick = () => {
         type.name = name
         type.price = price
+        type.days = days
         props.putData(type.id, type)
         props.setEditedID(null)
         props.setShowEditModule(false)
@@ -49,6 +55,7 @@ function EditRentalType(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput value={days} onChange={handleDaysInput} type='number' placeholder='Liczba dni' title='Dni wypożyczenia'/>
                 <DefaultInput value={price} onChange={handlePriceInput} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>

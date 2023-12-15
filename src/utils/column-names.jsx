@@ -91,6 +91,12 @@ export const discountColumns = [
     { name: 'Wartość Promocji'},
     { name: 'Dostępność'},
 ]
+export const rentalTypeColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+    { name: 'Dni'},
+    { name: 'Cena'},
+]
 export const bookItemColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},

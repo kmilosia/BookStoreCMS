@@ -6,7 +6,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { showAlert } from '../../store/alertSlice'
-import { namePriceValidate } from '../../utils/validation/newValidate'
+import { rentalTypeValidate } from '../../utils/validation/newValidate'
 
 function NewRentalType({setShowNewModule, postData}) {
     const dispatch = useDispatch()
@@ -14,6 +14,7 @@ function NewRentalType({setShowNewModule, postData}) {
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
         name: '',
+        days: '',
         price: '',
     })
     const handleChange = (e) => {
@@ -24,7 +25,7 @@ function NewRentalType({setShowNewModule, postData}) {
     }   
     const handleAcceptButton = () => {
         setSubmitting(true)
-        setErrors(namePriceValidate(values))
+        setErrors(rentalTypeValidate(values))
     } 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -42,6 +43,7 @@ function NewRentalType({setShowNewModule, postData}) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput name="days" error={errors.days} onChange={handleChange} type='number' placeholder='Liczba dni' title='Dni wypożyczenia'/>
                 <DefaultInput name="price" error={errors.price} onChange={handleChange} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
