@@ -233,12 +233,7 @@ export const discountCodeValidate = (values) => {
     } 
     if (!values.percent) {
         errors.percent = "Wprowadź wartość promocji!"
-    }else if (isNaN(values.percent)) {
-        errors.percent = "Wartość musi być liczbą!"
-    } 
-    if (values.selectedBooks.length === 0) {
-        errors.selectedBooks = "Wybierz książki objęte promocją!"
-    } 
+    }
     return errors
 }
 export const footerLinkValidate = (values) => {

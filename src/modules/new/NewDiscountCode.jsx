@@ -13,36 +13,21 @@ import { useDispatch } from 'react-redux'
 import { showAlert } from '../../store/alertSlice'
 
 function NewDiscountCode({setShowNewModule, postData}) {
-    const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch()
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
-    const [bookOptions, setBookOptions] = useState([])
     const [values, setValues] = useState({
       code: '',
       description: '',
       percent: '',
-      expirationDate: today,
-      startingDate: today,
-      selectedBooks: [],
+      isAvailable: false,
     })
-    const getBooks = async () => {
-        try{
-          const response = await axiosClient.get(`/BookItems`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.bookTitle
-          }))
-          setBookOptions(options)
-        }catch(err){
-          console.error(err)
-        }
-    }
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
-      }
-    const handleBooks = (selectedBooks) => {
-        setValues({ ...values, selectedBooks });
+    }
+    const handleAvailableChange = (e) => {
+      const isChecked = e.target.checked;
+      setValues({ ...values, isAvailable: isChecked });  
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -52,19 +37,12 @@ function NewDiscountCode({setShowNewModule, postData}) {
         setErrors(discountCodeValidate(values))
       } 
       const finishSubmit = () => {
-        const convertedExpDate = convertDate(values.expirationDate)
-        const convertedStartDate = convertDate(values.startingDate)
         const data = {
           code: values.code,
           description: values.description,
           percentOfDiscount: values.percent,
-          expiryDate: convertedExpDate,
-          startingDate: convertedStartDate,
-          listOfBookItems: values.booksList.map((item) => ({
-            id: item.value,
-          })),
+          isAvailable: values.isAvailable
         };     
-          console.log(data)
           postData(data)
           handleCloseModule()
           dispatch(showAlert({ title: 'Nowy kod rabatowy został dodany!' }));
@@ -74,11 +52,8 @@ function NewDiscountCode({setShowNewModule, postData}) {
           finishSubmit()
         }
       }, [errors])
-    useEffect(() => {
-        getBooks()
-    },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -90,11 +65,10 @@ function NewDiscountCode({setShowNewModule, postData}) {
                 <DefaultInput name="percent" error={errors.percent} onChange={handleChange} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
                 </div>
                 <DefaultTextarea name="description" error={errors.description} onChange={handleChange} placeholder='Opis' title="Opis kodu"/>
-                <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput name="startingDate" error={errors.startingDate} onChange={handleChange} value={values.startingDate} type='date' title='Data rozpoczęcia'/>
-                <DefaultInput name="expirationDate" error={errors.expirationDate} onChange={handleChange} value={values.expirationDate} type='date' title="Termin ważności"/>
-                </div>
-                <DefaultSelect name="selectedBooks" error={errors.selectedBooks} onChange={handleBooks} value={values.selectedBooks} options={bookOptions} isMulti={true} title="Egzemplarze objęte kodem rabatowym" placeholder='Egzemplarze książek'/>
+                <div class="flex items-center my-2">
+                  <input checked={values.isAvailable} onChange={handleAvailableChange} type="checkbox" name='isAvailable' value="" class="w-4 h-4 text-purple-400 bg-gray-100 ring-0 focus:ring-0 border-none rounded dark:bg-gray-700"/>
+                  <label htmlFor="isAvailable" class="ml-2 text-sm font-medium text-midnight-900 dark:text-gray-200">Zaznacz jeżeli kod obowiązuje</label>
+              </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
