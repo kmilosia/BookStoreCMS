@@ -12,7 +12,6 @@ function App() {
   const {isAuth} = useSelector((state) => state.user)
   useEffect(() => {
     dispatch(checkUserLogin()) 
-    console.log(isAuth);
   },[isAuth])
   return (
     <>

@@ -16,6 +16,7 @@ function NewBookItem({setShowNewModule, postData}) {
   const dispatch = useDispatch()
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [isEbook, setIsEbook] = useState(null)
   const [values, setValues] = useState({
     vat: 0,
     netto: 0,
@@ -30,6 +31,17 @@ function NewBookItem({setShowNewModule, postData}) {
     availability: null,
     book: null,
   })
+  useEffect(() => {
+    if(values.form){
+      if(values.form.value === 1){
+        setIsEbook(false)
+      }else if(values.form.value === 2){
+        setIsEbook(true)
+      }else{setIsEbook(null)}
+    }else{
+      setIsEbook(null)
+    }
+  },[values.form])
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   }
@@ -162,8 +174,8 @@ function NewBookItem({setShowNewModule, postData}) {
         publishingDate: covertedDate,
         translatorID: values.translator.value,
         languageID: values.language.value,
-        editionID: values.edition.value,
-        fileFormatID: values.fileFormat.value,
+        editionID: values.edition ? values.edition.value : null,
+        fileFormatID: values.fileFormat ? values.fileFormat.value : null,
         formID: values.form.value,
         availabilityID: values.availability.value,
         bookID: values.book.value,
@@ -202,31 +214,29 @@ function NewBookItem({setShowNewModule, postData}) {
               <h1 className='module-header'>Dodaj nowy egzemplarz książki</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
+            <h2 className='font-semibold dark:text-white'>Cena książki</h2>
             <div className='grid grid-cols-2 gap-2'>
               <DefaultInput name="vat" error={errors.vat} onChange={handleChange} placeholder="VAT" type="number" title="VAT"/>
               <DefaultInput name="netto" error={errors.netto} onChange={handleChange} placeholder="Netto" type="number" title="NETTO"/>
             </div>
-            <div className='divider'/>
-            <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
+            <h2 className='font-semibold dark:text-white mt-3'>Informacje szczegółowe</h2>
+            <div className='grid grid-cols-[1fr_2fr_2fr] gap-2 my-1'>
               <DefaultInput name="pages" error={errors.pages} onChange={handleChange} placeholder="Liczba stron" type="number" title="Strony"/>
               <DefaultInput name="ISBN" error={errors.ISBN} onChange={handleChange} placeholder="ISBN" type="text" title="ISBN"/>
               <DefaultInput name="publishingDate" error={errors.publishingDate} onChange={handleChange} placeholder="Data wydania" type="date" value={values.publishingDate} title="Data wydania"/>
             </div>
-            <div className='divider'/>
-            <div className='grid grid-cols-2 gap-2'>
+            <div className='grid grid-cols-2 gap-2 my-1'>
               <DefaultSelect name="language" error={errors.language} onChange={handleLanguage} placeholder="Język" options={languageOptions} value={values.language} title="Język"/>
               <DefaultSelect name="translator" error={errors.translator} onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={values.translator} title="Translator"/>
             </div>
-            <div className='divider'/>
-            <div className='grid grid-cols-[2fr_1fr] gap-2'>
+            <div className='grid grid-cols-[2fr_1fr] gap-2 my-1'>
               <DefaultSelect name="book" error={errors.book} onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={values.book} title="Podstawowa książka"/>
               <DefaultSelect name="availability" error={errors.availability} onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={values.availability} title="Dostępność"/>
             </div>
-            <div className='divider'/>
-            <div className='grid grid-cols-3 gap-2'>
+            <div className='grid grid-cols-2 gap-2 my-1'>
               <DefaultSelect name="form" error={errors.form} onChange={handleForm} placeholder="Format książki" options={formOptions} value={values.form} title="Format książki"/>
-              <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Okładka" options={editionOptions} value={values.edition} title="Edycja okładki"/>
-              <DefaultSelect name="fileFormat" error={errors.fileFormat} onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={values.fileFormat} title="Format pliku"/>
+              {isEbook && <DefaultSelect name="fileFormat" error={errors.fileFormat} onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={values.fileFormat} title="Format pliku"/>}
+              {isEbook === false && <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Okładka" options={editionOptions} value={values.edition} title="Edycja okładki"/>}
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
