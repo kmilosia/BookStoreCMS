@@ -1,28 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
+import { getAuthor } from '../../api/authorAPI'
+import Spinner from '../../components/Spinner'
 
-function ViewAuthor(props) {
+function ViewAuthor({handleCloseModule,editedID}) {
     const [author, setAuthor] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/Author/${id}`)
-          setAuthor(response.data)
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const handleCloseModule = () => {
-        props.setEditedID(null)
-        props.setShowViewModule(false)
-      }
+    const [loading, setLoading] = useState(true)
     useEffect(()=>{
-        getItem(props.editedID)
+        getAuthor(editedID, setAuthor, setLoading)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
+        {loading ? <Spinner /> :
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
                     <h1 className='module-header'>{author.name} {author.surname}</h1>
@@ -44,6 +35,7 @@ function ViewAuthor(props) {
                     <h2 className='column-info-text'>{author.description}</h2>
                 </div> 
             </div>
+        }
         </div>
     </div>
   )

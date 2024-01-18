@@ -11,78 +11,42 @@ import ListHeader from '../components/ListHeader'
 import { personColumns } from '../utils/column-names'
 import NewAuthor from '../modules/new/NewAuthor'
 import EditAuthor from '../modules/edit/EditAuthor'
-import { AiFillEdit, AiFillEye } from 'react-icons/ai'
+import { AiFillEdit, AiFillEye, AiOutlineClose } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import ViewAuthor from '../modules/view/ViewAuthor'
-import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
+import { deleteAuthor, getAuthors } from '../api/authorAPI'
+import { HiOutlineSearch } from 'react-icons/hi'
 
 function Author() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [searchValue, setSearchValue] = useState('')
-    const [showNewModule, setShowNewModule] = useState(false)
-    const [showEditModule, setShowEditModule] = useState(false)
-    const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
-    const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
+    const [module, setModule] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
 
-    const getAllData = async () => {
-      try{
-        setIsDataLoading(true)
-          const response = await axiosClient.get(`/Author`)
-          setData(response.data)
-          setIsDataLoading(false)
-
-      }catch(err){
-          console.error(err)
-      }
+    const handleAfterSubmit = () => {
+      setModule(null)
+      setEditedID(null)
+      getAuthors(setData,setLoading)
     }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/Author`, object)
-          getAllData()
-      }catch(err){
-          console.error(err)
-      }
+    const handleCloseModule = () => {
+      setEditedID(null)
+      setModule(null)
     }
-    const deleteData = async (id) => {
-      try{
-          const response = await axiosClient.delete(`/Author/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
-      }
+    const handleSearchChange = (e) => {
+      setSearchValue(e.target.value)
+    }  
+    const handleClearInput = () => {
+      setSearchValue('')
     }
-    const putData = async (id, object) => {
-      try{
-          const response = await axiosClient.put(`/Author/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
-      }
-  }
-
-    const handleEditClick = (itemID) => {
-       setEditedID(itemID)
-       setShowEditModule(true)
-    }
-    const handleDeleteClick = (itemID) => {
-      deleteData(itemID)
-    }
-    const handleViewClick = (itemID) => {
-      setEditedID(itemID)
-      setShowViewModule(true)
-    }
-
     useEffect(()=>{
-        getAllData()
+        getAuthors(setData, setLoading)
     },[])
-      
   return (
     <>
     <div className='main-wrapper'>
@@ -90,12 +54,18 @@ function Author() {
         <h1 className='main-header'>Autor</h1>    
         <div className='filter-panel'>
           <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Autora"/>                   
+          <div className='relative mx-2'>
+            <input value={searchValue} onChange={handleSearchChange} className='rounded-md pl-3 pr-12 py-2 bg-dracula-100 outline-none text-dracula-600 placeholder:text-dracula-400 dark:placeholder:text-dracula-500 dark:bg-dracula-700 dark:text-dracula-100' placeholder="Szukaj..." type='text'/>
+              {searchValue !== '' ? 
+              <button onClick={handleClearInput} className='absolute top-1/2 right-[10px] translate-y-[-50%] text-lg cursor-pointer text-dracula-400 dark:text-dracula-500 hover:text-dracula-600 dark:hover:text-dracula-200'><AiOutlineClose /></button>
+              : <span className='absolute top-1/2 right-[10px] translate-y-[-50%] text-lg text-dracula-400 dark:text-dracula-500'><HiOutlineSearch /></span>}
+          </div>      
+          <AddNewButton setShowNewModule={() => setModule('new')} title="Autora"/>  
+                         
         </div>
-        <ListHeader  columnNames={personColumns}/>
+        <ListHeader columnNames={personColumns}/>
       </div>
-      {isDataLoading ? 
+      {loading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
@@ -105,18 +75,19 @@ function Author() {
                 <p className='px-2'>{item.name}</p>
                 <p className='px-2'>{item.surname}</p>
                 <div className='flex justify-end'>
-                  <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  <button onClick={() => {setEditedID(item.id); setModule('view')}} className='table-button'><AiFillEye /></button>
+                  <button onClick={() => {setEditedID(item.id);setModule('edit')}} className='table-button'><AiFillEdit /></button>
+                  <button onClick={() => {deleteAuthor(item.id);getAuthors(setData,setLoading);}} className='table-button'><BsTrash3Fill /></button>
                 </div>             
             </div>        
         ))}
       </div>
       }
-        </div>
-    {showNewModule && <NewAuthor postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditAuthor putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewAuthor editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+      </div>
+      {module === 'new' ? <NewAuthor handleAfterSubmit={handleAfterSubmit} handleCloseModule={handleCloseModule}/> 
+      : module === 'edit' ? <EditAuthor handleAfterSubmit={handleAfterSubmit} handleCloseModule={handleCloseModule} editedID={editedID}/> 
+      : module === 'view' ? <ViewAuthor handleCloseModule={handleCloseModule} editedID={editedID}/> 
+      : ''}
     </>
   )
 }

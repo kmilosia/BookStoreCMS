@@ -180,7 +180,6 @@ function NewBookItem({setShowNewModule, postData}) {
         availabilityID: values.availability.value,
         bookID: values.book.value,
         };     
-        console.log(data)
         postData(data)
         handleCloseModule()
         dispatch(showAlert({ title: 'Nowy egzemplarz został dodany!' }));

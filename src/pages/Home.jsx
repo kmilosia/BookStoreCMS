@@ -1,23 +1,16 @@
 import React from 'react'
 import ManageContentElement from '../components/dashboard/ManageContentElement';
-import SalesOverviewElement from '../components/dashboard/SalesOverviewElement';
-import RentalOverviewElement from '../components/dashboard/RentalOverviewElement';
-import ReservationOverviewElement from '../components/dashboard/ReservationOverviewElement';
 import HeaderElement from '../components/dashboard/HeaderElement';
+import WeeklyOverviewElement from '../components/dashboard/WeeklyOverviewElement';
 
 function Home() {
   return (
     <div className='main-wrapper overflow-y-auto page-scrollbar pr-5'>
       <div className='flex flex-col'>
         <HeaderElement />
-        <h3 className='home-element-header'>Podsumowanie tygodnia</h3>
-        <div className='grid grid-cols-3 gap-3 my-2'>
-          <SalesOverviewElement />
-          <RentalOverviewElement />
-          <ReservationOverviewElement />
-        </div>
+        <WeeklyOverviewElement />
         <h3 className='home-element-header'>Zarządzaj sklepem internetowym</h3>
-        <div className='flex flex-col w-full'>         
+        <div className='grid grid-cols-4 gap-5 w-full mt-2'>         
           <ManageContentElement path="/promocja" imgURL="https://iili.io/Jo1fKT7.png" title="Promocje" content='Dodaj nową promocję lub zarządzaj obecnymi promocjami.' />
           <ManageContentElement path="/ksiazka" imgURL="https://iili.io/Jo1Io7a.png" title="Książki" content='Dodaj nową książkę bazową a następnie dodaj egzemplarze książki.' />
           <ManageContentElement path="/egzemplarz" imgURL="https://iili.io/Jo1Izmv.png" title="Egzemplarze książek" content='Dodaj egzemplarz książki, jeżeli książka ma różne formy dodaj oddzielny egzemplarz dla każdej.' />

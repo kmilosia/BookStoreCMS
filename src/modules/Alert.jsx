@@ -4,16 +4,16 @@ import { hideAlert } from '../store/alertSlice';
 import { AiOutlineClose } from 'react-icons/ai';
 
 const Alert = () => {
-  const { showAlert, alertTitle } = useSelector((state) => state.alert);
+  const { showAlert, alertTitle } = useSelector((state) => state.alert)
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (showAlert) {
       setTimeout(() => {
-        dispatch(hideAlert());
+        dispatch(hideAlert())
       }, 3000);
     }
-  }, [showAlert, dispatch]);
+  }, [showAlert, dispatch])
 
   return (
     showAlert && (

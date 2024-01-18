@@ -11,17 +11,19 @@ const initialState = {
 }
 export const checkTokenValidity = async (token) => {
     try {
-        const request = await axiosClient.post(`Account/CheckTokenValidity?token=${token}`);
-        return request.data === 'Valid';
+        const response = await axiosClient.post(`Account/CheckTokenValidity?token=${token}`)
+        if(response.status === 200){
+            return true
+        }else{
+            return false
+        }
     } catch (error) {
-      console.error('Błąd przy uwierzytelnianiu użytkownika - token jest przeterminowany!');
-      return false;
+      return false
     }
-  };
+  }
   export const checkUserLogin = createAsyncThunk(
     'user/auth',
     async () => {
-    console.log("Authenticating..");
       const rawToken = localStorage.getItem('token');
       if (rawToken) {
         const token = rawToken.replace(/^"|"$/g, '');
@@ -43,7 +45,7 @@ export const fetchUserData = createAsyncThunk(
     'user/data',
     async() => {
         const token = getValidToken()
-        const response = await axiosClient.get('User/Data',{
+        const response = await axiosClient.get('User',{
             headers:{
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ export const editUserData = createAsyncThunk(
     'user/editData',
     async(data) => {
         const token = getValidToken()
-        const request = await axiosClient.put('/User/Edit-Data', data, {
+        const request = await axiosClient.put('/User', data, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export const changePassword = createAsyncThunk(
     'user/changePassword',
     async(data) => {
         const token = getValidToken()
-        const request = await axiosClient.put('/User/Edit-Password', data,{
+        const request = await axiosClient.put('/User/Password', data,{
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',

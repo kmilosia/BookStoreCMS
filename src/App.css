@@ -50,7 +50,7 @@
       @apply absolute h-full w-full py-10 top-0 left-0 px-2 overflow-auto scrollbar-default scrollbar-rounded;
     }
     .module-window{
-      @apply rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/3 mx-auto shadow-lg shadow-dracula-900 dark:shadow-dracula-600;
+      @apply rounded-md bg-dracula-100 flex flex-col p-6 dark:bg-dracula-900 w-2/3 mx-auto 2xl:w-1/2 shadow-lg shadow-dracula-900 dark:shadow-dracula-600;
     }
     .module-content-wrapper{
       @apply p-4 mr-1 flex flex-col;
@@ -71,7 +71,7 @@
       @apply scrollbar-rounded focus:border-purple-400 text-sm focus:outline-none text-dracula-900 bg-dracula-100 border-dracula-300 resize-none rounded-md mb-2 px-3 py-2 w-full border-2 dark:border-dracula-600 dark:text-dracula-100 dark:bg-dracula-700 dark:placeholder:text-dracula-400;
     }
     .module-button{
-      @apply bg-purple-400 w-full rounded-md py-2 my-2 text-dracula-100 font-semibold transition-all hover:bg-purple-500;
+      @apply bg-purple-400 w-max rounded-md py-2 px-10 my-2 text-dracula-100 font-semibold transition-all hover:bg-purple-500;
     }
     .module-round-button{
       @apply bg-purple-400 hover:bg-purple-500 rounded-3xl text-2xl text-dracula-100 p-1 ml-2;

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 function LogoutButton() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    
     const handleClick = () => {
         dispatch(logout())
         navigate('/login')
