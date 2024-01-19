@@ -6,7 +6,7 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 
 function ShippingStatus() {
-    const title = "Status Dostawy"
+    const title = "Status Wysyłki"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
