@@ -4,11 +4,10 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditNavbarLink(props) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [name, setName] = useState('')
     const [path, setPath] = useState('')
     const [position, setPosition] = useState('')
@@ -44,8 +43,8 @@ function EditNavbarLink(props) {
         props.putData(link.id, link)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Navbar link został edytowany!' }));
-  }
+        setMessage({title: "Menu link został edytowany", type: 'success'})
+      }
   useEffect(()=> {
     getItem(props.editedID)
   },[])

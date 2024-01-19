@@ -4,11 +4,10 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditDiscountsBanner(props) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [header, setHeader] = useState('')
     const [buttonTitle, setButtonTitle] = useState('')
     const [imageTitle, setImageTitle] = useState('')
@@ -50,8 +49,8 @@ function EditDiscountsBanner(props) {
         props.putData(banner.id, banner)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Baner promocyjny został edytowany!' }));
-  }
+        setMessage({title: "Baner promocyjny został edytowany", type: 'success'})
+      }
   useEffect(()=> {
     getItem(props.editedID)
   },[])

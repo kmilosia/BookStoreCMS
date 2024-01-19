@@ -4,15 +4,14 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
 import { editAuthor, getAuthor } from '../../api/authorAPI'
 import Spinner from '../../components/Spinner'
 import { personValidate } from '../../utils/validation/newValidate'
 import ButtonSpinner from '../../components/ButtonSpinner'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditAuthor({handleAfterSubmit,handleCloseModule,editedID}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [author,setAuthor] = useState({})
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
@@ -34,8 +33,8 @@ function EditAuthor({handleAfterSubmit,handleCloseModule,editedID}) {
     if (Object.keys(errors).length === 0 && submitting) {
       editAuthor(author,setSubmitLoading)
       handleAfterSubmit()
-      dispatch(showAlert({ title: 'Autor został edytowany!' }));
-      }
+      setMessage({title: "Autor został edytowany", type: 'success'})
+    }
   }, [errors])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

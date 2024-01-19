@@ -3,13 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { bannerValidate, navbarValidate } from '../../utils/validation/newValidate'
+import { navbarValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewNavbarLink({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -32,7 +31,7 @@ function NewNavbarLink({setShowNewModule, postData}) {
             console.log(values);
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy link do navbaru został dodany!' }));
+            setMessage({title: "Menu link został dodany", type: 'success'})
         }
       }, [errors])
   return (

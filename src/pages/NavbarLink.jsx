@@ -86,11 +86,11 @@ function NavbarLink() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Navbar Linki</h1>    
+        <h1 className='main-header'>Menu Linki</h1>    
         <div className='filter-panel'>
           <SortBar options={navbarLinksSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Navbar Link"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Link Menu"/>                   
         </div>
         <ListHeader  columnNames={navbarLinksColumns}/>
       </div>

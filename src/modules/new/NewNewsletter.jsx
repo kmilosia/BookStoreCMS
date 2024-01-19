@@ -4,14 +4,13 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
-import { newsletterValidate, personValidate } from '../../utils/validation/newValidate'
+import { newsletterValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 import { convertDate } from '../../utils/functions/convertDate'
 
 function NewNewsletter({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -39,7 +38,7 @@ function NewNewsletter({setShowNewModule, postData}) {
               }));           
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy newsletter został dodany!' }));
+            setMessage({title: "Newsletter został dodany", type: 'success'})
         }
       }, [errors])
   return (

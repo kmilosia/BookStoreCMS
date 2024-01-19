@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import ButtonSpinner from '../components/ButtonSpinner'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import ChangePassword from '../modules/user/ChangePassword'
-import { editUserData, fetchUserData, resetState } from '../store/userSlice'
-import { showAlert } from '../store/alertSlice'
+import { useAuthStore } from '../store/authStore'
+import { useMessageStore } from '../store/messageStore'
 
 function Account() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const {userData,loading,error,success} = useSelector((state) => state.user)
+  const loading = useAuthStore((state) => state.loading)
+  const userData = useAuthStore((state) => state.userData)
+  const error = useAuthStore((state) => state.error)
+  const editUserData = useAuthStore((state) => state.editUserData)
+  const getUserData = useAuthStore((state) => state.getUserData)
+  const setMessage = useMessageStore((state) => state.setMessage)
+  const [success, setSuccess] = useState(null)
   const [isEdited, setIsEdited] = useState(false)
   const [isPasswordModule, setIsPasswordModule] = useState(false)
   const [userDetails, setUserDetails] = useState({
@@ -28,24 +30,26 @@ function Account() {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(editUserData(userDetails))
+    editUserData(userDetails,setSuccess)
     setIsEdited(false)
   }
   useEffect(() => {
-    dispatch(fetchUserData())
+    getUserData()
   },[])
   useEffect(() => {
     if (userData) {
-      setUserDetails(userData);
+      setUserDetails(userData)
     }
   },[userData])
   useEffect(() => {
     if (success) {
-      dispatch(resetState())
-      dispatch(fetchUserData())
+      getUserData()
       setIsEdited(false)
-      dispatch(showAlert({ title: 'Dane użytkownika zostały zmienione!' }));
-    }
+      setMessage({title: 'Dane użytkownika zostały zmienione', type: 'success'})
+    }else if(success === false){
+      setMessage({title: 'Błąd podczas zmiany danych użytkownika', type: 'error'})
+    }else{}
+    setSuccess(null)
   }, [success])
   return (
     <>

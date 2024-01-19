@@ -3,13 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { personValidate } from '../../utils/validation/newValidate'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewTranslator({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -30,7 +29,7 @@ function NewTranslator({setShowNewModule, postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy translator został dodany!' }));
+            setMessage({title: "Translator został dodany", type: 'success'})
         }
       }, [errors])
   return (

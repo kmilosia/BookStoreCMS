@@ -7,13 +7,12 @@ import { useEffect } from 'react'
 import {convertDate} from '../../utils/functions/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
 import { bookItemValidate } from '../../utils/validation/newValidate'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewBookItem({setShowNewModule, postData}) {
   const today = new Date().toISOString().split('T')[0];
-  const dispatch = useDispatch()
+  const setMessage = useMessageStore((state) => state.setMessage)
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [isEbook, setIsEbook] = useState(null)
@@ -182,8 +181,8 @@ function NewBookItem({setShowNewModule, postData}) {
         };     
         postData(data)
         handleCloseModule()
-        dispatch(showAlert({ title: 'Nowy egzemplarz został dodany!' }));
-    }
+        setMessage({title: "Egzemplarz został dodany", type: 'success'})
+      }
     useEffect(() => {
       if (Object.keys(errors).length === 0 && submitting) {
         finishSubmit()

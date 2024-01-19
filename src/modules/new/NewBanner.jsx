@@ -3,14 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import DefaultTextarea from '../../components/forms/DefaultTextarea'
-import { bannerValidate, personValidate } from '../../utils/validation/newValidate'
+import { bannerValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewBanner({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -34,7 +32,7 @@ function NewBanner({setShowNewModule, postData}) {
             console.log(values);
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy baner został dodany!' }));
+            setMessage({title: "Baner został dodany", type: 'success'})
         }
       }, [errors])
   return (

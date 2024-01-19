@@ -6,12 +6,11 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { supplierValidate } from '../../utils/validation/newValidate'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewSupplier({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+  const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
@@ -102,8 +101,8 @@ function NewSupplier({setShowNewModule, postData}) {
         };     
           postData(data)
           handleCloseModule()
-          dispatch(showAlert({ title: 'Nowy dostawca został dodany!' }));
-      }
+          setMessage({title: "Dostawca został dodany", type: 'success'})
+        }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()

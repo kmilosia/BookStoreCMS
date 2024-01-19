@@ -3,14 +3,13 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
 import { dictionaryValidate } from '../../utils/validation/newValidate'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewDictionaryRecord({setShowNewModule,postData,title}) {
     const [nameValue, setNameValue] = useState('')
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const handleValueChange = (e) => {
@@ -27,7 +26,7 @@ function NewDictionaryRecord({setShowNewModule,postData,title}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(nameValue)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy rekord słownikowy został dodany!' }));
+            setMessage({title: "Nowy rekord słownikowy został dodany", type: 'success'})
         }
       }, [errors])
   return (

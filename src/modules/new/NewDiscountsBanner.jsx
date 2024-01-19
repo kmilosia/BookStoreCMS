@@ -5,11 +5,10 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { discountsBannerValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewDiscountsBanner({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -32,7 +31,7 @@ function NewDiscountsBanner({setShowNewModule, postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy baner promocyjny został dodany!' }));
+            setMessage({title: "Baner promocyjny został dodany", type: 'success'})
         }
       }, [errors])
   return (

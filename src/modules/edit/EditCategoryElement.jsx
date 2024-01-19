@@ -5,12 +5,11 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditCategoryElement(props) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [path, setPath] = useState('')
     const [logo, setLogo] = useState('')
     const [content, setContent] = useState('')
@@ -93,8 +92,8 @@ function EditCategoryElement(props) {
         props.putData(element.id, data)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Element kategorii został edytowany!' }));
-  }
+        setMessage({title: "Element kategorii został edytowany", type: 'success'})
+      }
   useEffect(() => {
     const fetchAllData = async () => {
       await getCategories()

@@ -5,11 +5,10 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditNews(props) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [topic, setTopic] = useState('')
     const [content, setContent] = useState('')
     const [authorName, setAuthorName] = useState('')
@@ -57,8 +56,8 @@ function EditNews(props) {
         props.putData(news.id, news)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Wiadomość została edytowana!' }));
-  }
+        setMessage({title: "Wiadomość została edytowana", type: 'success'})
+      }
   useEffect(()=> {
     getItem(props.editedID)
   },[])

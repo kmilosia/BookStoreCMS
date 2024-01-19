@@ -8,11 +8,11 @@ import { FiMinus, FiPlus } from 'react-icons/fi'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
-import { useDispatch } from 'react-redux'
 import { bookValidate } from '../../utils/validation/newValidate'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewBook({setShowNewModule, postData}) {
+  const setMessage = useMessageStore((state) => state.setMessage)
     const getAuthors = async () => {
         try{
           const response = await axiosClient.get(`/Author`)
@@ -61,7 +61,6 @@ function NewBook({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const dispatch = useDispatch()
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
@@ -139,8 +138,8 @@ function NewBook({setShowNewModule, postData}) {
         console.log(data)
         postData(data)
         handleCloseModule()
-        dispatch(showAlert({ title: 'Nowa książka została dodana!' }));
-    }
+        setMessage({title: "Książka została dodana", type: 'success'})
+      }
     useEffect(() => {
       if (Object.keys(errors).length === 0 && submitting) {
         finishSubmit()

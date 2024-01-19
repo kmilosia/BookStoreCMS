@@ -1,13 +1,12 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserData } from '../../store/userSlice'
+import { useAuthStore } from '../../store/authStore'
 
 function HeaderElement() {
-    const {userData} = useSelector((state) => state.user)
-    const dispatch = useDispatch()
+  const userData = useAuthStore((state) => state.userData)
+  const getUserData = useAuthStore((state) => state.getUserData)
     useEffect(() => {
-        dispatch(fetchUserData())
+      getUserData()
     },[])
   return (
     <div className='flex w-full rounded-md bg-white dark:bg-dracula-700 px-10 py-10 shadow-md my-2 cursor-default'>

@@ -6,8 +6,7 @@ import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import { useDispatch } from 'react-redux'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 import { footerLinkValidate } from '../../utils/validation/newValidate'
 
 function NewFooterLink({setShowNewModule, postData}) {
@@ -23,7 +22,7 @@ function NewFooterLink({setShowNewModule, postData}) {
           console.error(err)
         }
     }
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
@@ -57,8 +56,8 @@ function NewFooterLink({setShowNewModule, postData}) {
         };     
           postData(data)
           handleCloseModule()
-          dispatch(showAlert({ title: 'Nowy footer link został dodany!' }));
-      }
+          setMessage({title: "Link footera został dodany", type: 'success'})
+        }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()

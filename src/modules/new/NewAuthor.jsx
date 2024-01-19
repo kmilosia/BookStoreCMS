@@ -6,13 +6,12 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { personValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
 import { addAuthor } from '../../api/authorAPI'
 import ButtonSpinner from '../../components/ButtonSpinner'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewAuthor({handleAfterSubmit,handleCloseModule}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
@@ -31,7 +30,7 @@ function NewAuthor({handleAfterSubmit,handleCloseModule}) {
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
             addAuthor(values, setSubmitLoading)
-            dispatch(showAlert({ title: 'Nowy autor został dodany!' }))
+            setMessage({title: "Autor został dodany", type: 'success'})
             handleAfterSubmit()
         }
       }, [errors])

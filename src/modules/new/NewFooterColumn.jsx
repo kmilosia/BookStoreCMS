@@ -3,13 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 import { useEffect } from 'react'
 import { footerColumnValidate } from '../../utils/validation/newValidate'
 
 function NewFooterColumn({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
@@ -31,8 +30,8 @@ function NewFooterColumn({setShowNewModule, postData}) {
       const finishSubmit = () => {
           postData(values)
           handleCloseModule()
-          dispatch(showAlert({ title: 'Nowa footer kolumna została dodana!' }));
-      }
+          setMessage({title: "Kolumna footera została dodana", type: 'success'})
+        }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()

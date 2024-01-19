@@ -6,13 +6,12 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { categoryElementValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 import axiosClient from '../../api/apiClient'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function NewCategoryElement({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [categoryOptions, setCategoryOptions] = useState([])
@@ -65,7 +64,7 @@ function NewCategoryElement({setShowNewModule, postData}) {
             console.log(data);
             postData(data)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowy element kategorii został dodany!' }));
+            setMessage({title: "Element kategorii został dodany", type: 'success'})
         }
       }, [errors])
   return (

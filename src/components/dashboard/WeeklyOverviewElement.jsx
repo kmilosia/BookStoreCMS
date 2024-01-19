@@ -11,28 +11,42 @@ function WeeklyOverviewElement() {
     <>
         <h3 className='home-element-header'>Podsumowanie tygodnia</h3>
         <div className='grid grid-cols-3 gap-3 my-2'>
-            <OverviewElement color='purple' icon='fa-solid fa-truck-fast' amount={data.numberOfOrdersThisWeek} title="Zamówień"/>
-            <OverviewElement color='red' icon='fa-solid fa-book' amount={data.numberOfRentalsThisWeek} title="Wypożyczeń"/>
-            <OverviewElement color='blue' icon='fa-solid fa-calendar' amount={data.numberOfReservationsThisWeek} title="Rezerwacji"/>
+          <div className={`flex w-full rounded-md h-max text-white shadow-md px-3 py-3 bg-orange-400`}>
+          <div className='flex w-full'>
+            <div className={`w-auto h-full text-2xl aspect-square flex items-center justify-center rounded-md bg-orange-300`}>
+              <i className='fa-solid fa-book'></i>
+            </div>
+            <div className='flex flex-col mx-3 w-full cursor-default'>
+              <h1 className='text-2xl font-medium'>{data.numberOfRentalsThisWeek}</h1>
+              <h2 className='font-light overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'>Wypożyczeń</h2>
+            </div>
+          </div>
+        </div>
+        <div className={`flex w-full rounded-md h-max text-white shadow-md px-3 py-3 bg-purple-400`}>
+        <div className='flex w-full'>
+          <div className={`w-auto h-full text-2xl aspect-square flex items-center justify-center rounded-md bg-purple-300`}>
+            <i className='fa-solid fa-truck-fast'></i>
+          </div>
+          <div className='flex flex-col mx-3 w-full cursor-default'>
+            <h1 className='text-2xl font-medium'>{data.numberOfOrdersThisWeek}</h1>
+            <h2 className='font-light overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'>Zamówień</h2>
+          </div>
+        </div>
+      </div>
+      <div className={`flex w-full rounded-md h-max text-white shadow-md px-3 py-3 bg-sky-400`}>
+        <div className='flex w-full'>
+          <div className={`w-auto h-full text-2xl aspect-square flex items-center justify-center rounded-md bg-sky-300`}>
+            <i className="fa-solid fa-calendar"></i>
+          </div>
+          <div className='flex flex-col mx-3 w-full cursor-default'>
+            <h1 className='text-2xl font-medium'>{data.numberOfReservationsThisWeek}</h1>
+            <h2 className='font-light overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'>Rezerwacji</h2>
+          </div>
+        </div>
+      </div>
         </div>
     </>
   )
 }
 
 export default WeeklyOverviewElement
-
-const OverviewElement = ({amount, title, color, icon}) => {
-    return(
-        <div className={`flex w-full rounded-md h-max text-white shadow-md px-3 py-3 bg-${color}-400`}>
-        <div className='flex w-full'>
-          <div className={`w-auto h-full text-2xl aspect-square flex items-center justify-center rounded-md bg-${color}-300`}>
-            <i className={icon}></i>
-          </div>
-          <div className='flex flex-col mx-3 w-full cursor-default'>
-            <h1 className='text-2xl font-medium'>{amount}</h1>
-            <h2 className='font-light overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'>{title}</h2>
-          </div>
-        </div>
-      </div>
-    )
-}

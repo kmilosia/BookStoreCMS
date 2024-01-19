@@ -6,11 +6,10 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { newsValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewNews({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -35,7 +34,7 @@ function NewNews({setShowNewModule, postData}) {
             console.log(values);
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowa wiadomość została dodana!' }));
+            setMessage({title: "Wiadomość została dodana", type: 'success'})
         }
       }, [errors])
   return (

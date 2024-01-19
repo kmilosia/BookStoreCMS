@@ -4,15 +4,20 @@ import ShowPasswordButton from '../../components/buttons/ShowPasswordButton'
 import { loginValidate } from '../../utils/validation/loginValidate'
 import { useEffect } from 'react'
 import TextLink from '../../components/buttons/TextLink'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, resetState } from '../../store/userSlice'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { loginUser, resetState } from '../../store/userSlice'
 import SubmitButton from '../../components/buttons/SubmitButton'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
 
 function Login() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const {loading,error,isAuth,success} = useSelector((state) => state.user)
+  const signIn = useAuthStore((state) => state.signIn)
+  const error = useAuthStore((state) => state.error)
+  const loading = useAuthStore((state) => state.loading)
+
+  // const dispatch = useDispatch()
+  // const navigate = useNavigate()
+  // const {loading,error,isAuth,success} = useSelector((state) => state.user)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(true)
@@ -34,19 +39,20 @@ function Login() {
       password: inputValues.password,
       audience: 'www',
     }
-    dispatch(loginUser(data))
+    signIn(data)
+    // dispatch(loginUser(data))
   }
   // useEffect(() => {
   //   if (isAuth) {
   //     navigate('/');
   //   }
   // }, [isAuth]);
-  useEffect(() =>{
-    if(success){
-    navigate('/')
-    dispatch(resetState())
-    }
-  },[success])
+  // useEffect(() =>{
+  //   if(success){
+  //   navigate('/')
+  //   dispatch(resetState())
+  //   }
+  // },[success])
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();

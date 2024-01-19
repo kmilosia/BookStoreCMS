@@ -1,25 +1,29 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Customer, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter } from './import'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkUserLogin } from './store/userSlice';
-import Alert from './modules/Alert';
+import Splash from './pages/Splash';
+import { useAuthStore } from './store/authStore';
+import Message from './modules/Message';
 
 function App() {
-  const dispatch = useDispatch()
-  const {isAuth} = useSelector((state) => state.user)
+  const token = useAuthStore((state) => state.token)
+  const restoring = useAuthStore((state) => state.restoring)
+  const restoreToken = useAuthStore((state) => state.restoreToken)
   useEffect(() => {
-    dispatch(checkUserLogin()) 
-  },[isAuth])
+    restoreToken()
+  },[])
   return (
+    restoring ? <Splash /> :
     <>
-    <Alert />
+    <Message />
       <Router>
         <Routes>
-          <Route path='/login' element={isAuth ? <Navigate to='/' /> : <Login/>}/>
-          <Route path='/' element={isAuth ? <Layout /> : <Navigate to='/login' />}>
+          {token === null ?
+          <Route path='/' element={<Login/>}/>
+          :
+          <Route path='/' element={<Layout />}>
             <Route index element={<Home />}/>
             <Route path='/autor' element={<Author />}/>
             <Route path='/slownik' element={<Dictionary />}/>
@@ -56,7 +60,6 @@ function App() {
             <Route path='/footer-link' element={<FooterLinks />}/>
             <Route path='/magazyn' element={<StockAmount />}/>
             <Route path='/wiadomosci' element={<News />}/>
-            <Route path='/klient' element={<Customer />}/>
             <Route path='/baner' element={<Banner />}/>
             <Route path='/navbar-link' element={<NavbarLink />}/>
             <Route path='/newsletter' element={<Newsletter />}/>
@@ -64,6 +67,7 @@ function App() {
             <Route path='/baner-promocyjny' element={<DiscountsBanner />}/>
             <Route path='/strona-klienta' element={<WebsiteLayout />}/>
           </Route>
+          }
           <Route path='*' element={<PageNotFound />}/>
         </Routes>
       </Router>

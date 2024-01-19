@@ -3,13 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { showAlert } from '../../store/alertSlice'
-import { useDispatch } from 'react-redux'
+import { useMessageStore } from '../../store/messageStore'
 import { namePriceValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
 
 function NewDeliveryMethod({setShowNewModule,postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -30,7 +29,7 @@ function NewDeliveryMethod({setShowNewModule,postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            dispatch(showAlert({ title: 'Nowa forma dostawy została dodana!' }));
+            setMessage({title: "Sposób dostawy został dodany", type: 'success'})
         }
       }, [errors])
   return (

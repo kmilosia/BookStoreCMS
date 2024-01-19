@@ -2,18 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import {convertDate}  from '../../utils/functions/convertDate'
 import { useEffect } from 'react'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { discountCodeValidate } from '../../utils/validation/newValidate'
-import { useDispatch } from 'react-redux'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function NewDiscountCode({setShowNewModule, postData}) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
@@ -45,8 +41,8 @@ function NewDiscountCode({setShowNewModule, postData}) {
         };     
           postData(data)
           handleCloseModule()
-          dispatch(showAlert({ title: 'Nowy kod rabatowy został dodany!' }));
-      }
+          setMessage({title: "Kod promocyjny został dodany", type: 'success'})
+        }
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()

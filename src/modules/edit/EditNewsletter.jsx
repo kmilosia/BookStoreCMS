@@ -5,12 +5,11 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
 import { convertDateToInput } from '../../utils/functions/convertDate'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditNewsletter(props) {
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [title, setTitle] = useState('')
     const [publicationDate, setPublicationDate] = useState('')
     const [content, setContent] = useState('')
@@ -47,8 +46,8 @@ function EditNewsletter(props) {
         props.putData(newsletter.id, newsletter)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Newsletter został edytowany!' }));
-  }
+        setMessage({title: "Newsletter został edytowany", type: 'success'})
+      }
   useEffect(()=> {
     getItem(props.editedID)
   },[])

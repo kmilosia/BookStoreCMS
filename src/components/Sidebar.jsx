@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BiUser, BiBook, BiBookBookmark,BiBox, BiSolidDashboard} from 'react-icons/bi'
+import { BiBook, BiBookBookmark,BiBox, BiSolidDashboard} from 'react-icons/bi'
 import {AiOutlineClose} from 'react-icons/ai'
 import {TbDiscount2} from 'react-icons/tb'
 import {FaRegImage} from 'react-icons/fa'
@@ -73,13 +73,6 @@ function Sidebar() {
         <div className='flex flex-row items-center'>
             <PiBooks className='text-xl mx-1'/>
             <span>Egzemplarz</span>
-          </div>
-        </Link>
-
-        <Link to="/klient" className='default-link'>
-        <div className='flex flex-row items-center'>
-            <BiUser className='text-xl mx-1'/>
-            <span>Klient</span>
           </div>
         </Link>
         <Link to="/magazyn" className='default-link'>

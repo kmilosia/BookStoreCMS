@@ -2,18 +2,19 @@ import React from 'react'
 import { useState } from 'react'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton';
 import ShowPasswordButton from '../../components/buttons/ShowPasswordButton';
-import ButtonSpinner from '../../components/ButtonSpinner';
-import { useDispatch, useSelector } from 'react-redux';
 import { backgroundOverlayModule } from '../../styles';
 import SubmitButton from '../../components/buttons/SubmitButton';
 import { useEffect } from 'react';
-import { changePassword, resetState } from '../../store/userSlice';
 import { resetPasswordValidate } from '../../utils/validation/resetPasswordValidate';
-import { showAlert } from '../../store/alertSlice';
+import { useAuthStore } from '../../store/authStore';
+import { useMessageStore } from '../../store/messageStore';
 
 function ChangePassword({setIsPasswordModule}) {
-    const dispatch = useDispatch()
-    const {loading,error,success} = useSelector((state) => state.user)
+    const loading = useAuthStore((state) => state.loading)
+    const changeUserPassword = useAuthStore((state) => state.changeUserPassword)
+    const error = useAuthStore((state) => state.error)
+    const setMessage = useMessageStore((state) => state.setMessage)
+    const [success, setSuccess] = useState(null)
     const [errors, setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false); 
     const [isHiddenPassword, setIsHiddenPassword] = useState(true)
@@ -38,17 +39,18 @@ function ChangePassword({setIsPasswordModule}) {
             newPassword: userDetails.newPassword,
             repeatNewPassword: userDetails.confirmPassword
         }
-        dispatch(changePassword(data))
+        changeUserPassword(data,setSuccess)
       }
     const handleClose = () => {
         setIsPasswordModule(false)
     }
     useEffect(() => {
-        if (success) {
+        if(success) {
             handleClose()
-            dispatch(resetState())
-            dispatch(showAlert({ title: 'Hasło zostało zmienione!' }));
-        }
+            setMessage({title: 'Hasło zostało zmienione', type: 'success'})
+        }else if(success === false){
+            setMessage({title: 'Błąd podczas zmiany hasła', type: 'error'})
+        }else{}
       }, [success])
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {

@@ -8,13 +8,12 @@ import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import { useDispatch } from 'react-redux'
-import { showAlert } from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 import { discountValidate } from '../../utils/validation/newValidate'
 
 function NewDiscount({setShowNewModule, postData}) {
     const today = new Date().toISOString().split('T')[0];
-    const dispatch = useDispatch()
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [bookOptions, setBookOptions] = useState([])
@@ -67,8 +66,8 @@ function NewDiscount({setShowNewModule, postData}) {
           console.log(data)
           postData(data)
           handleCloseModule()
-          dispatch(showAlert({ title: 'Nowa promocja została dodana!' }));
-      }
+          setMessage({title: "Promocja została dodana", type: 'success'})
+        }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()

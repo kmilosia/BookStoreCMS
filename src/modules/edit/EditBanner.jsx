@@ -3,14 +3,12 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
-import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useDispatch } from 'react-redux'
-import {showAlert} from '../../store/alertSlice'
+import { useMessageStore } from '../../store/messageStore'
 
 function EditBanner(props) {
-    const dispatch = useDispatch()
-    const [title, setTitle] = useState('')
+  const setMessage = useMessageStore((state) => state.setMessage)
+  const [title, setTitle] = useState('')
     const [path, setPath] = useState('')
     const [imageTitle, setImageTitle] = useState('')
     const [imageURL, setImageURL] = useState('')
@@ -51,8 +49,8 @@ function EditBanner(props) {
         props.putData(banner.id, banner)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        dispatch(showAlert({ title: 'Baner został edytowany!' }));
-  }
+        setMessage({title: "Baner został edytowany", type: 'success'})
+      }
   useEffect(()=> {
     getItem(props.editedID)
   },[])
