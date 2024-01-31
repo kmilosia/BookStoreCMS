@@ -43,6 +43,12 @@ export const customerColumns = [
     { name: 'Nazwisko'},
     { name: 'Numer Telefonu'},
  ]
+ export const supplyColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa dostawcy'},
+    { name: 'Data'},
+    { name: 'Kwota'},
+ ]
 export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}

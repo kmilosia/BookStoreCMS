@@ -4,11 +4,11 @@ import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { dictionarySortOptions } from '../utils/select-options'
+import { supplySortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { dictionaryColumns } from '../utils/column-names'
+import { supplyColumns } from '../utils/column-names'
 import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
@@ -16,6 +16,8 @@ import Spinner from '../components/Spinner'
 import NewSupplier from '../modules/new/NewSupplier'
 import EditSupplier from '../modules/edit/EditSupplier'
 import ViewSupplier from '../modules/view/ViewSupplier'
+import { formatDisplayDate } from '../utils/functions/formatDisplayDate'
+import ViewSupply from '../modules/view/ViewSupply'
 
 function Supply() {
     const [data, setData] = useState([])
@@ -34,7 +36,7 @@ function Supply() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Supplier`)
+          const response = await axiosClient.get(`/Supply`)
           setData(response.data)
           setIsDataLoading(false)
       }catch(err){
@@ -43,7 +45,7 @@ function Supply() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Supplier`, object)
+          const response = await axiosClient.post(`/Supply`, object)
           getAllData()
       }catch(err){
           console.error(err)
@@ -51,7 +53,7 @@ function Supply() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Supplier/${id}`)
+          const response = await axiosClient.delete(`/Supply/${id}`)
           getAllData()
       }catch(err){
           console.error(err)
@@ -59,7 +61,7 @@ function Supply() {
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Supplier/${id}`, object)
+          const response = await axiosClient.put(`/Supply/${id}`, object)
           getAllData()
       }catch(err){
         console.error(err)
@@ -86,22 +88,24 @@ function Supply() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Dostawca</h1>    
+        <h1 className='main-header'>Dostawa na magazyn</h1>    
         <div className='filter-panel'>
-          <SortBar options={dictionarySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
+          <SortBar options={supplySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Dostawcę"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Dostawę"/>                   
         </div>
-        <ListHeader  columnNames={dictionaryColumns}/>
+        <ListHeader  columnNames={supplyColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-3'>
+            <div key={item.id} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
-                <p className='px-2'>{item.name}</p>
+                <p className='px-2'>{item.supplierName}</p>
+                <p className='px-2'>{item.supplyDate && formatDisplayDate(item.supplyDate)}</p>
+                <p className='px-2'>{item.priceBrutto}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -114,7 +118,7 @@ function Supply() {
         </div>
     {showNewModule && <NewSupplier postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditSupplier putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewSupplier editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewSupply editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

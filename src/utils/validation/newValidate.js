@@ -205,6 +205,25 @@ export const supplierValidate = (values) => {
     } 
     return errors
 }
+export const supplyValidate = (values) => {
+    let errors = {}
+    if (!values.paymentMethodID) {
+        errors.paymentMethodID = "Wybierz metodę płatności!"
+    } 
+    if (!values.deliveryStatusID) {
+        errors.deliveryStatusID = "Wybierz status dostawy!"
+    } 
+    if (!values.deliveryDate) {
+        errors.deliveryDate = "Wybierz datę dostawy!"
+    } 
+    if (!values.supplierID) {
+        errors.supplierID = "Wybierz dostawcę!"
+    } 
+    if (values.selectedBooks.length === 0) {
+        errors.selectedBooks = "Wybierz produkt!"
+    } 
+    return errors
+}
 export const discountValidate = (values) => {
     let errors = {}
     if (!values.title) {

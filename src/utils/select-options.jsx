@@ -8,6 +8,10 @@ export const stockSortOptions = [
     {value: 'amount', label: 'Ilość', type: 'number'},
     {value: 'bookTitle', label: 'Tytuł', type: 'string'}
 ]
+export const supplySortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'supplierName', label: 'Nazwa dostawcy', type: 'string'},
+]
 export const numericSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'},

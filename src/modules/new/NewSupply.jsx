@@ -6,98 +6,107 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
-import { supplierValidate } from '../../utils/validation/newValidate'
+import { supplierValidate, supplyValidate } from '../../utils/validation/newValidate'
 import { useMessageStore } from '../../store/messageStore'
+import { convertDate } from '../../utils/functions/convertDate'
 
 function NewSupply({setShowNewModule, postData}) {
   const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
-    const [cities, setCities] = useState([])
-    const [countries, setCountries] = useState([])
-    const [addressTypes, setAddressTypes] = useState([])
+    const [suppliers, setSuppliers] = useState([])
+    const [books, setBooks] = useState([])
+    const [paymentMethods, setPaymentMethods] = useState([])
+    const [deliveryStatuses, setDeliveryStatuses] = useState([])
     const [values, setValues] = useState({
-      bookItems: [],
+      selectedBooks: [],
       deliveryDate: '',
       paymentMethodID: null,
       deliveryStatusID: null,
       supplierID: null,
     })
     const handleChange = (e) => {
-      const { name, value } = e.target
-      setValues({ ...values, [name]: value })
+      setValues({ ...values, [e.target.name]: e.target.value })
     }  
-    const getCities = async () => {
-        try{
-          const response = await axiosClient.get(`/City`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCities(options)
-        }catch(err){
-          console.error(err)
-        }
+    const getBooks = async () => {
+      try{
+        const response = await axiosClient.get(`/BookItems`)
+        const options = response.data.map(item => ({
+          value: item.id,
+          label: item.bookTitle
+        }))
+        setBooks(options)
+      }catch(e){
+        console.log(e)
+      }
+  }
+  const getSuppliers = async () => {
+    try{
+      const response = await axiosClient.get(`/Supplier`)
+      const options = response.data.map(item => ({
+        value: item.id,
+        label: item.name
+      }))
+      setSuppliers(options)
+    }catch(e){
+      console.log(e)
     }
-    const getCountries = async () => {
-        try{
-          const response = await axiosClient.get(`/Country`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCountries(options)
-        }catch(err){
-          console.error(err)
-        }
+  }
+  const getPaymentMethods = async () => {
+    try{
+      const response = await axiosClient.get(`/PaymentMethod`)
+      const options = response.data.map(item => ({
+        value: item.id,
+        label: item.name
+      }))
+      setPaymentMethods(options)
+    }catch(e){
+      console.log(e)
     }
-    const getAddressTypes = async () => {
-        try{
-          const response = await axiosClient.get(`/AddressType`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setAddressTypes(options)
-        }catch(err){
-          console.error(err)
-        }
+  }
+  const getDeliveryStatuses = async () => {
+    try{
+      const response = await axiosClient.get(`/DeliveryStatus`)
+      const options = response.data.map(item => ({
+        value: item.id,
+        label: item.name
+      }))
+      setDeliveryStatuses(options)
+    }catch(e){
+      console.log(e)
     }
-    const handleCityChange = (selectedOption) => {
-      setValues({ ...values, cityID: selectedOption })
+  }
+   
+    const handleDeliveryStatusChange = (selectedOption) => {
+      setValues({ ...values, deliveryStatusID: selectedOption })
     }
-    const handleCountryChange = (selectedOption) => {
-      setValues({ ...values, countryID: selectedOption })
+    const handlePaymentMethodChange = (selectedOption) => {
+      setValues({ ...values, paymentMethodID: selectedOption })
     }
-    const handleAddressTypeChange = (selectedOption) => {
-      setValues({ ...values, addressTypeID: selectedOption })
+    const handleSupplierChange = (selectedOption) => {
+      setValues({ ...values, supplierID: selectedOption })
+    }
+    const handleBooksChange = (selectedBooks) => {
+      setValues({ ...values, selectedBooks })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }          
     const handleAcceptButton = () => {
         setSubmitting(true)
-        setErrors(supplierValidate(values))
+        setErrors(supplyValidate(values))
       } 
       const finishSubmit = () => {
-        const newaddress = {
-            street: values.street,
-            streetNumber: values.streetNumber,
-            houseNumber: values.houseNumber,
-            postcode: values.postcode,
-            cityID: values.cityID.value,
-            countryID: values.countryID.value,
-            addressTypeID: values.addressTypeID.value,
-          }
+        const convertedDate = convertDate(values.deliveryDate)
         const data = {
-          name: values.name,
-          email: values.email,
-          phoneNumber: values.phoneNumber,
-          address: newaddress,
+          deliveryDate: convertedDate,
+          bookItems: values.selectedBooks.map((item) => ({
+            id: item.value,
+          })),
         }
           postData(data)
           handleCloseModule()
-          setMessage({title: "Dostawca został dodany", type: 'success'})
+          setMessage({title: "Dostawa została dodana", type: 'success'})
         }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -105,35 +114,28 @@ function NewSupply({setShowNewModule, postData}) {
         }
       }, [errors])
     useEffect(() => {
-      getCities()
-      getCountries()
-      getAddressTypes()
+      getBooks()
+      getPaymentMethods()
+      getDeliveryStatuses()
+      getSuppliers()
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>
         <div className='module-content-wrapper'>
         <div className='module-header-row'>
-              <h1 className='module-header'>Dodaj nowego dostawcę</h1>
+              <h1 className='module-header'>Dodaj nową dostawę</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <div className='grid grid-cols-3 gap-2'>
-                <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa dostawcy' />
-                <DefaultInput name="phoneNumber" error={errors.phoneNumber} onChange={handleChange} type='text' placeholder='Telefon' title='Numer telefonu' />
-                <DefaultInput name="email" error={errors.email} onChange={handleChange} type='text' placeholder='Email' title='Adres email' />
+            <div className='grid grid-cols-2 gap-2'>
+                <DefaultSelect name="supplierID" error={errors.supplierID} onChange={handleSupplierChange} value={values.supplierID} options={suppliers} title='Dostawca' placeholder='Dostawca'/>
+                <DefaultInput name="deliveryDate" onChange={handleChange} value={values.deliveryDate} error={errors.deliveryDate} type='date' title='Data dostawy'/>
+                <DefaultSelect name="paymentMethodID" error={errors.paymentMethodID} onChange={handlePaymentMethodChange} value={values.paymentMethodID} options={paymentMethods} title='Metoda płatności' placeholder='Metoda płatności'/>
+                <DefaultSelect name="deliveryStatusID" error={errors.deliveryStatusID} onChange={handleDeliveryStatusChange} value={values.deliveryStatusID} options={deliveryStatuses} title='Status dostawy' placeholder='Status dostawy'/>
             </div>
             <div className='divider' />
-            <h1 className='text-dracula-500 dark:text-dracula-300 mb-1 font-semibold'>Adres dostawcy</h1>
             <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput name="street" error={errors.street} onChange={handleChange} type='text' placeholder='Ulica' title='Ulica' />
-                <DefaultInput name="streetNumber" error={errors.streetNumber} onChange={handleChange} type='text' placeholder='Numer ulicy' title='Numer ulicy' />
-                <DefaultInput name="houseNumber" error={errors.houseNumber} onChange={handleChange} type='text' placeholder='Numer lokalu' title='Numer lokalu' />
-                <DefaultInput name="postcode" error={errors.postcode} onChange={handleChange} type='text' placeholder='Kod pocztowy' title='Kod pocztowy' />
-            </div>
-            <div className='grid grid-cols-2 gap-2'>
-                <DefaultSelect name="cityID" error={errors.cityID} onChange={handleCityChange} value={values.cityID} options={cities} title='Miasto' placeholder='Miasto'/>
-                <DefaultSelect name="countryID" error={errors.countryID} onChange={handleCountryChange} value={values.countryID} options={countries} title='Kraj' placeholder='Kraj'/>
-                <DefaultSelect name="addressTypeID" error={errors.addressTypeID} onChange={handleAddressTypeChange} value={values.addressTypeID} options={addressTypes} title='Typ adresu' placeholder='Typ adresu'/>
+                <DefaultSelect isMulti={true} name="selectedBooks" error={errors.selectedBooks} onChange={handleBooksChange} value={values.selectedBooks} options={books} title='Produkty w dostawie' placeholder='Produkty'/>
             </div>
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
