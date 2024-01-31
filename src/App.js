@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,AccountStatus,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -47,6 +47,7 @@ function App() {
             <Route path='/translator' element={<Translator />}/>
             <Route path='/plec' element={<Gender />}/>
             <Route path='/wydawnictwo' element={<Publisher />}/>
+            <Route path='/dostawa' element={<Supply />}/>
             <Route path='/dostawca' element={<Supplier />}/>
             <Route path='/status-zamowienia' element={<OrderStatus />}/>
             <Route path='/status-wypozyczenia' element={<RentalStatus />}/>
@@ -58,7 +59,7 @@ function App() {
             <Route path='/status-dostawy' element={<DeliveryStatus />}/>
             <Route path='/footer-kolumna' element={<FooterColumns />}/>
             <Route path='/footer-link' element={<FooterLinks />}/>
-            <Route path='/magazyn' element={<StockAmount />}/>
+            <Route path='/stan-magazynu' element={<StockAmount />}/>
             <Route path='/wiadomosci' element={<News />}/>
             <Route path='/baner' element={<Banner />}/>
             <Route path='/navbar-link' element={<NavbarLink />}/>

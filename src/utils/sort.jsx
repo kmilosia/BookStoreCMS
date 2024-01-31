@@ -1,7 +1,6 @@
 export const sortItems = (items, selectedOption, isAscending) => {
     if (selectedOption){
       const { value, type } = selectedOption;
-      //copy array into new sortedcategories array - immutable
       const sortedItems = [...items];
       sortedItems.sort((a, b) => {
         const aValue = a[value];

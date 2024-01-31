@@ -89,9 +89,3 @@ export const customerItemSortOptions = [
     {value: 'surname', label: 'Nazwisko', type: 'string'},
     {value: 'phoneNumber', label: 'Numer telefonu', type: 'string'},
 ]
-export const supplierSortOptions = [
-    {value: 'id', label: 'ID', type: 'number'},
-    {value: 'name', label: 'Imię', type: 'string'},
-    {value: 'email', label: 'Email', type: 'string'},
-    {value: 'phoneNumber', label: 'Numer telefonu', type: 'string'},
-]

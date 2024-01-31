@@ -110,9 +110,3 @@ export const stockItemsColumns = [
     { name: 'Tytuł'},
     { name: 'Ilość'},
 ]
-export const supplierColumns = [
-    { name: 'ID'},
-    { name: 'Nazwa'},
-    { name: 'Email'},
-    { name: 'Numer telefonu'},
-]

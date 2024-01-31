@@ -17,7 +17,7 @@ import NewSupplier from '../modules/new/NewSupplier'
 import EditSupplier from '../modules/edit/EditSupplier'
 import ViewSupplier from '../modules/view/ViewSupplier'
 
-function Supplier() {
+function Supply() {
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -119,4 +119,4 @@ function Supplier() {
   )
 }
 
-export default Supplier
+export default Supply

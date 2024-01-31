@@ -16,6 +16,9 @@ import DictionaryLinks from './links/DictionaryLinks'
 import ClientAppLinks from './links/ClientAppLinks'
 import LogoutButton from './buttons/LogoutButton'
 import SidebarAccountElement from './SidebarAccountElement'
+import StockLinks from './links/StockLinks'
+import BooksLinks from './links/BooksLinks'
+import DiscountsLinks from './links/DiscountsLinks'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -61,34 +64,24 @@ function Sidebar() {
             <span>Słownik</span>
           </div>
         </button>
-
-        <Link to="/ksiazka" className='default-link'>
-        <div className='flex flex-row items-center'>
-            <BiBookBookmark className='text-xl mx-1'/>
-            <span>Książka</span>
-          </div>
-        </Link>
-
-        <Link to="/egzemplarz" className='default-link'>
-        <div className='flex flex-row items-center'>
+        <button onClick={() => toggleSideMenu("books")} className='default-link'>
+          <div className='flex flex-row items-center'>
             <PiBooks className='text-xl mx-1'/>
-            <span>Egzemplarz</span>
+            <span>Książki</span>
           </div>
-        </Link>
-        <Link to="/magazyn" className='default-link'>
-        <div className='flex flex-row items-center'>
+        </button>
+        <button onClick={() => toggleSideMenu("stock")} className='default-link'>
+          <div className='flex flex-row items-center'>
             <BiBox className='text-xl mx-1'/>
             <span>Magazyn</span>
           </div>
-        </Link>
-
+        </button>
         <Link to="/wiadomosci" className='default-link'>
         <div className='flex flex-row items-center'>
             <FaRegNewspaper className='text-xl mx-1'/>
             <span>Wiadomości</span>
           </div>
         </Link>
-
         <Link to="/zdjecie" className='default-link'>
         <div className='flex flex-row items-center'>
             <FaRegImage className='text-xl mx-1'/>
@@ -101,28 +94,12 @@ function Sidebar() {
             <span>Newsletter</span>
           </div>
         </Link>
-
-        <Link to="/promocja" className='default-link'>
-        <div className='flex flex-row items-center'>
+        <button onClick={() => toggleSideMenu("discount")} className='default-link'>
+          <div className='flex flex-row items-center'>
             <MdOutlineDiscount className='text-xl mx-1'/>
-            <span>Promocja</span>
+            <span>Promocje</span>
           </div>
-        </Link>
-        
-        <Link to="/kod-rabatowy" className='default-link'>
-        <div className='flex flex-row items-center'>
-            <TbDiscount2 className='text-xl mx-1'/>
-            <span className='whitespace-nowrap'>Kod Rabatowy</span>
-          </div>
-        </Link>
-
-        <Link to="/dostawca" className='default-link'>
-        <div className='flex flex-row items-center'>
-            <RiTruckLine className='text-xl mx-1'/>
-            <span className='whitespace-nowrap'>Dostawca</span>
-          </div>
-        </Link>
-
+        </button>
         <button onClick={()=> toggleSideMenu("clientapp")} className='default-link'>
           <div className='flex flex-row items-center'>
             <CgWebsite className='text-xl mx-1'/>
@@ -160,6 +137,27 @@ function Sidebar() {
             <h1 className='text-base font-semibold whitespace-nowrap'>Strona Klienta</h1>
           </div>
           <ClientAppLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+          : sideMenu === "stock" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Magazyn</h1>
+          </div>
+          <StockLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+          : sideMenu === "books" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Książki</h1>
+          </div>
+          <BooksLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+          : sideMenu === "discount" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Promocje</h1>
+          </div>
+          <DiscountsLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
           </>
            : ""}
           <div className='w-full flex justify-center pt-4 pb-2'>

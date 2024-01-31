@@ -194,14 +194,14 @@ export const supplierValidate = (values) => {
     if (!values.postcode) {
         errors.postcode = "Wprowadź kod pocztowy!"
     } 
-    if (values.selectedCity === null) {
-        errors.selectedCity = "Wybierz miasto!"
+    if (!values.cityID) {
+        errors.cityID = "Wybierz miasto!"
     } 
-    if (values.selectedCountry === null) {
-        errors.selectedCountry = "Wybierz kraj!"
+    if (!values.countryID) {
+        errors.countryID = "Wybierz kraj!"
     } 
-    if (values.selectedType === null) {
-        errors.selectedType = "Wybierz typ adresu!"
+    if (!values.addressTypeID) {
+        errors.addressTypeID = "Wybierz typ adresu!"
     } 
     return errors
 }

@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 import { supplierValidate } from '../../utils/validation/newValidate'
 import { useMessageStore } from '../../store/messageStore'
 
-function NewSupplier({setShowNewModule, postData}) {
+function NewSupply({setShowNewModule, postData}) {
   const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
@@ -17,16 +17,11 @@ function NewSupplier({setShowNewModule, postData}) {
     const [countries, setCountries] = useState([])
     const [addressTypes, setAddressTypes] = useState([])
     const [values, setValues] = useState({
-      name: '',
-      email: '',
-      phoneNumber: '',
-      street: '',
-      streetNumber: '',
-      houseNumber: '',
-      postcode: '',
-      cityID: null,
-      countryID: null,
-      addressTypeID: null,
+      bookItems: [],
+      deliveryDate: '',
+      paymentMethodID: null,
+      deliveryStatusID: null,
+      supplierID: null,
     })
     const handleChange = (e) => {
       const { name, value } = e.target
@@ -147,4 +142,4 @@ function NewSupplier({setShowNewModule, postData}) {
   )
 }
 
-export default NewSupplier
+export default NewSupply
