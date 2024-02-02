@@ -4,52 +4,33 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
 
 function EditBanner(props) {
-  const setMessage = useMessageStore((state) => state.setMessage)
-  const [title, setTitle] = useState('')
-    const [path, setPath] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
     const [banner,setBanner] = useState({})
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Banner/${id}`)
-          setBanner(response.data)
-          setTitle(response.data.title)
-          setPath(response.data.path)
-          setImageTitle(response.data.imageTitle)
-          setImageURL(response.data.imageURL)
+          if(response.status === 200 || response.status === 204){
+            setBanner(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleTitle = (e) => {
-        setTitle(e.target.value)
-    }
-    const handlePath = (e) => {
-        setPath(e.target.value)
-    }
-    const handleImageURL = (e) => {
-        setImageURL(e.target.value)
-    }
-    const handleImageTitle = (e) => {
-        setImageTitle(e.target.value)
+    const handleChange = (e) => {
+      setBanner((prev) => {
+        return { ...prev, [e.target.name]: e.target.value }
+      })
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
-        banner.title = title
-        banner.path = path
-        banner.imageTitle = imageTitle
-        banner.imageURL = imageURL
+      console.log(banner);
         props.putData(banner.id, banner)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        setMessage({title: "Baner został edytowany", type: 'success'})
       }
   useEffect(()=> {
     getItem(props.editedID)
@@ -63,14 +44,14 @@ function EditBanner(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput onChange={handleTitle} value={title} type='text' placeholder='Tytuł' title='Tytuł baneru'/>
-                    <DefaultInput onChange={handlePath} value={path} type='text' placeholder='Ścieżka' title='Ścieżka baneru'/>
-                    <DefaultInput onChange={handleImageTitle} value={imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
-                    <DefaultInput onChange={handleImageURL} value={imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
+                    <DefaultInput onChange={handleChange} name='title' value={banner.title} type='text' placeholder='Tytuł' title='Tytuł baneru'/>
+                    <DefaultInput onChange={handleChange} name='path' value={banner.path} type='text' placeholder='Ścieżka' title='Ścieżka baneru'/>
+                    <DefaultInput onChange={handleChange} name='imageTitle' value={banner.imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
+                    <DefaultInput onChange={handleChange} name='imageURL' value={banner.imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
                 </div>
-                {imageURL &&
+                {banner.imageURL &&
                 <div className='w-full h-auto'>
-                    <img src={imageURL} className='w-full h-auto object-contain' />
+                    <img src={banner.imageURL} className='w-full h-auto object-contain' />
                 </div>
                 }
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>

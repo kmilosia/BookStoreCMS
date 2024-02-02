@@ -6,8 +6,6 @@ export const personColumns = [
  export const bannerColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
-    { name: 'Ścieżka'},
-    { name: 'Zdjęcie'},
  ]
  export const newsletterColumns = [
     { name: 'ID'},

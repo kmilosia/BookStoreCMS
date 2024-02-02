@@ -4,6 +4,7 @@ import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
+import { useMessageStore } from '../../store/messageStore'
 
 function Availability() {
     const title = "Dostępność"
@@ -14,18 +15,20 @@ function Availability() {
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
           setIsDataLoading(true)
           const response = await axiosClient.get(`/Availability`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
           setIsDataLoading(false)
-
       }catch(err){
-          console.error(err)
+          console.log(err)
+          setIsDataLoading(false)
       }
     }
     const postData = async (name) => {
@@ -33,9 +36,15 @@ function Availability() {
           const response = await axiosClient.post(`/Availability`, {
               name: name,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Nowa dostępność została dodana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd przy dodawaniu nowej dostępności", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          console.log(err)
+          setMessage({title: "Błąd przy dodawaniu nowej dostępności", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
@@ -44,24 +53,34 @@ function Availability() {
               id: id,
               name: nameValue,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostępność została edytowana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania dostępności", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        console.log(err)
+        setMessage({title: "Błąd podczas edytowania dostępności", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Availability/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostępność została usunięta", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania dostępności", type: 'error'})
+          }
+        }catch(err){
+          console.log(err)
+          setMessage({title: "Błąd podczas usuwania dostępności", type: 'error'})
       }
     }
-
     useEffect(()=>{
         getAllData()
     },[])
-    
     const props = {
       title,
       data,

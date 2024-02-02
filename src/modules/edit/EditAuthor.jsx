@@ -4,19 +4,15 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { editAuthor, getAuthor } from '../../api/authorAPI'
 import Spinner from '../../components/Spinner'
 import { personValidate } from '../../utils/validation/newValidate'
 import ButtonSpinner from '../../components/ButtonSpinner'
-import { useMessageStore } from '../../store/messageStore'
+import axiosClient from '../../api/apiClient'
 
-function EditAuthor({handleAfterSubmit,handleCloseModule,editedID}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
+function EditAuthor({handleAfterSubmit,handleCloseModule,editedID,putData}) {
     const [author,setAuthor] = useState({})
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
-    const [loading, setLoading] = useState(true)
-    const [submitLoading, setSubmitLoading] = useState(false)
     const handleChange = (e) => {
       setAuthor((prevAuthor) => {
         return { ...prevAuthor, [e.target.name]: e.target.value }
@@ -26,20 +22,28 @@ function EditAuthor({handleAfterSubmit,handleCloseModule,editedID}) {
       setErrors(personValidate(author))
       setSubmitting(true)
   }
+  const getItem = async (id) => {
+    try{
+      const response = await axiosClient.get(`/Author/${id}`)
+      if(response.status === 200 || response.status === 204){
+        setAuthor(response.data)
+      }
+    }catch(e){
+      console.log(e)
+    }
+}
   useEffect(()=> {
-    getAuthor(editedID, setAuthor, setLoading)
+    getItem(editedID)
   },[])
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
-      editAuthor(author,setSubmitLoading)
+      putData(author)
       handleAfterSubmit()
-      setMessage({title: "Autor został edytowany", type: 'success'})
     }
   }, [errors])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-          {loading ? <Spinner /> :
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
                   <h1 className='module-header'>Edytuj autora</h1>
@@ -50,9 +54,8 @@ function EditAuthor({handleAfterSubmit,handleCloseModule,editedID}) {
                     <DefaultInput error={errors.surname} name="surname" onChange={handleChange} value={author?.surname} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
                 </div>
                 <DefaultTextarea error={errors.description} name="description" onChange={handleChange} value={author?.description} placeholder='Opis' title="Opis autora"/>
-                <button onClick={handleSaveClick} className='module-button'>{submitLoading ? <ButtonSpinner /> : 'Akceptuj'}</button>
+                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
-          }
         </div>
     </div>
   )

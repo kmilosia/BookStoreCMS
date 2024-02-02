@@ -58,10 +58,10 @@ function Supply() {
           const response = await axiosClient.post(`/Supply`, object)
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Nowa dostawa została dodana", type: 'success'})
+            getAllData()
           }else{
             setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
           }
-          getAllData()
       }catch(err){
           setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
       }

@@ -14,6 +14,7 @@ import Spinner from '../../components/Spinner';
 function DictionaryComponent(props) {
   const inputRef = useRef(null)
   const [nameValue, setNameValue] = useState('')
+  const [error, setError] = useState(null)
   const handleEditClick = (itemID, itemName) => {
     if (props.editedID === null){
       props.setEditedID(itemID)
@@ -27,8 +28,15 @@ function DictionaryComponent(props) {
     setNameValue(e.target.value)
   }
   const handleSaveClick = (id) => {
+    if(nameValue === ''){
+      setError("Wartość nie może być pusta")
+    }else{
+    if(error){
+      setError(null)
+    }
     props.putData(id, nameValue)
     props.setEditedID(null)
+    }
   }
   const handleDeleteClick = (id) => {
     props.deleteData(id)
@@ -65,13 +73,16 @@ function DictionaryComponent(props) {
               <div key={item.id} className='table-row-wrapper'>
                 <p className='px-2'>{item.id}</p>
                 {props.editedID !== null && props.editedID === item.id ? (
+                  <div className='flex flex-col'>
                   <input
                     ref={inputRef}
                     type='text'
                     onChange={handleInputChange}
                     value={nameValue}
-                    className='bg-saphire-100 px-2 py-2 rounded-md dark:bg-gray-800'
+                    className='module-input-text'
                   />
+                  {error && <p className='error-text'>{error}</p>}
+                  </div>
                 ) : (
                   <p className='px-2'>{item.name}</p>
                 )}

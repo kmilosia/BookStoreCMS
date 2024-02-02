@@ -34,9 +34,16 @@ function EditSupply({setShowEditModule, putData,editedID}) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Supply/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setValues(response.data)
-          }
+          // if(response.status === 200 || response.status === 204){
+          //   const {supplierData, paymentData} = response.data
+          //   setValues({
+          //     ...values,
+          //     supplierID: supplierData.id,
+          //     // deliveryStatusID
+          //     paymentMethodID: paymentData.paymentMethod.id,
+          //     deliveryDate:
+          //   })
+          // }
           const newDate = new Date(response.data.deliveryDate)
           setExpirationDate(convertDateToInput(expDate))
           setStartingDate(convertDateToInput(startDate))

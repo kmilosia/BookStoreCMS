@@ -6,15 +6,11 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { personValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { addAuthor } from '../../api/authorAPI'
 import ButtonSpinner from '../../components/ButtonSpinner'
-import { useMessageStore } from '../../store/messageStore'
 
-function NewAuthor({handleAfterSubmit,handleCloseModule}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
+function NewAuthor({handleAfterSubmit,handleCloseModule,postData}) {
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
-    const [submitLoading, setSubmitLoading] = useState(false)
     const [values,setValues] = useState({
         name: '',
         surname: '',
@@ -29,8 +25,7 @@ function NewAuthor({handleAfterSubmit,handleCloseModule}) {
     } 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            addAuthor(values, setSubmitLoading)
-            setMessage({title: "Autor został dodany", type: 'success'})
+            postData(values)
             handleAfterSubmit()
         }
       }, [errors])
@@ -47,7 +42,7 @@ function NewAuthor({handleAfterSubmit,handleCloseModule}) {
                     <DefaultInput name="surname" error={errors.surname} onChange={handleChange} type='text' placeholder='Nazwisko' title='Nazwisko autora'/>
                 </div>
                 <DefaultTextarea name="description" onChange={handleChange} placeholder='Opis' title="Opis autora"/>
-                <button onClick={handleAcceptButton} className='module-button'>{submitLoading ? <ButtonSpinner /> : 'Akceptuj'}</button>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>
