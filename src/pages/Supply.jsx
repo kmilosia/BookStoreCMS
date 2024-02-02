@@ -3,7 +3,6 @@ import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
-import { filterItems } from '../utils/filter'
 import { supplySortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -13,13 +12,14 @@ import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
-import NewSupplier from '../modules/new/NewSupplier'
 import EditSupplier from '../modules/edit/EditSupplier'
-import ViewSupplier from '../modules/view/ViewSupplier'
 import { formatDisplayDate } from '../utils/functions/formatDisplayDate'
 import ViewSupply from '../modules/view/ViewSupply'
+import NewSupply from '../modules/new/NewSupply'
+import { useMessageStore } from '../store/messageStore'
 
 function Supply() {
+    const setMessage = useMessageStore((state) => state.setMessage)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -29,45 +29,69 @@ function Supply() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const filterItems = (list, value) => list.filter((item) => {
+      if (!value) {
+          return true;
+      }
+      const itemName = item.supplierName.toLowerCase()
+      return itemName.includes(value.toLowerCase())
+    })
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/Supply`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+        setIsDataLoading(false)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/Supply`, object)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Nowa dostawa została dodana", type: 'success'})
+          }else{
+            setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
+          }
           getAllData()
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Supply/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostawa została usunięta", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas usuwania", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/Supply/${id}`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            getAllData()
+            setMessage({title: "Nowa dostawa została dodana", type: 'success'})
+          }else{
+            setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edycji danych", type: 'error'})
       }
-  }
-
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -79,11 +103,9 @@ function Supply() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
-      
   return (
     <>
     <div className='main-wrapper'>
@@ -92,7 +114,7 @@ function Supply() {
         <div className='filter-panel'>
           <SortBar options={supplySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Dostawę"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Nową Dostawę"/>                   
         </div>
         <ListHeader  columnNames={supplyColumns}/>
       </div>
@@ -116,7 +138,7 @@ function Supply() {
       </div>
       }
         </div>
-    {showNewModule && <NewSupplier postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showNewModule && <NewSupply postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditSupplier putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewSupply editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>

@@ -20,7 +20,6 @@ function Dictionary() {
             <DictionaryLink title="Płeć" path='/plec' />
             <DictionaryLink title="Przywileje" path='/przywileje' />
             <DictionaryLink title="Status dostawy" path='/status-dostawy' />
-            <DictionaryLink title="Status konta" path='/status-konta' />
             <DictionaryLink title="Status transakcji" path='/status-transakcji' />
             <DictionaryLink title="Status wypożyczenia" path='/status-wypozyczenia' />
             <DictionaryLink title="Status wysyłki" path='/status-wysyłki' />

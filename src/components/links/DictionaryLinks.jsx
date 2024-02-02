@@ -21,7 +21,6 @@ function DictionaryLinks({setIsSideMenuExpanded}) {
         <Link to='/plec' onClick={handleClick} className='sidemenu-link'>Płeć</Link>
         <Link to='/przywileje' onClick={handleClick} className='sidemenu-link'>Przywileje</Link>  
         <Link to='/status-dostawy' onClick={handleClick} className='sidemenu-link'>Status Dostawy</Link>
-        <Link to='/status-konta' onClick={handleClick} className='sidemenu-link'>Status Konta</Link>
         <Link to='/status-transakcji' onClick={handleClick} className='sidemenu-link'>Status Transakcji</Link>  
         <Link to='/status-wypozyczenia' onClick={handleClick} className='sidemenu-link'>Status Wypożyczenia</Link> 
         <Link to='/status-wysylki' onClick={handleClick} className='sidemenu-link'>Status Wysyłki</Link>

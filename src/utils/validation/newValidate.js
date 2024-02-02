@@ -219,8 +219,8 @@ export const supplyValidate = (values) => {
     if (!values.supplierID) {
         errors.supplierID = "Wybierz dostawcę!"
     } 
-    if (values.selectedBooks.length === 0) {
-        errors.selectedBooks = "Wybierz produkt!"
+    if (values.bookItems.length === 0) {
+        errors.bookItems = "Wybierz produkt!"
     } 
     return errors
 }
