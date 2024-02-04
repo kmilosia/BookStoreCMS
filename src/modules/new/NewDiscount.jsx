@@ -8,12 +8,9 @@ import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import { useMessageStore } from '../../store/messageStore'
 import { discountValidate } from '../../utils/validation/newValidate'
 
 function NewDiscount({setShowNewModule, postData}) {
-    const today = new Date().toISOString().split('T')[0];
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [bookOptions, setBookOptions] = useState([])
@@ -21,27 +18,29 @@ function NewDiscount({setShowNewModule, postData}) {
       title: '',
       description: '',
       percent: '',
-      expirationDate: today,
-      startingDate: today,
+      expirationDate: '',
+      startingDate: '',
       selectedBooks: [],
     })
     const handleChange = (e) => {
-      setValues({ ...values, [e.target.name]: e.target.value });
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
     const getBooks = async () => {
         try{
           const response = await axiosClient.get(`/BookItems`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.bookTitle
           }))
           setBookOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleBooks = (selectedBooks) => {
-        setValues({ ...values, selectedBooks });
+        setValues({ ...values, selectedBooks })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -62,11 +61,10 @@ function NewDiscount({setShowNewModule, postData}) {
           listOfBookItems: values.selectedBooks.map((item) => ({
             id: item.value,
           })),
-        };     
+          }     
           console.log(data)
           postData(data)
           handleCloseModule()
-          setMessage({title: "Promocja została dodana", type: 'success'})
         }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -77,7 +75,7 @@ function NewDiscount({setShowNewModule, postData}) {
         getBooks()
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -93,7 +91,7 @@ function NewDiscount({setShowNewModule, postData}) {
                 <DefaultInput name="startingDate" onChange={handleChange} value={values.startingDate} type='date' title='Data rozpoczęcia'/>
                 <DefaultInput name="expirationDate" onChange={handleChange} value={values.expirationDate} type='date' title="Termin ważności"/>
                 </div>
-                <DefaultSelect name="selectedBooks" error={errors.selectedBooks} onChange={handleBooks} value={values.selectedBooks} options={bookOptions} isMulti={true} title="Wszystkie egzemplarze objęte promocją" placeholder='Egzemplarze książek'/>
+                <DefaultSelect name="selectedBooks" error={errors.selectedBooks} onChange={handleBooks} value={values.selectedBooks} options={bookOptions} isMulti={true} title="Egzemplarze objęte promocją" placeholder='Dodaj egzemplarz do promocji'/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

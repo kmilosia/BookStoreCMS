@@ -17,6 +17,7 @@ function Dictionary() {
             <DictionaryLink title="Metoda dostawy" path='/metoda-dostawy' />
             <DictionaryLink title="Metoda płatności" path='/metoda-platnosci' />
             <DictionaryLink title="Miasto" path='/miasto' />
+            <DictionaryLink title="Ocena" path='/ocena' />
             <DictionaryLink title="Przywileje" path='/przywileje' />
             <DictionaryLink title="Status dostawy" path='/status-dostawy' />
             <DictionaryLink title="Status transakcji" path='/status-transakcji' />

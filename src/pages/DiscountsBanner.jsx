@@ -16,6 +16,7 @@ import Spinner from '../components/Spinner'
 import NewDiscountsBanner from '../modules/new/NewDiscountsBanner'
 import EditDiscountsBanner from '../modules/edit/EditDiscountsBanner'
 import ViewDiscountsBanner from '../modules/view/ViewDiscountsBanner'
+import { useMessageStore } from '../store/messageStore'
 
 function DiscountsBanner() {
     const [data, setData] = useState([])
@@ -27,45 +28,69 @@ function DiscountsBanner() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const filterItems = (list, value) => list.filter((item) => {
+      if (!value) {
+          return true;
+      }
+      const itemName = item.header.toLowerCase()
+      return itemName.includes(value.toLowerCase())
+    })
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/DiscountsBanner`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
-
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/DiscountsBanner`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie dodano nową baner", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania baneru", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas dodawania baneru", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/DiscountsBanner/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie usunięto baner", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/DiscountsBanner/${id}`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie edytowano baner", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
       }
-  }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +102,6 @@ function DiscountsBanner() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -92,17 +116,16 @@ function DiscountsBanner() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Baner"/>                   
         </div>
-        <ListHeader  columnNames={discountsBannerColumns}/>
+        <ListHeader columnNames={discountsBannerColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
       {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-4'>
+            <div key={item.id} className='table-row-wrapper grid-cols-3'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.header}</p>
-                <img className='h-auto object-contain px-2' src={item.imageURL} />
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>

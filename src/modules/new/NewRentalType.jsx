@@ -3,12 +3,10 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
 import { useEffect } from 'react'
 import { rentalTypeValidate } from '../../utils/validation/newValidate'
 
 function NewRentalType({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -17,7 +15,7 @@ function NewRentalType({setShowNewModule, postData}) {
         price: '',
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -30,7 +28,6 @@ function NewRentalType({setShowNewModule, postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            setMessage({title: "Typ wypożyczenia został dodany", type: 'success'})
         }
       }, [errors])
   return (

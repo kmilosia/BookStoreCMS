@@ -5,10 +5,8 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { discountsBannerValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewDiscountsBanner({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -18,7 +16,7 @@ function NewDiscountsBanner({setShowNewModule, postData}) {
         imageURL: '',
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -31,7 +29,6 @@ function NewDiscountsBanner({setShowNewModule, postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            setMessage({title: "Baner promocyjny został dodany", type: 'success'})
         }
       }, [errors])
   return (

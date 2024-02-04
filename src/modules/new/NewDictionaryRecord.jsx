@@ -5,11 +5,9 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { useEffect } from 'react'
 import { dictionaryValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewDictionaryRecord({setShowNewModule,postData,title}) {
     const [nameValue, setNameValue] = useState('')
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const handleValueChange = (e) => {
@@ -26,7 +24,6 @@ function NewDictionaryRecord({setShowNewModule,postData,title}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(nameValue)
             handleCloseModule()
-            setMessage({title: "Nowy rekord słownikowy został dodany", type: 'success'})
         }
       }, [errors])
   return (

@@ -7,6 +7,10 @@ export const personColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
  ]
+ export const scoreColumns = [
+    { name: 'ID'},
+    { name: 'Ocena'},
+ ]
  export const contactColumns = [
     { name: 'ID'},
     { name: 'Użytkownik'},
@@ -31,7 +35,6 @@ export const personColumns = [
  export const discountsBannerColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
-    { name: 'Zdjęcie'},
  ]
  export const navbarLinksColumns = [
     { name: 'ID'},

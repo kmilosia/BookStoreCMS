@@ -253,6 +253,12 @@ export const discountCodeValidate = (values) => {
     if (!values.percent) {
         errors.percent = "Wprowadź wartość promocji!"
     }
+    if (!values.expiryDate) {
+        errors.expiryDate = "Wprowadź datę zakończenia!"
+    }
+    if (!values.startingDate) {
+        errors.startingDate = "Wprowadź datę rozpoczęcia!"
+    }
     return errors
 }
 export const footerLinkValidate = (values) => {

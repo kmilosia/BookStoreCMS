@@ -16,6 +16,7 @@ import EditDiscountCode from '../modules/edit/EditDiscountCode'
 import ViewDiscountCode from '../modules/view/ViewDiscountCode'
 import NewDiscountCode from '../modules/new/NewDiscountCode'
 import Spinner from '../components/Spinner'
+import { useMessageStore } from '../store/messageStore'
 
 function DiscountCode() {
     const [data, setData] = useState([])
@@ -27,45 +28,69 @@ function DiscountCode() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const filterItems = (list, value) => list.filter((item) => {
+      if (!value) {
+          return true;
+      }
+      const itemName = item.code.toLowerCase()
+      return itemName.includes(value.toLowerCase())
+    })
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-        const response = await axiosClient.get(`/DiscountCodes`)
-        setData(response.data)
-        setIsDataLoading(false)
+          const response = await axiosClient.get(`/DiscountCodes`)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
+          setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/DiscountCodes`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie dodano kod rabatowy", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania kodu rabatowego", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas dodawania kodu rabatowego", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/DiscountCodes/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie usunięto kod rabatowy", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania kodu rabatowego", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas usuwania kodu rabatowego", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/DiscountCodes/${id}`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie edytowano kod rabatowy", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania kodu rabatowego", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania kodu rabatowego", type: 'error'})
       }
-  }
-
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +102,6 @@ function DiscountCode() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -92,7 +116,7 @@ function DiscountCode() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Kod Rabatowy"/>                   
         </div>
-        <ListHeader  columnNames={discountColumns}/>
+        <ListHeader columnNames={discountColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />

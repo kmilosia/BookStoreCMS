@@ -6,24 +6,20 @@ import { useEffect } from 'react'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { discountCodeValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
+import { convertDate } from '../../utils/functions/convertDate'
 
 function NewDiscountCode({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values, setValues] = useState({
       code: '',
       description: '',
       percent: '',
-      isAvailable: false,
+      startingDate: '',
+      expiryDate: '',
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
-    }
-    const handleAvailableChange = (e) => {
-      const isChecked = e.target.checked;
-      setValues({ ...values, isAvailable: isChecked });  
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -33,15 +29,17 @@ function NewDiscountCode({setShowNewModule, postData}) {
         setErrors(discountCodeValidate(values))
       } 
       const finishSubmit = () => {
+        const newExpiryDate = convertDate(values.expiryDate)
+        const newStartingDate = convertDate(values.startingDate)
         const data = {
           code: values.code,
           description: values.description,
           percentOfDiscount: values.percent,
-          isAvailable: values.isAvailable
-        };     
+          expiryDate: newExpiryDate,
+          startingDate: newStartingDate
+        }
           postData(data)
           handleCloseModule()
-          setMessage({title: "Kod promocyjny został dodany", type: 'success'})
         }
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -60,11 +58,11 @@ function NewDiscountCode({setShowNewModule, postData}) {
                 <DefaultInput name="code" error={errors.code} onChange={handleChange} type='text' placeholder='Kod' title="Kod rabatu"/>
                 <DefaultInput name="percent" error={errors.percent} onChange={handleChange} type='number' placeholder='Wyrażona w %' title="Wartość rabatu"/>
                 </div>
+                <div className='grid grid-cols-2 gap-2'>
+                <DefaultInput name="startingDate" error={errors.startingDate} onChange={handleChange} type='date' title="Data rozpoczęcia"/>
+                <DefaultInput name="expiryDate" error={errors.expiryDate} onChange={handleChange} type='date' title="Data zakończenia"/>
+                </div>
                 <DefaultTextarea name="description" error={errors.description} onChange={handleChange} placeholder='Opis' title="Opis kodu"/>
-                <div class="flex items-center my-2">
-                  <input checked={values.isAvailable} onChange={handleAvailableChange} type="checkbox" name='isAvailable' value="" class="w-4 h-4 text-purple-400 bg-gray-100 ring-0 focus:ring-0 border-none rounded dark:bg-gray-700"/>
-                  <label htmlFor="isAvailable" class="ml-2 text-sm font-medium text-midnight-900 dark:text-gray-200">Zaznacz jeżeli kod obowiązuje</label>
-              </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

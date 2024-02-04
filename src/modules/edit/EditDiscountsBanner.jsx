@@ -4,58 +4,49 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
+import { discountsBannerValidate } from '../../utils/validation/newValidate'
 
 function EditDiscountsBanner(props) {
-    const setMessage = useMessageStore((state) => state.setMessage)
-    const [header, setHeader] = useState('')
-    const [buttonTitle, setButtonTitle] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
-    const [banner,setBanner] = useState({})
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+    const [banner,setBanner] = useState({
+      header: '',
+      buttonTitle: '',
+      imageTitle: '',
+      imageURL: '',      
+    })
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/DiscountsBanner/${id}`)
-          setBanner(response.data)
-          setHeader(response.data.header)
-          setButtonTitle(response.data.buttonTitle)
-          setImageTitle(response.data.imageTitle)
-          setImageURL(response.data.imageURL)
+          if(response.status === 200 || response.status === 204){
+            setBanner(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleHeader = (e) => {
-        setHeader(e.target.value)
-    }
-    const handleButtonTitle = (e) => {
-        setButtonTitle(e.target.value)
-    }
-    const handleImageURL = (e) => {
-        setImageURL(e.target.value)
-    }
-    const handleImageTitle = (e) => {
-        setImageTitle(e.target.value)
+    const handleChange = (e) => {
+      setBanner({ ...banner, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
-    const handleSaveClick = () => {
-        banner.header = header
-        banner.buttonTitle = buttonTitle
-        banner.imageTitle = imageTitle
-        banner.imageURL = imageURL
-        props.putData(banner.id, banner)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-        setMessage({title: "Baner promocyjny został edytowany", type: 'success'})
+    const handleAcceptButton = () => {
+      setSubmitting(true)
+      setErrors(discountsBannerValidate(banner))
+  } 
+  useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+          props.putData(props.editedID,banner)
+          handleCloseModule()
       }
+    }, [errors])
   useEffect(()=> {
     getItem(props.editedID)
   },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -63,17 +54,17 @@ function EditDiscountsBanner(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput onChange={handleHeader} value={header} type='text' placeholder='Tytuł' title='Tytuł baneru'/>
-                    <DefaultInput onChange={handleButtonTitle} value={buttonTitle} type='text' placeholder='Tytuł buttona' title='Tytuł buttona'/>
-                    <DefaultInput onChange={handleImageTitle} value={imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
-                    <DefaultInput onChange={handleImageURL} value={imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
+                    <DefaultInput error={errors.header} name="header" onChange={handleChange} value={banner.header} type='text' placeholder='Tytuł' title='Tytuł baneru'/>
+                    <DefaultInput error={errors.buttonTitle} name="buttonTitle" onChange={handleChange} value={banner.buttonTitle} type='text' placeholder='Tytuł buttona' title='Tytuł buttona'/>
+                    <DefaultInput error={errors.imageTitle} name="imageTitle" onChange={handleChange} value={banner.imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
+                    <DefaultInput error={errors.imageURL} name="imageURL" onChange={handleChange} value={banner.imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
                 </div>
-                {imageURL &&
+                {banner.imageURL &&
                 <div className='w-full h-auto'>
-                    <img src={imageURL} className='w-full h-auto object-contain' />
+                    <img src={banner.imageURL} className='w-full h-auto object-contain' />
                 </div>
                 }
-                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

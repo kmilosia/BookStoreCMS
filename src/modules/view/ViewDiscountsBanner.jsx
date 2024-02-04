@@ -8,9 +8,11 @@ function ViewDiscountsBanner(props) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/DiscountsBanner/${id}`)
-          setBanner(response.data)
+          if(response.status === 200 || response.status === 204){
+            setBanner(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {
@@ -25,25 +27,25 @@ function ViewDiscountsBanner(props) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                    <h1 className='module-header'>{banner.header}</h1>
+                    <h1 className='module-header'>{banner?.header}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-4'>
                 <div className='flex flex-col'>
                     <p className='column-info-title'>Tytuł</p>
-                    <h2 className='column-info-text'>{banner.header}</h2>
+                    <h2 className='column-info-text'>{banner?.header}</h2>
                 </div>
                 <div className='flex flex-col'>
                     <p className='column-info-title'>Tytuł buttona</p>
-                    <h2 className='column-info-text'>{banner.buttonTitle}</h2>
+                    <h2 className='column-info-text'>{banner?.buttonTitle}</h2>
                 </div>
                 <div className='flex flex-col col-span-2'>
                     <p className='column-info-title'>Tytuł zdjęcia</p>
-                    <h2 className='column-info-text'>{banner.imageTitle}</h2>
+                    <h2 className='column-info-text'>{banner?.imageTitle}</h2>
                 </div>
                 <div className='flex flex-col col-span-2'>
                     <p className='column-info-title'>Adres URL zdjęcia</p>
-                    <h2 className='column-info-text'>{banner.imageURL}</h2>
+                    <h2 className='column-info-text'>{banner?.imageURL}</h2>
                 </div>
                 <div className='col-span-2'>
                     {banner.imageURL &&

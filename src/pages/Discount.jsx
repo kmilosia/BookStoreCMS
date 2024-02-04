@@ -3,7 +3,6 @@ import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
-import { filterItems } from '../utils/filter'
 import { discountSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -16,6 +15,7 @@ import NewDiscount from '../modules/new/NewDiscount'
 import ViewDiscount from '../modules/view/ViewDiscount'
 import EditDiscount from '../modules/edit/EditDiscount'
 import Spinner from '../components/Spinner'
+import { useMessageStore } from '../store/messageStore'
 
 function Discount() {
     const [data, setData] = useState([])
@@ -27,45 +27,69 @@ function Discount() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const filterItems = (list, value) => list.filter((item) => {
+      if (!value) {
+          return true;
+      }
+      const itemName = item.title.toLowerCase()
+      return itemName.includes(value.toLowerCase())
+    })
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-        const response = await axiosClient.get(`/Discount`)
-        setData(response.data)
-        setIsDataLoading(false)
+          const response = await axiosClient.get(`/Discount`)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
+          setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/Discount`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie dodano nową promocję", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania promocji", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas dodawania promocji", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Discount/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie usunięto promocję", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania promocji", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd podczas usuwania promocji", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/Discount/${id}`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pomyślnie edytowano promocję", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania promocji", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania promocji", type: 'error'})
       }
-  }
-
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +101,6 @@ function Discount() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -92,7 +115,7 @@ function Discount() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Promocję"/>                   
         </div>
-        <ListHeader  columnNames={discountColumns}/>
+        <ListHeader columnNames={discountColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -103,7 +126,7 @@ function Discount() {
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.title}</p>
                 <p className='px-2'>{item.percentOfDiscount}%</p>
-                <p className='px-2'>{item.isAvailable ? "Aktywna" : "Nieaktywna"}</p>
+                <p className='px-2'>{item.isAvailable ? "Aktywna" : "Zakończona"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>

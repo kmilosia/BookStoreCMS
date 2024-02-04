@@ -8,9 +8,11 @@ function ViewTranslator(props) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Translator/${id}`)
-          setTranslator(response.data)
+          if(response.status === 200 || response.status === 204){
+            setTranslator(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {

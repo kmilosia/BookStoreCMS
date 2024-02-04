@@ -24,9 +24,8 @@ function StockAmount() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
 
     const getAllData = async () => {
       try{

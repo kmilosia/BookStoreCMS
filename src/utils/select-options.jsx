@@ -42,6 +42,10 @@ export const personSortOptions = [
     {value: 'name', label: 'Imię', type: 'string'},
     {value: 'surname', label: 'Nazwisko', type: 'string'}
 ]
+export const scoreSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'value', label: 'Ocena', type: 'number'},
+]
 export const bannerSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'title', label: 'Tytuł', type: 'string'},

@@ -8,34 +8,42 @@ import { useMessageStore } from '../../store/messageStore'
 import { rentalTypeValidate } from '../../utils/validation/newValidate'
 
 function EditRentalType(props) {
-    const setMessage = useMessageStore((state) => state.setMessage)
-    const [type,setType] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [errors,setErrors] = useState({})
+    const [values,setValues] = useState({
+      name: '',
+      days: '',
+      price: '',
+    })
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/RentalType/${id}`)
-          setType(response.data)
+          if(response.status === 200 || response.status === 204){
+            setValues({
+              ...values, 
+              name: response.data.name,
+              days: response.data.days,
+              price: response.data.price
+            })
+            }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleChange = (e) => {
-      setType({ ...type, [e.target.name]: e.target.value });
+      setValues({ ...values, [e.target.name]: e.target.value })
   }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const finishSubmit = () => {
-        props.putData(type.id, type)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-        setMessage({title: "Typ wypożyczenia został zmieniony", type: 'success'})
+        props.putData(props.editedID, values)
+        handleCloseModule()
     }
     const handleSubmit = () => {
       setSubmitting(true)
-      setErrors(rentalTypeValidate(type))
+      setErrors(rentalTypeValidate(values))
     } 
   useEffect(()=> {
     getItem(props.editedID)
@@ -53,9 +61,9 @@ function EditRentalType(props) {
                   <h1 className='module-header'>Edytuj typ wypożyczenia</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <DefaultInput error={errors.name} value={type.name} name='name' onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa'/>
-                <DefaultInput error={errors.days} value={type.days} name='days' onChange={handleChange} type='number' placeholder='Liczba dni' title='Dni wypożyczenia'/>
-                <DefaultInput error={errors.price} value={type.price} name='price' onChange={handleChange} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
+                <DefaultInput error={errors.name} value={values.name} name='name' onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa'/>
+                <DefaultInput error={errors.days} value={values.days} name='days' onChange={handleChange} type='number' placeholder='Liczba dni' title='Dni wypożyczenia'/>
+                <DefaultInput error={errors.price} value={values.price} name='price' onChange={handleChange} type='number' placeholder='Cena' title='Cena wypożyczenia'/>
                 <button onClick={handleSubmit} className='module-button'>Akceptuj</button>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -65,6 +65,7 @@ function App() {
             <Route path='/element-kategorii' element={<CategoryElement />}/>
             <Route path='/baner-promocyjny' element={<DiscountsBanner />}/>
             <Route path='/kontakt' element={<Contact />}/>
+            <Route path='/ocena' element={<Score />}/>
             <Route path='/strona-klienta' element={<WebsiteLayout />}/>
           </Route>
           }

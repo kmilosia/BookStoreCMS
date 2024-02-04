@@ -4,11 +4,11 @@ import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
 import { filterItems } from '../utils/filter'
-import { numericSortOptions, rentalTypeSortOptions } from '../utils/select-options'
+import { rentalTypeSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ListHeader from '../components/ListHeader'
-import { numericColumns, rentalTypeColumns } from '../utils/column-names'
+import { rentalTypeColumns } from '../utils/column-names'
 import NewRentalType from '../modules/new/NewRentalType'
 import EditRentalType from '../modules/edit/EditRentalType'
 import ViewRentalType from '../modules/view/ViewRentalType'
@@ -16,6 +16,7 @@ import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
+import { useMessageStore } from '../store/messageStore'
 
 function RentalType() {
     const [data, setData] = useState([])
@@ -27,45 +28,63 @@ function RentalType() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/RentalType`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
-      }
-    }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/RentalType`, object)
-          getAllData()
-      }catch(err){
-          console.error(err)
+        setIsDataLoading(false)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/RentalType/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Typ wypożyczenia został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania typu wypożyczenia", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas usuwania typu wypożyczenia", type: 'error'})
       }
     }
-    const putData = async (id, object) => {
+  const postData = async (data) => {
       try{
-          const response = await axiosClient.put(`/RentalType/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
+          const response = await axiosClient.post(`/RentalType`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Typ wypożyczenia został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania typu wypożyczenia", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas dodawania typu wypożyczenia", type: 'error'})
       }
-  }
-
+    }
+    const putData = async (id,data) => {
+      try{
+          const response = await axiosClient.put(`/RentalType/${id}`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Typ wypożyczenia został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania typu wypożyczenia", type: 'error'})
+          }
+      }catch(e){
+        setMessage({title: "Błąd podczas edytowania typu wypożyczenia", type: 'error'})
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +96,6 @@ function RentalType() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
