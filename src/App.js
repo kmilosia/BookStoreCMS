@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -44,17 +44,15 @@ function App() {
             <Route path='/format' element={<Form />}/>
             <Route path='/zdjecie' element={<Image />}/>
             <Route path='/translator' element={<Translator />}/>
-            <Route path='/plec' element={<Gender />}/>
             <Route path='/wydawnictwo' element={<Publisher />}/>
             <Route path='/dostawa' element={<Supply />}/>
             <Route path='/dostawca' element={<Supplier />}/>
             <Route path='/status-zamowienia' element={<OrderStatus />}/>
             <Route path='/status-wypozyczenia' element={<RentalStatus />}/>
             <Route path='/typ-wypozyczenia' element={<RentalType />}/>
-            <Route path='/status-wysylki' element={<ShippingStatus />}/>
             <Route path='/status-transakcji' element={<TransactionStatus />}/>
             <Route path='/metoda-platnosci' element={<PaymentMethod />}/>
-            <Route path='/forma-dostawy' element={<DeliveryMethod />}/>
+            <Route path='/metoda-dostawy' element={<DeliveryMethod />}/>
             <Route path='/status-dostawy' element={<DeliveryStatus />}/>
             <Route path='/footer-kolumna' element={<FooterColumns />}/>
             <Route path='/footer-link' element={<FooterLinks />}/>
@@ -66,6 +64,7 @@ function App() {
             <Route path='/newsletter' element={<Newsletter />}/>
             <Route path='/element-kategorii' element={<CategoryElement />}/>
             <Route path='/baner-promocyjny' element={<DiscountsBanner />}/>
+            <Route path='/kontakt' element={<Contact />}/>
             <Route path='/strona-klienta' element={<WebsiteLayout />}/>
           </Route>
           }

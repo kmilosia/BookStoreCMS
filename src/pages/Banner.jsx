@@ -3,7 +3,6 @@ import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
-import { filterItems } from '../utils/filter'
 import { bannerSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -49,7 +48,6 @@ function Banner() {
           }
           setIsDataLoading(false)
       }catch(err){
-          console.log(err)
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
@@ -63,7 +61,6 @@ function Banner() {
             setMessage({title: "Błąd podczas dodawania nowego baneru", type: 'error'})
           }
       }catch(err){
-          console.log(err)
           setMessage({title: "Błąd podczas dodawania nowego baneru", type: 'error'})
       }
     }
@@ -77,7 +74,6 @@ function Banner() {
             setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
           }
       }catch(err){
-          console.log(err)
           setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
       }
     }
@@ -91,7 +87,6 @@ function Banner() {
             setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
           }
       }catch(err){
-        console.log(err)
         setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
       }
   }

@@ -6,10 +6,8 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { useEffect } from 'react'
 import { publisherValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewPublisher({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -30,7 +28,6 @@ function NewPublisher({setShowNewModule, postData}) {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
             handleCloseModule()
-            setMessage({title: "Wydawnictwo zostało dodane", type: 'success'})
         }
       }, [errors])
   return (

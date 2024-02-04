@@ -16,6 +16,7 @@ import Spinner from '../components/Spinner'
 import NewDeliveryMethod from '../modules/new/NewDeliveryMethod'
 import EditDeliveryMethod from '../modules/edit/EditDeliveryMethod'
 import ViewDeliveryMethod from '../modules/view/ViewDeliveryMethod'
+import { useMessageStore } from '../store/messageStore'
 
 function DeliveryMethod() {
     const [data, setData] = useState([])
@@ -27,45 +28,63 @@ function DeliveryMethod() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/DeliveryMethod`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
-      }
-    }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/DeliveryMethod`, object)
-          getAllData()
-      }catch(err){
-          console.error(err)
+        setIsDataLoading(false)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/DeliveryMethod/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Metoda dostawy została usunięta", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
       }
     }
-    const putData = async (id, object) => {
+  const postData = async (data) => {
       try{
-          const response = await axiosClient.put(`/DeliveryMethod/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
+          const response = await axiosClient.post(`/DeliveryMethod`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Metoda dostawy została dodana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania metody dostawy", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas dodawania metody dostawy", type: 'error'})
       }
-  }
-
+    }
+    const putData = async (id,data) => {
+      try{
+          const response = await axiosClient.put(`/DeliveryMethod/${id}`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Metoda dostawy została edytowana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania metody dostawy", type: 'error'})
+          }
+      }catch(e){
+        setMessage({title: "Błąd podczas edytowania metody dostawy", type: 'error'})
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +96,6 @@ function DeliveryMethod() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -86,11 +104,11 @@ function DeliveryMethod() {
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Forma Dostawy</h1>    
+        <h1 className='main-header'>Metoda Dostawy</h1>    
         <div className='filter-panel'>
           <SortBar options={numericSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Formę Dostawy"/>                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Metodę Dostawy"/>                   
         </div>
         <ListHeader  columnNames={numericColumns}/>
       </div>

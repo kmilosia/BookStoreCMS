@@ -4,7 +4,6 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import Spinner from '../../components/Spinner'
 import { personValidate } from '../../utils/validation/newValidate'
 import axiosClient from '../../api/apiClient'
 

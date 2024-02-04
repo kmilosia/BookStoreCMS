@@ -4,6 +4,7 @@ import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
+import { useMessageStore } from '../../store/messageStore'
 
 function Edition() {
     const title = "Edycja"
@@ -14,18 +15,20 @@ function Edition() {
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
-        setIsDataLoading(true)
+          setIsDataLoading(true)
           const response = await axiosClient.get(`/Edition`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+          console.log(err)
+          setIsDataLoading(false)
       }
     }
     const postData = async (name) => {
@@ -33,9 +36,14 @@ function Edition() {
           const response = await axiosClient.post(`/Edition`, {
               name: name,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Edycja książki została dodana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania edycji książki", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas dodawania edycji książki", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
@@ -44,20 +52,29 @@ function Edition() {
               id: id,
               name: nameValue,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Edycja książki została edytowana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania edycji książki", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania edycji książki", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Edition/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
-      }
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Edycja książki została usunięta", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania edycji książki", type: 'error'})
+          }
+        }catch(err){
+          setMessage({title: "Błąd podczas usuwania edycji książki", type: 'error'})
+        }
     }
-
     useEffect(()=>{
         getAllData()
     },[])

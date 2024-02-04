@@ -5,39 +5,47 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
+import { publisherValidate } from '../../utils/validation/newValidate'
 
 function EditPublisher(props) {
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [publisher,setPublisher] = useState({})
-
+  const [values,setValues] = useState({
+    name: '',
+    description: ''
+  })
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Publisher/${id}`)
-          setPublisher(response.data)
-          setName(response.data.name)
-          setDescription(response.data.description)
-        }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setValues({
+              ...values, 
+              name: response.data.name,
+              description: response.data.description
+            })
+            }
+          }catch(err){
+          console.log(err)
         }
-    }
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
-    const handleSaveClick = () => {
-        publisher.name = name
-        publisher.description = description
-        props.putData(publisher.id, publisher)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
+    const finishSubmit = () => {
+      props.putData(props.editedID, values)
+      props.setEditedID(null)
+      props.setShowEditModule(false)
   }
+  const handleSubmit = () => {
+    setSubmitting(true)
+    setErrors(publisherValidate(values))
+  } 
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit()
+    }
+  }, [errors])
   useEffect(()=> {
     getItem(props.editedID)
   },[])
@@ -49,9 +57,9 @@ function EditPublisher(props) {
                   <h1 className='module-header'>Edytuj wydawnictwo</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title='Nazwa wydawnictwa'/>
-                <DefaultTextarea value={description} onChange={handleDescriptionInput} placeholder='Opis' title='Opis wydawnictwa'/>
-                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
+                <DefaultInput error={errors.name} value={values.name} onChange={(e) => setValues({...values, name: e.target.value})} type='text' placeholder='Nazwa' title='Nazwa wydawnictwa'/>
+                <DefaultTextarea error={errors.description} value={values.description} onChange={(e) => setValues({...values, description: e.target.value})} placeholder='Opis' title='Opis wydawnictwa'/>
+                <button onClick={handleSubmit} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

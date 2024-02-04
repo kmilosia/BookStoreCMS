@@ -51,7 +51,7 @@ function Author() {
             setMessage({title: "Autor został usunięty", type: 'success'})
             getAllData()
           }else{
-            setMessage({title: "Błąd podczs usuwania danych", type: 'error'})
+            setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
           }
         }catch(e){
           setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
@@ -80,7 +80,7 @@ function Author() {
             setMessage({title: "Błąd podczas edytowania autora", type: 'error'})
           }
       }catch(e){
-        setMessage({title: "Błąd podczas dodawania autora", type: 'error'})
+        setMessage({title: "Błąd podczas edytowania autora", type: 'error'})
       }
     }
     const handleAfterSubmit = () => {

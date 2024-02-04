@@ -46,6 +46,11 @@ export const bannerSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'title', label: 'Tytuł', type: 'string'},
 ]
+export const contactSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'clientName', label: 'Użytkownik', type: 'string'},
+    {value: 'email', label: 'Email', type: 'string'},
+]
 export const reviewSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'bookTitle', label: 'Tytuł', type: 'string'},

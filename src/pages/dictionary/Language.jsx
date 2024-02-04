@@ -4,6 +4,7 @@ import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
+import { useMessageStore } from '../../store/messageStore'
 
 function Language() {
     const title = "Język"
@@ -14,18 +15,20 @@ function Language() {
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
-        setIsDataLoading(true)
+          setIsDataLoading(true)
           const response = await axiosClient.get(`/Language`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+          console.log(err)
+          setIsDataLoading(false)
       }
     }
     const postData = async (name) => {
@@ -33,9 +36,14 @@ function Language() {
           const response = await axiosClient.post(`/Language`, {
               name: name,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Język został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania języka", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas dodawania języka", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
@@ -44,20 +52,29 @@ function Language() {
               id: id,
               name: nameValue,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Język został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania języka", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania języka", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Language/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
-      }
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Język został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania języka", type: 'error'})
+          }
+        }catch(err){
+          setMessage({title: "Błąd podczas usuwania języka", type: 'error'})
+        }
     }
-
     useEffect(()=>{
         getAllData()
     },[])

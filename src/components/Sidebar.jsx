@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BiBook, BiBookBookmark,BiBox, BiSolidDashboard} from 'react-icons/bi'
-import {AiOutlineClose} from 'react-icons/ai'
-import {TbDiscount2} from 'react-icons/tb'
+import { BiBook,BiBox, BiSolidDashboard} from 'react-icons/bi'
+import {AiOutlineClose,AiOutlineMessage } from 'react-icons/ai'
 import {FaRegImage} from 'react-icons/fa'
 import {CgWebsite} from 'react-icons/cg'
 import {PiBooks} from 'react-icons/pi'
-import {RiTruckLine} from 'react-icons/ri'
 import {MdOutlineDiscount,MdOutlineAccountCircle, MdOutlineNewspaper} from 'react-icons/md'
 import { FaRegNewspaper } from "react-icons/fa6"
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
@@ -105,7 +103,13 @@ function Sidebar() {
             <CgWebsite className='text-xl mx-1'/>
             <span className='whitespace-nowrap'>Strona Klienta</span>
           </div>
-        </button>              
+        </button>   
+        <Link to="/kontakt" className='default-link'>
+        <div className='flex flex-row items-center'>
+            <AiOutlineMessage className='text-xl mx-1'/>
+            <span>Kontakt</span>
+          </div>
+        </Link>           
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>

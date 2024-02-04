@@ -16,6 +16,7 @@ import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
+import { useMessageStore } from '../store/messageStore'
 
 function Translator() {
     const [data, setData] = useState([])
@@ -27,45 +28,63 @@ function Translator() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/Translator`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
-      }
-    }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/Translator`, object)
-          getAllData()
-      }catch(err){
-          console.error(err)
+        setIsDataLoading(false)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Translator/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Translator został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania translatora", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas usuwania translatora", type: 'error'})
       }
     }
-    const putData = async (id, object) => {
+  const postData = async (data) => {
       try{
-          const response = await axiosClient.put(`/Translator/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
+          const response = await axiosClient.post(`/Translator`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Translator został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania translatora", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas dodawania translatora", type: 'error'})
       }
-  }
-
+    }
+    const putData = async (id,data) => {
+      try{
+          const response = await axiosClient.put(`/Translator/${id}`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Translator został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania translatora", type: 'error'})
+          }
+      }catch(e){
+        setMessage({title: "Błąd podczas edytowania translatora", type: 'error'})
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +96,6 @@ function Translator() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])

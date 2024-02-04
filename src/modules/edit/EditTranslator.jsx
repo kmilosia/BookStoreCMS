@@ -5,19 +5,26 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { personValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function EditTranslator(props) {
-    const setMessage = useMessageStore((state) => state.setMessage)
-    const [translator,setTranslator] = useState({})
+    const [values,setValues] = useState({
+      name: '',
+      surname: ''
+    })
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Translator/${id}`)
-          setTranslator(response.data)
+          if(response.status === 200 || response.status === 204){
+          setValues({
+            ...values, 
+            name: response.data.name,
+            surname: response.data.surname
+          })
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {
@@ -25,14 +32,13 @@ function EditTranslator(props) {
       props.setShowEditModule(false)
     }
     const finishSubmit = () => {
-        props.putData(translator.id, translator)
+        props.putData(props.editedID, values)
         props.setEditedID(null)
         props.setShowEditModule(false)
-        setMessage({title: "Translator został edytowany", type: 'success'})
     }
     const handleSubmit = () => {
       setSubmitting(true)
-      setErrors(personValidate(translator))
+      setErrors(personValidate(values))
   } 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
@@ -50,8 +56,8 @@ function EditTranslator(props) {
                   <h1 className='module-header'>Edytuj translatora</h1>
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <DefaultInput error={errors.name} value={translator.name} onChange={(e) => setTranslator({...translator, name: e.target.value})} type='text' placeholder='Imię' title='Imię translatora' />
-                <DefaultInput error={errors.surname} value={translator.surname} onChange={(e) => setTranslator({...translator, surname: e.target.value})} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
+                <DefaultInput error={errors.name} value={values.name} onChange={(e) => setValues({...values, name: e.target.value})} type='text' placeholder='Imię' title='Imię translatora' />
+                <DefaultInput error={errors.surname} value={values.surname} onChange={(e) => setValues({...values, surname: e.target.value})} type='text' placeholder='Nazwisko' title='Nazwisko translatora' />
                 <button onClick={handleSubmit} className='module-button'>Akceptuj</button>
             </div>
         </div>

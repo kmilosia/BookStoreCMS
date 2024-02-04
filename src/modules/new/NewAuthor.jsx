@@ -6,7 +6,6 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { personValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import ButtonSpinner from '../../components/ButtonSpinner'
 
 function NewAuthor({handleAfterSubmit,handleCloseModule,postData}) {
     const [errors,setErrors] = useState({})
