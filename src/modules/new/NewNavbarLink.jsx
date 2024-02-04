@@ -5,10 +5,8 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { navbarValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewNavbarLink({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -17,7 +15,7 @@ function NewNavbarLink({setShowNewModule, postData}) {
         position: '',
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -28,10 +26,8 @@ function NewNavbarLink({setShowNewModule, postData}) {
     } 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            console.log(values);
             postData(values)
             handleCloseModule()
-            setMessage({title: "Menu link został dodany", type: 'success'})
         }
       }, [errors])
   return (
@@ -45,7 +41,7 @@ function NewNavbarLink({setShowNewModule, postData}) {
                 <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput name="name" error={errors.name} onChange={handleChange} type='text' placeholder='Nazwa' title='Nazwa linku'/>
                     <DefaultInput name="path" error={errors.path} onChange={handleChange} type='text' placeholder='Ścieżka' title='Ścieżka linku'/>
-                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='text' placeholder='Pozycja' title='Pozycja linku'/>
+                    <DefaultInput name="position" error={errors.position} onChange={handleChange} type='number' placeholder='Pozycja' title='Pozycja linku'/>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

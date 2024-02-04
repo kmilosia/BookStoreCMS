@@ -5,94 +5,84 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { footerLinkValidate } from '../../utils/validation/newValidate'
 
 function EditFooterLink(props) {
-  const [name, setName] = useState('')
-  const [position, setPosition] = useState('')
-  const [path, setPath] = useState('')
-  const [url, setUrl] = useState('')
-  const [selectedOption, setSelectedOption] = useState(null)
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
   const [columns, setColumns] = useState([])
-  const [columnId, setColumnId] = useState(null)
-  const [link, setLink] = useState({})
-
+  const [values, setValues] = useState({
+      name: '',
+      path: '',
+      url: '',
+      position: '',
+      column: null,
+    })
   const getFooterColumns = async () => {
     try{
       const response = await axiosClient.get(`/FooterColumns`)
+      if(response.status === 200 || response.status === 204){
       const optionColumns = response.data.map(item => ({
         value: item.id,
         label: item.name
       }))
       setColumns(optionColumns)
+    }
     }catch(err){
-      console.error(err)
+      console.log(err)
     }
   }
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/FooterLinks/${id}`)
-          setLink(response.data)
-          setName(response.data.name)
-          setPosition(response.data.position)
-          setPath(response.data.path)
-          setUrl(response.data.url)
-          setColumnId(response.data.footerColumnID)
-          
+          if(response.status === 200 || response.status === 204){
+            const newData = response.data
+            setValues({
+              name: newData.name,
+              position: newData.position,
+              path: newData.path,
+              url: newData.url,
+              column: { value: newData.columnId, label: newData.columnName },
+            })
+          }          
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleNameInput = (e) => {
-        setName(e.target.value)
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
-    const handlePositionInput = (e) => {
-      setPosition(e.target.value)
-    }
-    const handlePathInput = (e) => {
-      setPath(e.target.value)
-    }
-    const handleUrlInput = (e) => {
-      setUrl(e.target.value)
+    const handleColumn = (selected) => {
+      setValues({ ...values, column:selected })
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
-    const handleSelectChange = (selectedOption) => {
-      if (selectedOption) {
-          setSelectedOption(selectedOption)
-          setColumnId(selectedOption.value)
-      } else {
-          setSelectedOption(null)
-          setColumnId(null)
-      }
-    }
-    const handleAcceptButton = () => {
-      const data = {
-          id: link.id,
-          name: name,
-          path: path,
-          url: url,
-          position: position,
-          footerColumnID: columnId
-      }
-      props.putData(link.id,data)
-      handleCloseModule()
+  const handleAcceptButton = () => {
+    setSubmitting(true)
+    setErrors(footerLinkValidate(values))
   } 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      await getFooterColumns();
-      await getItem(props.editedID);
-    };
-    fetchAllData();
-  }, []);
-  
-  useEffect(() => {
-    const selected = columns.find((col) => col.value === columnId);
-    if (selected) {
-      setSelectedOption(selected);
+  const finishSubmit = () => {
+    const data = {
+      name: values.name,
+      path: values.path,
+      url: values.url,
+      position: values.position,
+      footerColumnID: values.column.value, 
     }
-  }, [columns, columnId]);
+      props.putData(props.editedID,data)
+      handleCloseModule()
+    }
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit()
+    }
+  }, [errors])  
+  useEffect(() => {
+    getFooterColumns()
+    getItem(props.editedID)
+  }, [])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
@@ -102,14 +92,14 @@ function EditFooterLink(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>                
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
-                <DefaultInput value={position} onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                <DefaultInput error={errors.name} value={values.name} name="name" onChange={handleChange} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput error={errors.position} value={values.position} name="position" onChange={handleChange} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
                 </div>
                 <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput value={path} onChange={handlePathInput} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
-                <DefaultInput value={url} onChange={handleUrlInput} type='text' placeholder='URL' title="Adres URL linku"/>
+                <DefaultInput value={values.path} name="path" onChange={handleChange} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
+                <DefaultInput value={values.url} name="url" onChange={handleChange} type='text' placeholder='URL' title="Adres URL linku"/>
                 </div>
-                <DefaultSelect onChange={handleSelectChange} value={selectedOption} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
+                <DefaultSelect error={errors.column} onChange={handleColumn} value={values.column} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footera"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

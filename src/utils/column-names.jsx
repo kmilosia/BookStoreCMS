@@ -29,8 +29,6 @@ export const personColumns = [
  export const newsColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
-    { name: 'Autor'},
-    { name: 'Zdjęcie'},
  ]
  export const discountsBannerColumns = [
     { name: 'ID'},
@@ -63,6 +61,11 @@ export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}
 ]
+export const footerLinkColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+    { name: 'Kolumna'}
+]
 export const imageColumns = [
     { name: 'ID'},
     { name: 'Zdjęcie'},
@@ -89,7 +92,6 @@ export const footerColumns = [
     { name: 'ID'},
     { name: 'Nazwa'},
     { name: 'Pozycja'},
-    { name: 'HTML Tag'},
 ]
 export const bookColumns = [
     { name: 'ID'},

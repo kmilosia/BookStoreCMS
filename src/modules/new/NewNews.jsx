@@ -6,10 +6,8 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { newsValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewNews({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
@@ -20,7 +18,7 @@ function NewNews({setShowNewModule, postData}) {
         imageURL: '',
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -31,14 +29,12 @@ function NewNews({setShowNewModule, postData}) {
     } 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            console.log(values);
             postData(values)
             handleCloseModule()
-            setMessage({title: "Wiadomość została dodana", type: 'success'})
         }
       }, [errors])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -58,7 +54,7 @@ function NewNews({setShowNewModule, postData}) {
                     <img src={values.imageURL} className='w-full h-auto object-contain' />
                 </div>
                 }
-                <DefaultTextarea name="content" onChange={handleChange} placeholder='Treść' title="Treść wiadomości"/>
+                <DefaultTextarea error={errors.content} name="content" onChange={handleChange} placeholder='Treść' title="Treść wiadomości"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

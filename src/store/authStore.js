@@ -16,7 +16,6 @@ export const useAuthStore = create((set) => ({
                 const userToken = response.data
                 set({token: userToken})
                 localStorage.setItem('token', JSON.stringify(userToken))
-                console.log(userToken)
             }else{
                 set({error: 'Nieudane logowanie'})
             }

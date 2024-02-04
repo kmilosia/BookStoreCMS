@@ -6,38 +6,38 @@ import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import { useMessageStore } from '../../store/messageStore'
 import { footerLinkValidate } from '../../utils/validation/newValidate'
 
 function NewFooterLink({setShowNewModule, postData}) {
-    const getFooterColumns = async () => {
-        try{
-          const response = await axiosClient.get(`/FooterColumns`)
-          const optionColumns = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setColumns(optionColumns)
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
+    const [columns, setColumns] = useState([])
     const [values, setValues] = useState({
         name: '',
         path: '',
         url: '',
         position: '',
-        selectedOption: null,
+        column: null,
       })
-      const [columns, setColumns] = useState([])
-      const handleChange = (e) => {
-      setValues({ ...values, [e.target.name]: e.target.value });
+    const getFooterColumns = async () => {
+        try{
+          const response = await axiosClient.get(`/FooterColumns`)
+          if(response.status === 200 || response.status === 204){
+          const optionColumns = response.data.map(item => ({
+            value: item.id,
+            label: item.name
+          }))
+          setColumns(optionColumns)
+          }
+        }catch(err){
+          console.log(err)
+        }
+    }
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleSelectChange = (selectedOption) => {
-        setValues({ ...values, selectedOption });
+        setValues({ ...values, column:selectedOption });
       }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -52,11 +52,10 @@ function NewFooterLink({setShowNewModule, postData}) {
           path: values.path,
           url: values.url,
           position: values.position,
-          footerColumnID: values.selectedOption.value, 
-        };     
+          footerColumnID: values.column.value, 
+        }
           postData(data)
           handleCloseModule()
-          setMessage({title: "Link footera został dodany", type: 'success'})
         }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -82,7 +81,7 @@ function NewFooterLink({setShowNewModule, postData}) {
                 <DefaultInput name="path" error={errors.path} onChange={handleChange} type='text' placeholder='Ścieżka' title="Ścieżka linku"/>
                 <DefaultInput name="url" error={errors.url} onChange={handleChange} type='text' placeholder='URL' title="Adres URL linku"/>
                 </div>
-                <DefaultSelect name="selectedOption" error={errors.selectedOption} onChange={handleSelectChange} value={values.selectedOption} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
+                <DefaultSelect name="column" error={errors.column} onChange={handleSelectChange} value={values.column} options={columns} isMulti={false} placeholder='Kolumna' title="Kolumna footer'a"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>

@@ -16,6 +16,7 @@ import Spinner from '../components/Spinner'
 import NewNavbarLink from '../modules/new/NewNavbarLink'
 import EditNavbarLink from '../modules/edit/EditNavbarLink'
 import ViewNavbarLink from '../modules/view/ViewNavbarLink'
+import { useMessageStore } from '../store/messageStore'
 
 function NavbarLink() {
     const [data, setData] = useState([])
@@ -27,45 +28,63 @@ function NavbarLink() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/NavBarMenuLinks`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
-
       }catch(err){
-          console.error(err)
-      }
-    }
-    const postData = async (object) => {
-      try{
-          const response = await axiosClient.post(`/NavBarMenuLinks`, object)
-          getAllData()
-      }catch(err){
-          console.error(err)
+        setIsDataLoading(false)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/NavBarMenuLinks/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Link został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
       }
     }
-    const putData = async (id, object) => {
+  const postData = async (data) => {
       try{
-          const response = await axiosClient.put(`/NavBarMenuLinks/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
+          const response = await axiosClient.post(`/NavBarMenuLinks`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Link został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
+          }
+        }catch(e){
+          setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
       }
-  }
+    }
+    const putData = async (id,data) => {
+      try{
+          const response = await axiosClient.put(`/NavBarMenuLinks/${id}`, data)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Link został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
+          }
+      }catch(e){
+        setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +96,6 @@ function NavbarLink() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])

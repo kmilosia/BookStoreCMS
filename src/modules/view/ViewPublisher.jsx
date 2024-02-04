@@ -8,9 +8,11 @@ function ViewPublisher(props) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Publisher/${id}`)
+          if(response.status === 200 || response.status === 204){
           setPublisher(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {
@@ -25,17 +27,17 @@ function ViewPublisher(props) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                    <h1 className='module-header'>{publisher.name}</h1>
+                    <h1 className='module-header'>{publisher?.name}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>  
                 <div className='flex flex-col my-1'>
                     <p className='column-info-title'>Nazwa</p>
-                    <h2 className='column-info-text'>{publisher.name}</h2>
+                    <h2 className='column-info-text'>{publisher?.name}</h2>
                 </div>             
                 <div className='divider'></div>           
                 <div className='flex flex-col my-1'>
                     <p className='column-info-title'>Opis</p>
-                    <h2 className='column-info-text'>{publisher.description}</h2>
+                    <h2 className='column-info-text'>{publisher?.description}</h2>
                 </div>              
             </div>
         </div>

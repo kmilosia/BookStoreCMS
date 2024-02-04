@@ -4,54 +4,72 @@ import axiosClient from '../../api/apiClient'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import { backgroundOverlayModule } from '../../styles'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { footerColumnValidate } from '../../utils/validation/newValidate'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function EditFooterColumn(props) {
-    const [name, setName] = useState('')
-    const [position, setPosition] = useState('')
-    const [htmlObject, setHtmlObject] = useState('')
-    const [direction, setDirection] = useState('')
-    const [column,setColumn] = useState({})
-
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const options = [
+    {value: "row", label: "Wiersz"},
+    {value: "col", label: "Kolumna"},
+  ]
+  const [directionOptions, setDirectionOptions] = useState(options)
+  const [values, setValues] = useState({
+      name: '',
+      position: '',
+      htmlObject: '',
+      direction: null,
+    })
+    const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
+  const handleDirection = (selected) => {
+    setValues({ ...values, direction:selected })
+  }
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/FooterColumns/${id}`)
-          setColumn(response.data)
-          setName(response.data.name)
-          setPosition(response.data.position)
-          setHtmlObject(response.data.htmlObject)
-          setDirection(response.data.direction)
+          if(response.status === 200 || response.status === 204){
+            const newData = response.data
+            const newDir = directionOptions.find((item) => item.value === response.data.direction)
+            setValues({
+              name: newData.name,
+              position: newData.position,
+              htmlObject: newData.htmlObject,
+              direction: newDir
+            })
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleNameInput = (e) => {
-        setName(e.target.value)
-    }
-    const handlePositionInput = (e) => {
-        setPosition(e.target.value)
-    }
-    const handleHTMLObjectInput = (e) => {
-        setHtmlObject(e.target.value)
-    }
-    const handleDirection = (e) => {
-      setDirection(e.target.value)
-  }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
-        column.name = name
-        column.position = position
-        column.htmlObject = htmlObject
-        column.direction = direction
-        props.putData(column.id, column)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-  }
-  useEffect(()=> {
-    getItem(props.editedID)
-  },[])
+      setSubmitting(true)
+      setErrors(footerColumnValidate(values))
+    } 
+    const finishSubmit = () => {
+      const data = {
+        name: values.name,
+        position: Number(values.position),
+        htmlObject: values.htmlObject,
+        direction: values.direction.value
+      }
+      props.putData(props.editedID, data)
+      handleCloseModule()
+    }
+    useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+        finishSubmit()
+      }
+    }, [errors]) 
+    useEffect(()=> {
+      getItem(props.editedID)
+    },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>
@@ -61,12 +79,12 @@ function EditFooterColumn(props) {
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>                
             <div className='grid grid-cols-[2fr_1fr] gap-2'>
-                <DefaultInput value={name} onChange={handleNameInput} type='text' placeholder='Nazwa' title="Nazwa linku"/>
-                <DefaultInput value={position} onChange={handlePositionInput} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
+                <DefaultInput name="name" error={errors.name} value={values.name} onChange={handleChange} type='text' placeholder='Nazwa' title="Nazwa linku"/>
+                <DefaultInput name="position" error={errors.position} value={values.position} onChange={handleChange} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                  <DefaultInput value={htmlObject} onChange={handleHTMLObjectInput} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
-                  <DefaultInput value={direction} onChange={handleDirection} type='text' placeholder='Kierunek wyświetlania' title='Kierunek wyświetlania obiektów'/>
+                  <DefaultInput name="htmlObject" value={values.htmlObject} error={errors.htmlObject} onChange={handleChange} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
+                  <DefaultSelect name='direction' error={errors.direction} onChange={handleDirection} value={values.direction} options={directionOptions} title='Kierunek wyświetlania obiektów' placeholder='Kierunek wyświetlania'/>
                 </div>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
         </div>

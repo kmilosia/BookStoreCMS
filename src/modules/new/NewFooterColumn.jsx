@@ -3,22 +3,29 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
 import { useEffect } from 'react'
 import { footerColumnValidate } from '../../utils/validation/newValidate'
+import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function NewFooterColumn({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
+    const options = [
+      {value: "row", label: "Wiersz"},
+      {value: "col", label: "Kolumna"},
+    ]
+    const [directionOptions, setDirectionOptions] = useState(options)
     const [values, setValues] = useState({
         name: '',
         position: '',
         htmlObject: '',
-        direction: '',
+        direction: null,
       })
       const handleChange = (e) => {
-      setValues({ ...values, [e.target.name]: e.target.value });
+      setValues({ ...values, [e.target.name]: e.target.value })
+    }
+    const handleDirection = (selected) => {
+      setValues({ ...values, direction:selected })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -28,10 +35,15 @@ function NewFooterColumn({setShowNewModule, postData}) {
         setErrors(footerColumnValidate(values))
       } 
       const finishSubmit = () => {
-          postData(values)
-          handleCloseModule()
-          setMessage({title: "Kolumna footera została dodana", type: 'success'})
+        const data = {
+          name: values.name,
+          position: Number(values.position),
+          htmlObject: values.htmlObject,
+          direction: values.direction.value
         }
+          postData(data)
+          handleCloseModule()
+      }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit()
@@ -51,7 +63,7 @@ function NewFooterColumn({setShowNewModule, postData}) {
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput name="htmlObject" error={errors.htmlObject} onChange={handleChange} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
-                    <DefaultInput name="direction" error={errors.direction} onChange={handleChange} type='text' placeholder='Kierunek wyświetlania' title='Kierunek wyświetlania obiektów'/>
+                    <DefaultSelect name='direction' error={errors.direction} onChange={handleDirection} value={values.direction} options={directionOptions} title='Kierunek wyświetlania obiektów' placeholder='Kierunek wyświetlania'/>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

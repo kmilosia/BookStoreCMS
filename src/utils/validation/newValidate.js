@@ -269,8 +269,8 @@ export const footerLinkValidate = (values) => {
     if (!values.position) {
         errors.position = "Wprowadź pozycję wyświetlania!"
     } 
-    if (values.selectedOption === null) {
-        errors.selectedOption = "Wybierz opcję!"
+    if (!values.column) {
+        errors.column = "Wybierz kolumnę!"
     } 
     return errors
 }

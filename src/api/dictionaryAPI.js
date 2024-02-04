@@ -3,8 +3,9 @@ import axiosClient from "./apiClient";
 export const getAllData = async (setData,table) => {
     try{
         const response = await axiosClient.get(`/${table}`)
-        console.log(response.data);
+        if(response.status === 200 || response.status === 204){
         setData(response.data)
+        }
     }catch(err){
         console.error(err)
     }

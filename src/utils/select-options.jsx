@@ -2,6 +2,11 @@ export const dictionarySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
+export const footerLinksSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
+    {value: 'columnName', label: 'Kolumna', type: 'string'},
+]
 export const stockSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'bookItemID', label: 'ID Egzemplarza', type: 'number'},
@@ -63,7 +68,6 @@ export const reviewSortOptions = [
 export const newsSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'topic', label: 'Tytuł', type: 'string'},
-    {value: 'authorName', label: 'Autor', type: 'string'},
 ]
 export const newsletterSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
@@ -88,7 +92,6 @@ export const footerColumnsSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'},
     {value: 'position', label: 'Pozycja', type: 'number'},
-    {value: 'htmlObject', label: 'HTML Tag', type: 'string'}
 ]
 export const bookSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
