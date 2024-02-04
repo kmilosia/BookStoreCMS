@@ -1,267 +1,228 @@
-import React from 'react'
-import { useState } from 'react'
-import { backgroundOverlayModule } from '../../styles'
-import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import Select from 'react-select'
-import { useEffect } from 'react'
-import axiosClient from '../../api/apiClient'
-import { FiMinus, FiPlus } from 'react-icons/fi'
-import DefaultInput from '../../components/forms/DefaultInput'
-import DefaultTextarea from '../../components/forms/DefaultTextarea'
-import DefaultSelect from '../../components/forms/DefaultSelect'
+import React, { useState, useEffect } from 'react';
+import { backgroundOverlayModule } from '../../styles';
+import CloseWindowButton from '../../components/buttons/CloseWindowButton';
+import axiosClient from '../../api/apiClient';
+import { FiMinus, FiPlus } from 'react-icons/fi';
+import DefaultSelect from '../../components/forms/DefaultSelect';
+import DefaultInput from '../../components/forms/DefaultInput';
+import DefaultTextarea from '../../components/forms/DefaultTextarea';
+import { bookValidate } from '../../utils/validation/newValidate';
 
-
-function EditBook({setShowEditModule, putData, editedID}) {
-    const getAuthors = async () => {
-        try{
-          const response = await axiosClient.get(`/Author`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name + " " + item.surname
-          }))
-          setAuthorOptions(options)
-        }catch(err){
-          console.error(err)
-        }
+function EditBook({ setShowEditModule, putData, editedID }) {
+  const [errors, setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [languageOptions, setLanguageOptions] = useState([])
+  const [publisherOptions, setPublisherOptions] = useState([])
+  const [categoryOptions, setCategoryOptions] = useState([])
+  const [authorOptions, setAuthorOptions] = useState([])
+  const [values, setValues] = useState({
+    title: '',
+    description: '',
+    selectedLanguage: null,
+    selectedPublisher: null,
+    selectedCategories: [],
+    selectedAuthors: [],
+    selectedImages: [],
+    newImageTitle: '',
+    newImageURL: ''
+  })
+  const getAuthors = async () => {
+    try{
+      const response = await axiosClient.get(`/Author`)
+      if(response.status === 200 || response.status === 204){
+        const options = response.data.map(item => ({
+          value: item.id,
+          label: item.name + " " + item.surname
+        }))
+        setAuthorOptions(options)  
+      }
+    }catch(err){
+      console.log(err)
     }
-    const getCategories = async () => {
-        try{
-          const response = await axiosClient.get(`/Category`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCategoryOptions(options)
-        }catch(err){
-          console.error(err)
-        }
+}
+const getCategories = async () => {
+    try{
+      const response = await axiosClient.get(`/Category`)
+      if(response.status === 200 || response.status === 204){
+        const options = response.data.map(item => ({
+          value: item.id,
+          label: item.name
+        }))
+        setCategoryOptions(options)  
+      }
+    }catch(err){
+      console.log(err)
     }
-    const getLanguages = async () => {
-        try{
-          const response = await axiosClient.get(`/Language`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setLanguageOptions(options)
-        }catch(err){
-          console.error(err)
-        }
+}
+const getLanguages = async () => {
+    try{
+      const response = await axiosClient.get(`/Language`)
+      if(response.status === 200 || response.status === 204){
+        const options = response.data.map(item => ({
+          value: item.id,
+          label: item.name
+        }))
+        setLanguageOptions(options)  
+      }
+    }catch(err){
+      console.log(err)
     }
-    const getPublishers = async () => {
-        try{
-          const response = await axiosClient.get(`/Publisher`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setPublisherOptions(options)
-        }catch(err){
-          console.error(err)
-        }
+}
+const getPublishers = async () => {
+    try{
+      const response = await axiosClient.get(`/Publisher`)
+      if(response.status === 200 || response.status === 204){
+        const options = response.data.map(item => ({
+          value: item.id,
+          label: item.name
+        }))
+        setPublisherOptions(options)  
+      }
+    }catch(err){
+      console.log(err)
     }
-    const getItem = async (id) => {
-      try{
-        const response = await axiosClient.get(`/Book/${id}`)
-        setBook(response.data)
-        setTitle(response.data.title)
-        setDescription(response.data.description)
-        setLanguageID(response.data.originalLanguageID)
-        setPublisherID(response.data.publisherID)
-        setAuthors(response.data.authors)
-        setCategories(response.data.categories)
-        setSelectedImages(response.data.images)
-      }catch(err){
-        console.error(err)
+}
+  useEffect(() => {
+    getAuthors()
+    getPublishers()
+    getCategories()
+    getLanguages()
+    const fetchData = async () => {
+      try {
+        const response = await axiosClient.get(`/Book/${editedID}`)
+        if(response.status === 200 || response.status === 204){
+          const bookData = response.data
+          setValues({
+            title: bookData.title,
+            description: bookData.description,
+            selectedLanguage: { value: bookData.originalLanguageID, label: bookData.originalLanguageName },
+            selectedPublisher: { value: bookData.publisherID, label: bookData.publisherName },
+            selectedCategories: bookData.categories.map(category => ({ value: category.id, label: category.name })),
+            selectedAuthors: bookData.authors.map(author => ({ value: author.id, label: `${author.name} ${author.surname}` })),
+            selectedImages: bookData.images,
+            newImageTitle: '',
+            newImageURL: ''
+          })
+        }
+      } catch (error) {
+        console.log(error)
       }
     }
-    const [book,setBook] = useState([])
-    const [title, setTitle] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
-    const [description, setDescription] = useState('')
-    
-    const [selectedLanguage, setSelectedLanguage] = useState(null)
-    const [selectedPublisher, setSelectedPublisher] = useState(null)
-    const [selectedCategories, setSelectedCategories] = useState([])
-    const [selectedAuthors, setSelectedAuthors] = useState([])
-    const [selectedImages, setSelectedImages] = useState([])
+    fetchData()
+  }, [editedID])
 
-    const [languageOptions, setLanguageOptions] = useState([])
-    const [publisherOptions, setPublisherOptions] = useState([])
-    const [categoryOptions, setCategoryOptions] = useState([])
-    const [authorOptions, setAuthorOptions] = useState([])
-
-    const [languageID, setLanguageID] = useState([])
-    const [publisherID, setPublisherID] = useState([])
-
-    const [authors, setAuthors] = useState([])
-    const [categories, setCategories] = useState([])
-
-
-    const handleImageTitleInput = (e) => {
-      setImageTitle(e.target.value)
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
+  const handleLanguageInput = (selectedLanguage) => {
+    setValues(prevValues => ({ ...prevValues, selectedLanguage }))
+  }
+  const handlePublisherInput = (selectedPublisher) => {
+    setValues(prevValues => ({ ...prevValues, selectedPublisher }))
+  }
+  const handleCategoriesChange = (selectedCategories) => {
+    setValues(prevValues => ({ ...prevValues, selectedCategories }))
+  }
+  const handleAuthorsChange = (selectedAuthors) => {
+    setValues(prevValues => ({ ...prevValues, selectedAuthors }))
+  }
+  const handleImagesChange = (selectedImages) => {
+    setValues(prevValues => ({ ...prevValues, selectedImages }))
+  }
+  const handleCloseModule = () => {
+    setShowEditModule(false)
+  }
+  const handleClearAllPhotos = () => {
+    setValues({ ...values, selectedImages: [] })
+  }
+  const handleDeleteImage = (index) => {
+    const updatedImages = [...values.selectedImages]
+    updatedImages.splice(index, 1)
+    setValues(prevValues => ({ ...prevValues, selectedImages: updatedImages }))
+  }
+  const handleAddPhoto = () => {
+    const newImage = { title: values.newImageTitle, imageURL: values.newImageURL }
+    setValues(prevValues => ({
+      ...prevValues,
+      selectedImages: [...prevValues.selectedImages, newImage],
+      newImageTitle: '',
+      newImageURL: ''
+    }))
+  }
+  const handleAcceptButton = () => {
+    setSubmitting(true)
+    setErrors(bookValidate(values))
+  }
+  const finishSubmit = () => {
+    const data = {
+      id: editedID,
+      title: values.title,
+      description: values.description,
+      originalLanguageID: values.selectedLanguage.value,
+      publisherID: values.selectedPublisher.value,
+      listOfBookAuthors: values.selectedAuthors.map(author => ({ id: author.value })),
+      listOfBookCategories: values.selectedCategories.map(category => ({ id: category.value })),
+      listOfBookImages: values.selectedImages.map((image, index) => ({ ...image, position: index + 1 })),
     }
-    const handleImageURLInput = (e) => {
-      setImageURL(e.target.value)
+    console.log(data)
+    putData(editedID, data);
+    handleCloseModule();
+  }
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit()
     }
-    const handleTitleInput = (e) => {
-        setTitle(e.target.value)
-    }
-    const handleDescriptionInput = (e) => {
-        setDescription(e.target.value)
-    }
-    const handleLanguageInput = (selectedLanguage) => {
-        setSelectedLanguage(selectedLanguage)
-    }
-    const handlePublisherInput = (selectedPublisher) => {
-        setSelectedPublisher(selectedPublisher)
-    }
-    const handleCategoriesChange = (selectedCategories) => {
-        setSelectedCategories(selectedCategories)
-    }
-    const handleAuthorsChange = (selectedAuthors) => {
-        setSelectedAuthors(selectedAuthors)
-    }
-    const handleImagesChange = (selectedImages) => {
-      setSelectedImages(selectedImages)
-    }
-    const handleCloseModule = () => {
-        setShowEditModule(false)
-    }   
-    const handleDeleteImage = (index) => {
-      const updatedImages = selectedImages.filter((_,i) => i !== index)
-      setSelectedImages(updatedImages)
-    }
-    const handleAddPhoto = () => {
-      setSelectedImages([...selectedImages,{title: imageTitle, imageURL: imageURL, id:0}])
-      setImageTitle('')
-      setImageURL('')
-    }
-    const handleAcceptButton = () => {
-        const authors = selectedAuthors.map(item => (
-            {
-                id: item.value
-            }
-        ))
-        const categories = selectedCategories.map(item => (
-            {
-                id: item.value
-            }
-        ))
-        const data = {
-            id: book.id,
-            title: title,
-            description: description,
-            originalLanguageID: selectedLanguage.value,
-            publisherID: selectedPublisher.value,
-            listOfBookAuthors: authors,
-            listOfBookCategories: categories,
-            listOfBookImages: selectedImages.map((item, index) => ({
-              ...item,
-              position: index + 1,
-            })),        }
-        // console.log(selectedImages);
-        console.log(data)
-        putData(book.id,data)
-        handleCloseModule()
-    } 
-    useEffect(() => {
-        const fetchAll = async () => {
-            try{
-                getAuthors()
-                getPublishers()
-                getCategories()
-                getLanguages()
-                getItem(editedID)
-            }catch(error){
-                console.error(error)
-            }
-        }
-        fetchAll()
-    },[])
-
-    useEffect(() => {
-      const selected = languageOptions.find((x) => x.value === languageID)
-      if(selected){
-        setSelectedLanguage(selected)
-      }
-    },[languageOptions,languageID])
-
-    useEffect(() => {
-      const selected = publisherOptions.find((x) => x.value === publisherID)
-      if(selected){
-        setSelectedPublisher(selected)
-      }
-    },[publisherOptions,publisherID])
-
-    useEffect(() => {
-      const updatedSelectedAuthors = authors.reduce((selectedAuthors, item) => {
-        const selected = authorOptions.find((option) => option.value === item.id);
-        if (selected) {
-          return [...selectedAuthors, selected];
-        }
-        return selectedAuthors;
-      }, []);
-      setSelectedAuthors(updatedSelectedAuthors);
-    }, [authors, authorOptions]);
-
-    useEffect(() => {
-      const updatedSelectedCategories = categories.reduce((selectedCategories, item) => {
-        const selected = categoryOptions.find((option) => option.value === item.id);
-        if (selected) {
-          return [...selectedCategories, selected];
-        }
-        return selectedCategories;
-      }, []);
-      setSelectedCategories(updatedSelectedCategories);
-    }, [categories, categoryOptions]);
-
+  }, [errors])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
-        <div className='module-window'>
-            <div className='module-content-wrapper'>
-                <div className='module-header-row'>
-                  <h1 className='module-header'>Edytuj książkę</h1>
-                  <CloseWindowButton handleCloseModule={handleCloseModule} />
-                </div>
-                <DefaultInput value={title} onChange={handleTitleInput} type='text' placeholder='Tytuł' title='Tytuł książki'/>
-                <DefaultTextarea value={description} onChange={handleDescriptionInput} placeholder='Opis' title='Opis książki'/>
-                <div className='divider' />
-                <div className='grid grid-cols-2 gap-2'>
-                  <DefaultSelect onChange={handleLanguageInput} value={selectedLanguage} options={languageOptions} title='Język oryginalny' placeholder='Język'/>
-                  <DefaultSelect onChange={handlePublisherInput} value={selectedPublisher} options={publisherOptions} title='Wydawnictwo' placeholder='Wydawnictwo'/>
-                </div>
-                <DefaultSelect isMulti={true} onChange={handleAuthorsChange} value={selectedAuthors} options={authorOptions} title='Autorzy' placeholder='Autorzy'/>
-                <DefaultSelect isMulti={true} onChange={handleCategoriesChange} value={selectedCategories} options={categoryOptions} title='Kategorie' placeholder='Kategorie'/>
-                <div className='divider'></div>
-                <p className='w-full text-sm mt-1 mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki:</p>
-                {selectedImages && 
-                <div className='flex flex-row flex-wrap'>
-                <div className='grid grid-cols-3 gap-2 my-2'>
-                  {selectedImages.map((item,index)=>(
-                    <div key={index} className='flex flex-col rounded-md bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
-                      <div className='relative'>
-                      <img src={item.imageURL} className='w-full h-auto object-contain rounded-t-md' />
-                      <button onClick={() => handleDeleteImage(index)} className='module-minus-button'><FiMinus/></button>
-                      </div>
-                      <h3 className='p-2 text-xs'>{item.title}</h3>
-                    </div>
-                  ))}
-                </div>
-                </div>}
-                <div className='flex flex-row items-center'>
-                  <div className='grid grid-cols-[1fr_2fr] gap-2'>
-                    <DefaultInput onChange={handleImageTitleInput} value={imageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
-                    <DefaultInput onChange={handleImageURLInput} value={imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
+      <div className='module-window'>
+        <div className='module-content-wrapper'>
+          <div className='module-header-row'>
+            <h1 className='module-header'>Edytuj książkę</h1>
+            <CloseWindowButton handleCloseModule={handleCloseModule} />
+          </div>
+          <DefaultInput error={errors.title} name="title" value={values.title} onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł książki'/>
+          <DefaultTextarea error={errors.description} name="description" value={values.description} onChange={handleChange} placeholder='Opis' title='Opis książki'/>
+          <div className='divider' />
+          <div className='grid grid-cols-2 gap-2'>
+            <DefaultSelect name="selectedLanguage" error={errors.selectedLanguage} onChange={handleLanguageInput} value={values.selectedLanguage} options={languageOptions} title='Język oryginalny' placeholder='Język'/>
+            <DefaultSelect name="selectedPublisher" error={errors.selectedPublisher} onChange={handlePublisherInput} value={values.selectedPublisher} options={publisherOptions} title='Wydawnictwo' placeholder='Wydawnictwo'/>
+          </div>
+          <DefaultSelect name="selectedAuthors" error={errors.selectedAuthors} isMulti={true} onChange={handleAuthorsChange} value={values.selectedAuthors} options={authorOptions} title='Autorzy' placeholder='Autorzy'/>
+          <DefaultSelect name="selectedCategories" error={errors.selectedCategories} isMulti={true} onChange={handleCategoriesChange} value={values.selectedCategories} options={categoryOptions} title='Kategorie' placeholder='Kategorie'/>
+          <div className='divider'></div>
+          <div className="flex flex-row justify-between items-center my-1">
+            <p className='text-sm mx-1 font-[500] text-dracula-500 dark:text-dracula-400'>Zdjęcia książki</p>
+            {values.selectedImages.length > 0 && 
+            <button onClick={handleClearAllPhotos} className="text-xs px-3 py-1 rounded-sm text-dracula-100 bg-purple-400 hover:bg-purple-500">Wyczyść wszystko</button>
+            }
+          </div>
+          {values.selectedImages.length > 0 && 
+          <div className='flex flex-row flex-wrap'>
+            <div className='grid grid-cols-3 gap-2 my-2'>
+              {values.selectedImages.map((item, index) => (
+                <div key={index} className='flex flex-col rounded-md bg-dracula-200 dark:bg-dracula-800 dark:text-dracula-300'>
+                  <div className='relative'>
+                    <img src={item.imageURL} className='w-full h-36 object-cover rounded-t-md' alt={item.title} />
+                    <button className='absolute top-0 right-0' onClick={() => handleDeleteImage(index)}><FiMinus /></button>
                   </div>
-                  <button className='module-round-button mt-4' onClick={handleAddPhoto}><FiPlus/></button>
+                  <p className='p-1 text-xs font-[400] dark:text-dracula-400'>{item.title}</p>
                 </div>
-                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
+              ))}
             </div>
+          </div>}
+          <div className='flex flex-row items-center'>
+            <div className='grid grid-cols-[1fr_2fr] gap-2'>
+              <DefaultInput name="newImageTitle" onChange={handleChange} value={values.newImageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+              <DefaultInput name="newImageURL" onChange={handleChange} value={values.newImageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
+            </div>
+            <button className='module-round-button mt-4' onClick={handleAddPhoto}><FiPlus/></button>
+          </div>
+          <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default EditBook
+export default EditBook;

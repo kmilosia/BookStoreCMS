@@ -7,6 +7,11 @@ export const personColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
  ]
+ export const reviewColumns = [
+    { name: 'ID'},
+    { name: 'Tytuł'},
+    { name: 'Forma'},
+ ]
  export const newsletterColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},

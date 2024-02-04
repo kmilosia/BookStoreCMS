@@ -6,7 +6,6 @@ import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
 import Spinner from '../../components/Spinner'
 import { personValidate } from '../../utils/validation/newValidate'
-import ButtonSpinner from '../../components/ButtonSpinner'
 import axiosClient from '../../api/apiClient'
 
 function EditAuthor({handleAfterSubmit,handleCloseModule,editedID,putData}) {

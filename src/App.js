@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,Gender,OrderStatus,ShippingStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -61,6 +61,7 @@ function App() {
             <Route path='/stan-magazynu' element={<StockAmount />}/>
             <Route path='/wiadomosci' element={<News />}/>
             <Route path='/baner' element={<Banner />}/>
+            <Route path='/recenzja' element={<BookItemReview />}/>
             <Route path='/navbar-link' element={<NavbarLink />}/>
             <Route path='/newsletter' element={<Newsletter />}/>
             <Route path='/element-kategorii' element={<CategoryElement />}/>

@@ -9,60 +9,14 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { bookValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewBook({setShowNewModule, postData}) {
-  const setMessage = useMessageStore((state) => state.setMessage)
-    const getAuthors = async () => {
-        try{
-          const response = await axiosClient.get(`/Author`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name + " " + item.surname
-          }))
-          setAuthorOptions(options)
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const getCategories = async () => {
-        try{
-          const response = await axiosClient.get(`/Category`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCategoryOptions(options)
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const getLanguages = async () => {
-        try{
-          const response = await axiosClient.get(`/Language`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setLanguageOptions(options)
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const getPublishers = async () => {
-        try{
-          const response = await axiosClient.get(`/Publisher`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setPublisherOptions(options)
-        }catch(err){
-          console.error(err)
-        }
-    }
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
+    const [languageOptions, setLanguageOptions] = useState([])
+    const [publisherOptions, setPublisherOptions] = useState([])
+    const [categoryOptions, setCategoryOptions] = useState([])
+    const [authorOptions, setAuthorOptions] = useState([])
     const [values, setValues] = useState({
       title: '',
       imageTitle: '',
@@ -74,36 +28,87 @@ function NewBook({setShowNewModule, postData}) {
       selectedAuthors: [],
       selectedImages: [],
     })
+    const getAuthors = async () => {
+      try{
+        const response = await axiosClient.get(`/Author`)
+        if(response.status === 200 || response.status === 204){
+          const options = response.data.map(item => ({
+            value: item.id,
+            label: item.name + " " + item.surname
+          }))
+          setAuthorOptions(options)  
+        }
+      }catch(err){
+        console.log(err)
+      }
+  }
+  const getCategories = async () => {
+      try{
+        const response = await axiosClient.get(`/Category`)
+        if(response.status === 200 || response.status === 204){
+          const options = response.data.map(item => ({
+            value: item.id,
+            label: item.name
+          }))
+          setCategoryOptions(options)  
+        }
+      }catch(err){
+        console.log(err)
+      }
+  }
+  const getLanguages = async () => {
+      try{
+        const response = await axiosClient.get(`/Language`)
+        if(response.status === 200 || response.status === 204){
+          const options = response.data.map(item => ({
+            value: item.id,
+            label: item.name
+          }))
+          setLanguageOptions(options)  
+        }
+      }catch(err){
+        console.log(err)
+      }
+  }
+  const getPublishers = async () => {
+      try{
+        const response = await axiosClient.get(`/Publisher`)
+        if(response.status === 200 || response.status === 204){
+          const options = response.data.map(item => ({
+            value: item.id,
+            label: item.name
+          }))
+          setPublisherOptions(options)  
+        }
+      }catch(err){
+        console.log(err)
+      }
+  }
     const handleChange = (e) => {
-      setValues({ ...values, [e.target.name]: e.target.value });
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
-    const [languageOptions, setLanguageOptions] = useState([])
-    const [publisherOptions, setPublisherOptions] = useState([])
-    const [categoryOptions, setCategoryOptions] = useState([])
-    const [authorOptions, setAuthorOptions] = useState([])
-
     const handleLanguageInput = (selectedLanguage) => {
-      setValues({ ...values, selectedLanguage });
+      setValues({ ...values, selectedLanguage })
     }
     const handlePublisherInput = (selectedPublisher) => {
-      setValues({ ...values, selectedPublisher });
+      setValues({ ...values, selectedPublisher })
     }
     const handleCategoriesChange = (selectedCategories) => {
-      setValues({ ...values, selectedCategories });
+      setValues({ ...values, selectedCategories })
     }
     const handleAuthorsChange = (selectedAuthors) => {
-      setValues({ ...values, selectedAuthors });
+      setValues({ ...values, selectedAuthors })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleDeleteImage = (index) => {
-      const updatedImages = [...values.selectedImages];
-      updatedImages.splice(index, 1);
-      setValues({ ...values, selectedImages: updatedImages });
+      const updatedImages = [...values.selectedImages]
+      updatedImages.splice(index, 1)
+      setValues({ ...values, selectedImages: updatedImages })
     }
     const handleAddPhoto = () => {
-      const newImage = { title: values.imageTitle, imageURL: values.imageURL };
+      const newImage = { title: values.imageTitle, imageURL: values.imageURL }
       setValues({
         ...values,
         selectedImages: [...values.selectedImages, newImage],
@@ -112,7 +117,7 @@ function NewBook({setShowNewModule, postData}) {
       })
     }
     const handleClearAllPhotos = () => {
-      setValues({ ...values, selectedImages: [] });
+      setValues({ ...values, selectedImages: [] })
     }
     const handleAcceptButton = () => {
       setSubmitting(true)
@@ -138,7 +143,6 @@ function NewBook({setShowNewModule, postData}) {
         console.log(data)
         postData(data)
         handleCloseModule()
-        setMessage({title: "Książka została dodana", type: 'success'})
       }
     useEffect(() => {
       if (Object.keys(errors).length === 0 && submitting) {
@@ -146,17 +150,10 @@ function NewBook({setShowNewModule, postData}) {
       }
     }, [errors])
     useEffect(() => {
-        const fetchAll = async () => {
-            try{
-                getAuthors()
-                getPublishers()
-                getCategories()
-                getLanguages()
-            }catch(error){
-                console.error(error)
-            }
-        }
-        fetchAll()
+      getAuthors()
+      getPublishers()
+      getCategories()
+      getLanguages()
     },[])
   return (
     <div className='module-wrapper shadow-module' style={backgroundOverlayModule}>
