@@ -17,6 +17,7 @@ import SidebarAccountElement from './SidebarAccountElement'
 import StockLinks from './links/StockLinks'
 import BooksLinks from './links/BooksLinks'
 import DiscountsLinks from './links/DiscountsLinks'
+import { FiPackage } from 'react-icons/fi'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -109,7 +110,13 @@ function Sidebar() {
             <AiOutlineMessage className='text-xl mx-1'/>
             <span>Kontakt</span>
           </div>
-        </Link>           
+        </Link>   
+        <Link to="/zamowienie" className='default-link'>
+        <div className='flex flex-row items-center'>
+            <FiPackage className='text-xl mx-1'/>
+            <span>Zamówienia</span>
+          </div>
+        </Link>         
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>

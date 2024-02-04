@@ -61,6 +61,11 @@ export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}
 ]
+export const orderColumns = [
+    { name: 'ID'},
+    { name: 'Data zamówienia'},
+    { name: 'Kwota brutto'},
+]
 export const footerLinkColumns = [
     { name: 'ID'},
     { name: 'Nazwa'},

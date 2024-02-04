@@ -2,6 +2,10 @@ export const dictionarySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
+export const orderSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'totalBruttoPrice', label: 'Kwota', type: 'number'}
+]
 export const footerLinksSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'},
