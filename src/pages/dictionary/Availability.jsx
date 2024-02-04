@@ -43,7 +43,6 @@ function Availability() {
             setMessage({title: "Błąd przy dodawaniu nowej dostępności", type: 'error'})
           }
       }catch(err){
-          console.log(err)
           setMessage({title: "Błąd przy dodawaniu nowej dostępności", type: 'error'})
       }
     }
@@ -60,7 +59,6 @@ function Availability() {
             setMessage({title: "Błąd podczas edytowania dostępności", type: 'error'})
           }
       }catch(err){
-        console.log(err)
         setMessage({title: "Błąd podczas edytowania dostępności", type: 'error'})
       }
     }
@@ -74,7 +72,6 @@ function Availability() {
             setMessage({title: "Błąd podczas usuwania dostępności", type: 'error'})
           }
         }catch(err){
-          console.log(err)
           setMessage({title: "Błąd podczas usuwania dostępności", type: 'error'})
       }
     }

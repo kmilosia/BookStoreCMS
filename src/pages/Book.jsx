@@ -37,7 +37,6 @@ function Book() {
     })
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
-
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -117,7 +116,7 @@ function Book() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Książkę"/>                   
         </div>
-        <ListHeader  columnNames={bookColumns}/>
+        <ListHeader columnNames={bookColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />

@@ -8,11 +8,9 @@ import {convertDate} from '../../utils/functions/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { bookItemValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewBookItem({setShowNewModule, postData}) {
   const today = new Date().toISOString().split('T')[0];
-  const setMessage = useMessageStore((state) => state.setMessage)
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [isEbook, setIsEbook] = useState(null)
@@ -30,20 +28,6 @@ function NewBookItem({setShowNewModule, postData}) {
     availability: null,
     book: null,
   })
-  useEffect(() => {
-    if(values.form){
-      if(values.form.value === 1){
-        setIsEbook(false)
-      }else if(values.form.value === 2){
-        setIsEbook(true)
-      }else{setIsEbook(null)}
-    }else{
-      setIsEbook(null)
-    }
-  },[values.form])
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  }
     const [translatorOptions, setTranslatorOptions] = useState([])
     const [languageOptions, setLanguageOptions] = useState([])
     const [editionOptions, setEditionOptions] = useState([])
@@ -54,86 +38,103 @@ function NewBookItem({setShowNewModule, postData}) {
     const getTranslators = async () => {
         try{
           const response = await axiosClient.get(`/Translator`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name + " " + item.surname
           }))
           setTranslatorOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getLanguages = async () => {
         try{
           const response = await axiosClient.get(`/Language`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setLanguageOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getEditions = async () => {
         try{
           const response = await axiosClient.get(`/Edition`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setEditionOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getFileFormats = async () => {
         try{
           const response = await axiosClient.get(`/FileFormat`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setFileFormatOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getForms = async () => {
         try{
           const response = await axiosClient.get(`/Form`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setFormOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getAvailabilities = async () => {
         try{
           const response = await axiosClient.get(`/Availability`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setAvailabilityOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getBooks = async () => {
         try{
           const response = await axiosClient.get(`/Book`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.title
-          }))
-          setBookOptions(options)
+          if(response.status === 200 || response.status === 204){
+            const options = response.data.map(item => ({
+              value: item.id,
+              label: item.title
+            }))
+            setBookOptions(options)  
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
+    }
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
     }
     const handleTranslator = (translator) => {
       setValues({ ...values, translator });
@@ -178,31 +179,35 @@ function NewBookItem({setShowNewModule, postData}) {
         formID: values.form.value,
         availabilityID: values.availability.value,
         bookID: values.book.value,
-        };     
-        postData(data)
-        handleCloseModule()
-        setMessage({title: "Egzemplarz został dodany", type: 'success'})
+        }
+        console.log(data);
+        // postData(data)
+        // handleCloseModule()
       }
+      useEffect(() => {
+        if(values.form){
+          if(values.form.value === 1){
+            setIsEbook(false)
+          }else if(values.form.value === 2){
+            setIsEbook(true)
+          }else{setIsEbook(null)}
+        }else{
+          setIsEbook(null)
+        }
+      },[values.form])
     useEffect(() => {
       if (Object.keys(errors).length === 0 && submitting) {
         finishSubmit()
       }
     }, [errors])
     useEffect(() => {
-        const fetchAll = async () => {
-            try{
-                getTranslators()
-                getLanguages()
-                getEditions()
-                getFileFormats()
-                getForms()
-                getAvailabilities()
-                getBooks()
-            }catch(error){
-                console.error(error)
-            }
-        }
-        fetchAll()
+      getTranslators()
+      getLanguages()
+      getEditions()
+      getFileFormats()
+      getForms()
+      getAvailabilities()
+      getBooks()
     },[])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>

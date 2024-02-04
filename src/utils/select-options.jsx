@@ -35,7 +35,7 @@ export const imageSortOptions = [
 ]
 export const categoryElementSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
-    {value: 'position', label: 'Pozycja', type: 'number'}
+    {value: 'categoryName', label: 'Kategoria', type: 'string'}
 ]
 export const personSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},

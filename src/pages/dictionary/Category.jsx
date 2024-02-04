@@ -4,6 +4,7 @@ import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
+import { useMessageStore } from '../../store/messageStore'
 
 function Category() {
     const title = "Kategoria"
@@ -14,17 +15,20 @@ function Category() {
     const [showNewModule, setShowNewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const setMessage = useMessageStore((state) => state.setMessage)
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/Category`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+        console.log(err)
+        setIsDataLoading(false)
       }
     }
     const postData = async (name) => {
@@ -32,9 +36,14 @@ function Category() {
           const response = await axiosClient.post(`/Category`, {
               name: name,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Nowa kategoria została dodana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd przy dodawaniu nowej kategorii", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas dodawania kategorii", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
@@ -43,20 +52,29 @@ function Category() {
               id: id,
               name: nameValue,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Kategoria została edytowana", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd przy edytowaniu kategorii", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania kategorii", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Category/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Kategoria została usunięta", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd przy usuwaniu kategorii", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas usuwania kategorii", type: 'error'})
       }
     }
-
     useEffect(()=>{
         getAllData()
     },[])

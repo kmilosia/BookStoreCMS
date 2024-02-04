@@ -6,12 +6,10 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { categoryElementValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { useMessageStore } from '../../store/messageStore'
 import axiosClient from '../../api/apiClient'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 
 function NewCategoryElement({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [categoryOptions, setCategoryOptions] = useState([])
@@ -24,47 +22,49 @@ function NewCategoryElement({setShowNewModule, postData}) {
         imageTitle: '',
         imageURL: '',
     })
-
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCategory = (selectedCategory) => {
-        setSelectedCategory(selectedCategory);
+        setSelectedCategory(selectedCategory)
       }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        console.log(values);
         setSubmitting(true)
         setErrors(categoryElementValidate(values))
     } 
     const getCategories = async () => {
         try{
           const response = await axiosClient.get(`/Category`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setCategoryOptions(options)
-        }catch(err){
-          console.error(err)
         }
+        }catch(err){
+          console.log(err)
+        }
+    }
+    const finishSubmit = () => {
+        const data = {
+            ...values,
+            position: Number(values.position),
+            categoryID: selectedCategory.value
+        }
+        console.log(data);
+        postData(data)
+        handleCloseModule()
     }
     useEffect(() => {
         getCategories()
     },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
-            const data = {
-                ...values,
-                position: Number(values.position),
-                categoryID: selectedCategory.value
-            }
-            console.log(data);
-            postData(data)
-            handleCloseModule()
-            setMessage({title: "Element kategorii został dodany", type: 'success'})
+            finishSubmit()
         }
       }, [errors])
   return (

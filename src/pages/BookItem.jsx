@@ -16,6 +16,7 @@ import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import NewBookItem from '../modules/new/NewBookItem'
+import { useMessageStore } from '../store/messageStore'
 
 function BookItem() {
     const [data, setData] = useState([])
@@ -27,57 +28,71 @@ function BookItem() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
+    const setMessage = useMessageStore((state) => state.setMessage)
+    const filterItems = (list, value) => list.filter((item) => {
+      if (!value) {
+          return true;
+      }
+      const itemName = item.bookTitle.toLowerCase()
+      return itemName.includes(value.toLowerCase())
+    })
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
 
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/BookItems`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+        setIsDataLoading(false)
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/BookItems`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Egzemplarz został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania egzemplarza", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas dodawania egzemplarza", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/BookItems/${id}`)
-          console.log("Deleted object");
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Egzemplarz został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania egzemplarza", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas usuwania egzemplarza", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/BookItems/${id}`, object)
-          getAllData()
-        } catch (err) {
-          if (err.response) {
-            // Request made and server responded with a status code
-            console.error('Error Status:', err.response.status);
-            console.error('Error Data:', err.response.data);
-            console.error('Request Payload:', object);
-          } else if (err.request) {
-            // The request was made but no response was received
-            console.error('Error Request:', err.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error('Error Message:', err.message);
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Egzemplarz został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania egzemplarza", type: 'error'})
           }
+        } catch (err) {
+          setMessage({title: "Błąd podczas edytowania egzemplarza", type: 'error'})
         }
-      };  
-
+      } 
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -89,7 +104,6 @@ function BookItem() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -104,19 +118,18 @@ function BookItem() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Egzemplarz"/>                   
         </div>
-        <ListHeader  columnNames={bookItemColumns}/>
+        <ListHeader columnNames={bookItemColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
       {filteredItems.map((item) => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-6'>
+            <div key={item.id} className='table-row-wrapper grid-cols-5 gap-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.bookTitle}</p>
-                <p className='px-2'>{item.formName}</p>
-                <p className='px-2'>{item.isbn}</p>
-                <p className='px-2'>{item.nettoPrice}</p>
+                <p className='px-2'>{item.formName === 'Book' ? 'Książka' : 'Ebook'}</p>
+                <p className='px-2'>{item.nettoPrice}zł</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
@@ -126,7 +139,7 @@ function BookItem() {
         ))}
       </div>
       }
-        </div>
+    </div>
     {showNewModule && <NewBookItem postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditBookItem putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewBookItem editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}

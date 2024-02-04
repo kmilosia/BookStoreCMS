@@ -4,6 +4,7 @@ import { filterItems } from '../../utils/filter'
 import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
+import { useMessageStore } from '../../store/messageStore'
 
 function Country() {
     const title = "Kraj"
@@ -16,16 +17,18 @@ function Country() {
     const [isDataLoading, setIsDataLoading] = useState(false)
     const sortedItems = sortItems(data, selectedOption, isAscending);
     const filteredItems = filterItems(sortedItems, searchValue);
-
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
-        setIsDataLoading(true)
+          setIsDataLoading(true)
           const response = await axiosClient.get(`/Country`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
           setIsDataLoading(false)
-
       }catch(err){
-          console.error(err)
+          console.log(err)
+          setIsDataLoading(false)
       }
     }
     const postData = async (name) => {
@@ -33,9 +36,14 @@ function Country() {
           const response = await axiosClient.post(`/Country`, {
               name: name,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Kraj został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd przy dodawaniu kraju", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+          setMessage({title: "Błąd przy dodawaniu kraju", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
@@ -44,24 +52,32 @@ function Country() {
               id: id,
               name: nameValue,
           })
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Kraj został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania kraju", type: 'error'})
+          }
       }catch(err){
-        console.error(err)
+        setMessage({title: "Błąd podczas edytowania kraju", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Country/${id}`)
-          getAllData()
-      }catch(err){
-          console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Kraj został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania kraju", type: 'error'})
+          }
+        }catch(err){
+          setMessage({title: "Błąd podczas usuwania kraju", type: 'error'})
       }
     }
-
     useEffect(()=>{
         getAllData()
     },[])
-    
     const props = {
       title,
       data,
@@ -82,7 +98,7 @@ function Country() {
       deleteData,
       putData,
       isDataLoading
-  };
+    }
   return (
     <>
         <DictionaryComponent {...props}/>

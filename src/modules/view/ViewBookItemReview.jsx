@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
+import {formatDisplayDate} from '../../utils/functions/formatDisplayDate'
 
 function ViewBookItemReview(props) {
     const [data, setData] = useState([])
@@ -27,24 +28,37 @@ function ViewBookItemReview(props) {
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
-                    <h1 className='module-header'>Ocena #{data?.id}</h1>
+                    <h1 className='module-header'>{props.editedItem?.bookTitle}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
-                <div className='grid grid-cols-2 gap-4'>
-                <div className='flex flex-col'>
-                    <p className='column-info-title'>ID produktu</p>
-                    <h2 className='column-info-text'>{data?.bookItemId}</h2>
-                </div>
-                <div className='flex flex-col'>
-                    <p className='column-info-title'>Ocena</p>
-                    <h2 className='column-info-text'>{data?.scoreId}</h2>
-                </div>
-                <div className='flex flex-col col-span-2'>
-                    <p className='column-info-title'>Treść</p>
-                    <h2 className='column-info-text'>{data?.content}</h2>
-                </div>
-                
-                </div>
+                {data?.map((item,index) => {
+                    return(
+                        <div key={index} className='flex flex-col rounded-md mb-3 border-2 border-gray-200 dark:border-dracula-700'>
+                            <div className='bg-gray-200 dark:bg-dracula-700 p-3'>
+                                <h2 className='font-semibold'>Recenzja #{item.id}</h2>
+                            </div>
+                            <div className='grid grid-cols-3 gap-2 p-3 text-sm'>
+                                <div className='flex flex-col'>
+                                    <p className='font-light'>Użytkownik</p>
+                                    <p className='font-semibold'>{item.customerName}</p>
+                                </div>
+                                <div className='flex flex-col w-max items-center'>
+                                    <p className='font-light'>Ocena</p>
+                                    <p className='font-semibold'>{item.scoreValue}</p>
+                                </div>
+                                <div className='flex flex-col'>
+                                    <p className='font-light'>Data dodania</p>
+                                    <p className='font-semibold'>{item.creationDate && formatDisplayDate(item.creationDate)}</p>
+                                </div>
+                                {item.content !== '' &&
+                                <div className='flex flex-col col-span-3 border-t pt-2'>
+                                    <p className='font-light'>Treść oceny</p>
+                                    <p className='font-semibold'>{item.content}</p>
+                                </div>}
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
         </div>
     </div>

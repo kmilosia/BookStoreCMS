@@ -36,9 +36,8 @@ export const personColumns = [
  ]
  export const categoryElementColumns = [
     { name: 'ID'},
-    { name: 'Logo'},
+    { name: 'Kategoria'},
     { name: 'Ścieżka'},
-    { name: 'Pozycja'},
  ]
 export const customerColumns = [
     { name: 'ID'},
@@ -110,7 +109,6 @@ export const bookItemColumns = [
     { name: 'ID'},
     { name: 'Tytuł'},
     { name: 'Format'},
-    { name: 'ISBN'},
     { name: 'Cena Netto'},
 ]
 export const stockItemsColumns = [
