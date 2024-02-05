@@ -83,6 +83,9 @@ const getPublishers = async () => {
     }
 }
   useEffect(() => {
+    console.log(values);
+  },[values])
+  useEffect(() => {
     getAuthors()
     getPublishers()
     getCategories()
@@ -164,7 +167,6 @@ const getPublishers = async () => {
       listOfBookCategories: values.selectedCategories.map(category => ({ id: category.value })),
       listOfBookImages: values.selectedImages.map((image, index) => ({ ...image, position: index + 1 })),
     }
-    console.log(data)
     putData(editedID, data);
     handleCloseModule();
   }

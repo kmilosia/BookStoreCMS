@@ -7,13 +7,11 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
 import { supplyValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 import { convertDate } from '../../utils/functions/convertDate'
 import Select from 'react-select'
 import { IoClose } from "react-icons/io5";
 
 function NewSupply({setShowNewModule, postData}) {
-  const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [suppliers, setSuppliers] = useState([])
@@ -34,11 +32,13 @@ function NewSupply({setShowNewModule, postData}) {
   const getSuppliers = async () => {
     try{
       const response = await axiosClient.get(`/Supplier`)
+      if(response.status === 200 || response.status === 204){
       const options = response.data.map(item => ({
         value: item.id,
         label: item.name
       }))
       setSuppliers(options)
+    }
     }catch(e){
       console.log(e)
     }
@@ -46,11 +46,13 @@ function NewSupply({setShowNewModule, postData}) {
   const getPaymentMethods = async () => {
     try{
       const response = await axiosClient.get(`/PaymentMethod`)
+      if(response.status === 200 || response.status === 204){
       const options = response.data.map(item => ({
         value: item.id,
         label: item.name
       }))
       setPaymentMethods(options)
+    }
     }catch(e){
       console.log(e)
     }
@@ -58,11 +60,13 @@ function NewSupply({setShowNewModule, postData}) {
   const getDeliveryStatuses = async () => {
     try{
       const response = await axiosClient.get(`/DeliveryStatus`)
+      if(response.status === 200 || response.status === 204){
       const options = response.data.map(item => ({
         value: item.id,
         label: item.name
       }))
       setDeliveryStatuses(options)
+    }
     }catch(e){
       console.log(e)
     }
@@ -70,11 +74,13 @@ function NewSupply({setShowNewModule, postData}) {
   const getBooks = async () => {
     try{
       const response = await axiosClient.get(`/BookItems`)
+      if(response.status === 200 || response.status === 204){
       const options = response.data.map(item => ({
         value: item,
         label: item.bookTitle + " (" + item.formName + ")"
       }))
       setBooks(options)
+    }
     }catch(e){
       console.log(e)
     }
@@ -146,10 +152,8 @@ function NewSupply({setShowNewModule, postData}) {
           return bookItemData
           }),
         }
-        console.log(data);
           postData(data)
           handleCloseModule()
-          setMessage({title: "Dostawa została dodana", type: 'success'})
         }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
@@ -162,9 +166,6 @@ function NewSupply({setShowNewModule, postData}) {
       getDeliveryStatuses()
       getSuppliers()
     },[])
-    useEffect(() => {
-      console.log(values.bookItems);
-    },[values.bookItems])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>

@@ -16,6 +16,7 @@ import Spinner from '../components/Spinner'
 import NewSupplier from '../modules/new/NewSupplier'
 import EditSupplier from '../modules/edit/EditSupplier'
 import ViewSupplier from '../modules/view/ViewSupplier'
+import { useMessageStore } from '../store/messageStore'
 
 function Supplier() {
     const [data, setData] = useState([])
@@ -27,45 +28,63 @@ function Supplier() {
     const [showViewModule, setShowViewModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-   
-    const sortedItems = sortItems(data, selectedOption, isAscending);
-    const filteredItems = filterItems(sortedItems, searchValue);
-
+    const sortedItems = sortItems(data, selectedOption, isAscending)
+    const filteredItems = filterItems(sortedItems, searchValue)
+    const setMessage = useMessageStore((state) => state.setMessage)
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
           const response = await axiosClient.get(`/Supplier`)
-          setData(response.data)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }else{
+            setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+          }
           setIsDataLoading(false)
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
+        setIsDataLoading(false)
       }
     }
     const postData = async (object) => {
       try{
           const response = await axiosClient.post(`/Supplier`, object)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostawca został dodany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas dodawania dostawcy", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas dodawania dostawcy", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
           const response = await axiosClient.delete(`/Supplier/${id}`)
-          getAllData()
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostawca został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania dostawcy", type: 'error'})
+          }
       }catch(err){
-          console.error(err)
+        setMessage({title: "Błąd podczas usuwania dostawcy", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
           const response = await axiosClient.put(`/Supplier/${id}`, object)
-          getAllData()
-      }catch(err){
-        console.error(err)
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Dostawca został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania dostawcy", type: 'error'})
+          }
+        } catch (err) {
+          setMessage({title: "Błąd podczas edytowania dostawcy", type: 'error'})
+        }
       }
-  }
-
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -77,7 +96,6 @@ function Supplier() {
       setEditedID(itemID)
       setShowViewModule(true)
     }
-
     useEffect(()=>{
         getAllData()
     },[])
@@ -92,7 +110,7 @@ function Supplier() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Dostawcę"/>                   
         </div>
-        <ListHeader  columnNames={dictionaryColumns}/>
+        <ListHeader columnNames={dictionaryColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -111,7 +129,7 @@ function Supplier() {
         ))}
       </div>
       }
-        </div>
+      </div>
     {showNewModule && <NewSupplier postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditSupplier putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewSupplier editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}

@@ -8,9 +8,11 @@ function ViewSupplier(props) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Supplier/${id}`)
+          if(response.status === 200 || response.status === 204){
           setSupplier(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {

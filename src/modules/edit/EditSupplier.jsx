@@ -5,11 +5,9 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import { backgroundOverlayModule } from '../../styles'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import { useMessageStore } from '../../store/messageStore'
 import { supplierValidate } from '../../utils/validation/newValidate'
 
 function EditSupplier(props) {
-  const setMessage = useMessageStore((state) => state.setMessage)
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [cities, setCities] = useState([])
@@ -43,51 +41,66 @@ const handleAddressTypeChange = (selectedAddressType) => {
   const getCities = async () => {
       try{
         const response = await axiosClient.get(`/City`)
+        if(response.status === 200 || response.status === 204){
         const options = response.data.map(item => ({
           value: item.id,
           label: item.name
         }))
         setCities(options)
+      }
       }catch(err){
-        console.error(err)
+        console.log(err)
       }
   }
   const getCountries = async () => {
       try{
         const response = await axiosClient.get(`/Country`)
+        if(response.status === 200 || response.status === 204){
         const options = response.data.map(item => ({
           value: item.id,
           label: item.name
         }))
         setCountries(options)
+      }
       }catch(err){
-        console.error(err)
+        console.log(err)
       }
   }
   const getAddressTypes = async () => {
       try{
         const response = await axiosClient.get(`/AddressType`)
+        if(response.status === 200 || response.status === 204){
         const options = response.data.map(item => ({
           value: item.id,
           label: item.name
         }))
         setAddressTypes(options)
+      }
       }catch(err){
-        console.error(err)
+        console.log(err)
       }
   }
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Supplier/${id}`)
-          const { name, email, phoneNumber, supplierAddress } = response.data;
+          if(response.status === 200 || response.status === 204){
+            const newSupplier = response.data
+            const newAddress = response.data.supplierAddress
             setValues({
-                name,
-                email,
-                phoneNumber,
-                ...supplierAddress
+                name: newSupplier.name,
+                email: newSupplier.email,
+                phoneNumber: newSupplier.phoneNumber,
+                street: newAddress.street,
+                streetNumber: newAddress.streetNumber,
+                houseNumber: newAddress.houseNumber,
+                postcode: newAddress.postcode,
+                cityID: { value: newAddress.cityID, label: newAddress.cityName },
+                countryID: { value: newAddress.countryID, label: newAddress.countryName },
+                addressTypeID: addressTypes.find((item) => item.value === newAddress.addressTypeID),
             })
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {
@@ -113,10 +126,8 @@ const handleAddressTypeChange = (selectedAddressType) => {
           addressTypeID: values.addressTypeID.value,
         }
       }
-      console.log(data);
       props.putData(props.editedID, data)
-      props.setEditedID(null)
-      props.setShowEditModule(false)
+      handleCloseModule()
     }
   useEffect(()=> {
     getCities()
@@ -127,33 +138,14 @@ const handleAddressTypeChange = (selectedAddressType) => {
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit()
-      setMessage({title: "Dostawca został edytowany", type: 'success'})
     }
   }, [errors])
-  useEffect(() => {
-    const selected = cities.find((x) => x.value === values.cityID)
-    if(selected){
-      setValues(prevValues => ({...prevValues,cityID: selected}))
-    }
-  },[values.cityID])
-  useEffect(() => {
-    const selected = countries.find((x) => x.value === values.countryID)
-    if(selected){
-      setValues(prevValues => ({...prevValues,countryID: selected}))
-    }
-  },[values.countryID])
-  useEffect(() => {
-    const selected = addressTypes.find((x) => x.value === values.addressTypeID)
-    if(selected){
-      setValues(prevValues => ({...prevValues,addressTypeID: selected}))
-    }
-  },[values.addressTypeID])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>
         <div className='module-content-wrapper'>
         <div className='module-header-row'>
-              <h1 className='module-header'>Edytuj kolumnę footera</h1>
+              <h1 className='module-header'>Edytuj dostawcę</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>   
             <div className='grid grid-cols-3 gap-2'>

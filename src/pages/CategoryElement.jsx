@@ -68,7 +68,7 @@ function CategoryElement() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/CategoryElements/${id}`)
+          const response = await axiosClient.delete(`/CategoryElements/${id}?categoryElementId=${id}`)
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Element kategorii został usunięty", type: 'success'})
             getAllData()

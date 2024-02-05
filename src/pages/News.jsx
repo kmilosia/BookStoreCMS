@@ -54,23 +54,13 @@ function News() {
     }
     const postData = async (object) => {
       try{
-        const rawToken = localStorage.getItem('token')
-        if(rawToken){
-          const token = rawToken.replace(/^"|"$/g, '')
-          const response = await axiosClient.post('News', object ,{
-            headers:{
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-          }})
+          const response = await axiosClient.post('News', object)
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano nową wiadomość", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania wiadomości", type: 'error'})
           }
-        }else{
-          setMessage({title: "Błąd przy pobieraniu tokena", type: 'error'})
-        }
       }catch(err){
           setMessage({title: "Błąd podczas dodawania wiadomości", type: 'error'})
       }

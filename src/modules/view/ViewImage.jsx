@@ -8,9 +8,11 @@ function ViewImage(props) {
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Images/${id}`)
+          if(response.status === 200 || response.status === 204){
           setImage(response.data)
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCloseModule = () => {
@@ -21,24 +23,30 @@ function ViewImage(props) {
         getItem(props.editedID)
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper '>
             <div className='module-header-row'>
-                    <h1 className='module-header'>{image.title}</h1>
+                    <h1 className='module-header'>{image?.title}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>               
                  <div className='my-2 flex items-center justify-center'>
-                    <img src={image.imageURL} alt='Zdjęcie' className='w-full object-contain h-auto'/>
+                    <img src={image?.imageURL} alt='Zdjęcie' className='w-1/2 object-contain h-auto'/>
                 </div>
                 <div className='divider'/>
+                <div className='grid grid-cols-2 gap-2'>
                 <div className='flex flex-col my-1'>
                     <p className='column-info-title'>Tytuł</p>
-                    <h2 className='column-info-text'>{image.title}</h2>
+                    <h2 className='column-info-text'>{image?.title}</h2>
                 </div>
                 <div className='flex flex-col my-1'>
-                    <p className='column-info-title'>Opis</p>
-                    <h2 className='column-info-text break-all'>{image.imageURL}</h2>
+                    <p className='column-info-title'>Pozycja</p>
+                    <h2 className='column-info-text'>{image?.position}</h2>
+                </div>
+                </div>             
+                <div className='flex flex-col my-1'>
+                    <p className='column-info-title'>Adres URL zdjęcia</p>
+                    <h2 className='column-info-text break-all'>{image?.imageURL}</h2>
                 </div>                        
             </div>
         </div>

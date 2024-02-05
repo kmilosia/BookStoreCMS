@@ -17,6 +17,7 @@ import { formatDisplayDate } from '../utils/functions/formatDisplayDate'
 import ViewSupply from '../modules/view/ViewSupply'
 import NewSupply from '../modules/new/NewSupply'
 import { useMessageStore } from '../store/messageStore'
+import EditSupply from '../modules/edit/EditSupply'
 
 function Supply() {
     const setMessage = useMessageStore((state) => state.setMessage)
@@ -84,9 +85,9 @@ function Supply() {
           const response = await axiosClient.put(`/Supply/${id}`, object)
           if(response.status === 200 || response.status === 204){
             getAllData()
-            setMessage({title: "Nowa dostawa została dodana", type: 'success'})
+            setMessage({title: "Dostawa została edytowana", type: 'success'})
           }else{
-            setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
+            setMessage({title: "Błąd podczas edycji danych", type: 'error'})
           }
       }catch(err){
         setMessage({title: "Błąd podczas edycji danych", type: 'error'})
@@ -116,7 +117,7 @@ function Supply() {
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
           <AddNewButton setShowNewModule={setShowNewModule} title="Nową Dostawę"/>                   
         </div>
-        <ListHeader  columnNames={supplyColumns}/>
+        <ListHeader columnNames={supplyColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -139,7 +140,7 @@ function Supply() {
       }
         </div>
     {showNewModule && <NewSupply postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditSupplier putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showEditModule && <EditSupply putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewSupply editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )

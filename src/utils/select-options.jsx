@@ -20,6 +20,7 @@ export const stockSortOptions = [
 export const supplySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'supplierName', label: 'Nazwa dostawcy', type: 'string'},
+    {value: 'priceBrutto', label: 'Kwota brutto', type: 'number'},
 ]
 export const numericSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
@@ -40,7 +41,7 @@ export const discountSortOptions = [
 ]
 export const imageSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
-    {value: 'imageURL', label: 'URL', type: 'string'}
+    {value: 'title', label: 'Tytuł', type: 'string'}
 ]
 export const categoryElementSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},

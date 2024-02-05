@@ -7,10 +7,8 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
 import { supplierValidate } from '../../utils/validation/newValidate'
-import { useMessageStore } from '../../store/messageStore'
 
 function NewSupplier({setShowNewModule, postData}) {
-  const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [cities, setCities] = useState([])
@@ -35,37 +33,43 @@ function NewSupplier({setShowNewModule, postData}) {
     const getCities = async () => {
         try{
           const response = await axiosClient.get(`/City`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setCities(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getCountries = async () => {
         try{
           const response = await axiosClient.get(`/Country`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setCountries(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getAddressTypes = async () => {
         try{
           const response = await axiosClient.get(`/AddressType`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setAddressTypes(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const handleCityChange = (selectedOption) => {
@@ -94,15 +98,14 @@ function NewSupplier({setShowNewModule, postData}) {
             countryID: values.countryID.value,
             addressTypeID: values.addressTypeID.value,
           }
-        const data = {
-          name: values.name,
-          email: values.email,
-          phoneNumber: values.phoneNumber,
-          address: newaddress,
-        }
+          const data = {
+            name: values.name,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            address: newaddress,
+          }
           postData(data)
           handleCloseModule()
-          setMessage({title: "Dostawca został dodany", type: 'success'})
         }
       useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {

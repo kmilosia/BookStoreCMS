@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import axiosClient from "../api/apiClient";
-import { getValidToken } from "../api/getValidToken";
 
 export const useAuthStore = create((set) => ({
     restoring: true,

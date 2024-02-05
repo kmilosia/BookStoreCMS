@@ -72,9 +72,9 @@ export const footerLinkColumns = [
     { name: 'Kolumna'}
 ]
 export const imageColumns = [
-    { name: 'ID'},
     { name: 'Zdjęcie'},
-    { name: 'URL'}
+    { name: 'ID'},
+    { name: 'Tytuł'},
 ]
 export const addressColumns = [
     {name: 'ID'},

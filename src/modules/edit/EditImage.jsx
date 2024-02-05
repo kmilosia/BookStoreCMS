@@ -4,38 +4,47 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
+import { imageValidate } from '../../utils/validation/newValidate'
 
 function EditImage(props) {
-    const [title, setTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
-    const [image,setImage] = useState({})
-
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [values,setValues] = useState({
+      title: '',
+      position: '',
+      imageURL: '',
+  })
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Images/${id}`)
-          setImage(response.data)
-          setTitle(response.data.title)
-          setImageURL(response.data.imageURL)
+          if(response.status === 200 || response.status === 204){
+            setValues({
+              title: response.data.title,
+              position: response.data.position,
+              imageURL: response.data.imageURL
+            })
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleURLInput = (e) => {
-        setImageURL(e.target.value)
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
-    const handleTitleInput = (e) => {
-      setTitle(e.target.value)
-  }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleAcceptButton = () => {
-        image.imageURL = imageURL
-        props.putData(image.id, image)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-  }
+      setSubmitting(true)
+      setErrors(imageValidate(values))
+    } 
+    useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+          props.putData(props.editedID, values)
+          handleCloseModule()
+      }
+    }, [errors])
   useEffect(()=> {
     getItem(props.editedID)
   },[])
@@ -47,13 +56,18 @@ function EditImage(props) {
               <h1 className='module-header'>Edytuj zdjęcie</h1>
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
-            <img src={imageURL} className='w-full object-contain h-auto my-1' />
-            <div className='flex flex-row items-center'>
-              <div className='grid grid-cols-[1fr_2fr] gap-2 mt-2'>
-              <DefaultInput onChange={handleTitleInput} value={title} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
-              <DefaultInput onChange={handleURLInput} value={imageURL} type='text' placeholder='Adres URL' title='Adres URL zdjęcia'/>
-              </div>
-            </div>
+            <div className='grid grid-cols-2 gap-2'>
+                    <DefaultInput name="position" error={errors.position} value={values.position} onChange={handleChange} type='number' placeholder='Pozycja (1 to zdjęcie główne książki)' title='Pozycja'/>
+                    <DefaultInput name="title" error={errors.title} value={values.title} onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                </div>
+                <div className='grid grid-cols-1 gap-2'>
+                    <DefaultInput name="imageURL" error={errors.imageURL} value={values.imageURL} onChange={handleChange} type='text' placeholder='Adres zdjęcia' title='Adres zdjęcia'/>
+                </div>
+                {values.imageURL &&
+                <div className='w-full h-auto'>
+                    <img src={values.imageURL} className='w-1/3 h-auto object-contain' />
+                </div>
+                }
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>

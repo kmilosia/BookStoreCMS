@@ -76,6 +76,19 @@ export const bannerValidate = (values) => {
     }
     return errors
 }
+export const imageValidate = (values) => {
+    let errors = {}
+    if (!values.position) {
+        errors.position = "Wprowadź pozycję!"
+    } 
+    if (!values.title) {
+        errors.title = "Wprowadź tytuł!"
+    } 
+    if (!values.imageURL) {
+        errors.imageURL = "Wprowadź adres zdjęcia!"
+    }
+    return errors
+}
 export const discountsBannerValidate = (values) => {
     let errors = {}
     if (!values.header) {
@@ -210,6 +223,22 @@ export const supplyValidate = (values) => {
     if (!values.paymentMethodID) {
         errors.paymentMethodID = "Wybierz metodę płatności!"
     } 
+    if (!values.deliveryStatusID) {
+        errors.deliveryStatusID = "Wybierz status dostawy!"
+    } 
+    if (!values.deliveryDate) {
+        errors.deliveryDate = "Wybierz datę dostawy!"
+    } 
+    if (!values.supplierID) {
+        errors.supplierID = "Wybierz dostawcę!"
+    } 
+    if (values.bookItems.length === 0) {
+        errors.bookItems = "Wybierz produkt!"
+    } 
+    return errors
+}
+export const supplyEditValidate = (values) => {
+    let errors = {}
     if (!values.deliveryStatusID) {
         errors.deliveryStatusID = "Wybierz status dostawy!"
     } 
