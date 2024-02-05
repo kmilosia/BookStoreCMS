@@ -6,26 +6,24 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { newsletterValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import { useMessageStore } from '../../store/messageStore'
 import { convertDate } from '../../utils/functions/convertDate'
 
 function NewNewsletter({setShowNewModule, postData}) {
-    const setMessage = useMessageStore((state) => state.setMessage)
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
         title: '',
-        publicationDate: null,
-        content: ''
+        publicationDate: '',
+        content: '',
+        isSent: false,
     })
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
     }   
     const handleAcceptButton = () => {
-        console.log(values);
         setSubmitting(true)
         setErrors(newsletterValidate(values))
     } 
@@ -35,14 +33,13 @@ function NewNewsletter({setShowNewModule, postData}) {
             setValues(prevValues => ({
                 ...prevValues,
                 publicationDate: convertedDate,
-              }));           
+              }))     
             postData(values)
             handleCloseModule()
-            setMessage({title: "Newsletter został dodany", type: 'success'})
         }
       }, [errors])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -53,7 +50,7 @@ function NewNewsletter({setShowNewModule, postData}) {
                     <DefaultInput name="title" error={errors.title} onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł newslettera'/>
                     <DefaultInput name="publicationDate" error={errors.publicationDate} onChange={handleChange} type='date' placeholder='Data publikacji' title='Data publikacji'/>
                 </div>
-                <DefaultTextarea name="content" onChange={handleChange} placeholder='Treść' title="Treść newslettera"/>
+                <DefaultTextarea name="content" error={errors.content} onChange={handleChange} placeholder='Treść' title="Treść newslettera"/>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
