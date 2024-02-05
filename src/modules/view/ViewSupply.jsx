@@ -27,7 +27,7 @@ function ViewSupply(props) {
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <div className='module-content-wrapper cursor-default'>
+            <div className='module-content-wrapper cursor-default dark:text-white'>
                 <div className='module-header-row'>
                     <h1 className='module-header'>Dostawa od {data?.supplierData?.name} #{data?.id}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />

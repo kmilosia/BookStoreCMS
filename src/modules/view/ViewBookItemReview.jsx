@@ -33,7 +33,7 @@ function ViewBookItemReview(props) {
                 </div>
                 {data?.map((item,index) => {
                     return(
-                        <div key={index} className='flex flex-col rounded-md mb-3 border-2 border-gray-200 dark:border-dracula-700'>
+                        <div key={index} className='flex flex-col rounded-md mb-3 border-2 border-gray-200 dark:border-dracula-700 dark:text-white'>
                             <div className='bg-gray-200 dark:bg-dracula-700 p-3'>
                                 <h2 className='font-semibold'>Recenzja #{item.id}</h2>
                             </div>
@@ -51,7 +51,7 @@ function ViewBookItemReview(props) {
                                     <p className='font-semibold'>{item.creationDate && formatDisplayDate(item.creationDate)}</p>
                                 </div>
                                 {item.content !== '' &&
-                                <div className='flex flex-col col-span-3 border-t pt-2'>
+                                <div className='flex flex-col col-span-3 border-t dark:border-dracula-600 pt-2'>
                                     <p className='font-light'>Treść oceny</p>
                                     <p className='font-semibold'>{item.content}</p>
                                 </div>}

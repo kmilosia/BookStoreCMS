@@ -206,7 +206,7 @@ function EditSupply(props) {
               <div className='grid grid-cols-1 gap-2'>
                 {values.bookItems.length > 0 && values.bookItems.map((item,index) => {
                   return(
-                    <div key={index} className='flex flex-row items-center justify-between border-2 border-gray-200 dark:border-dracula-700 rounded-md p-3'>
+                    <div key={index} className='flex flex-row items-center justify-between border-2 border-gray-200 dark:border-dracula-700 dark:text-white rounded-md p-3'>
                       <div className='flex flex-col'>
                         <h1 className='font-semibold'>{item.bookTitle}</h1>
                         <h2 className='text-sm'>{item.formName === 'Book' ? 'Książka' : 'Ebook'}</h2>

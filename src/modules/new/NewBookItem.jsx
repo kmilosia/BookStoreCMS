@@ -10,16 +10,15 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import { bookItemValidate } from '../../utils/validation/newValidate'
 
 function NewBookItem({setShowNewModule, postData}) {
-  const today = new Date().toISOString().split('T')[0];
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [isEbook, setIsEbook] = useState(null)
   const [values, setValues] = useState({
-    vat: 0,
-    netto: 0,
+    vat: '',
+    netto: '',
     ISBN: '',
-    pages: 0,
-    publishingDate: today,
+    pages: '',
+    publishingDate: '',
     translator: null,
     language: null,
     edition: null,
@@ -180,9 +179,8 @@ function NewBookItem({setShowNewModule, postData}) {
         availabilityID: values.availability.value,
         bookID: values.book.value,
         }
-        console.log(data);
-        // postData(data)
-        // handleCloseModule()
+        postData(data)
+        handleCloseModule()
       }
       useEffect(() => {
         if(values.form){
@@ -210,7 +208,7 @@ function NewBookItem({setShowNewModule, postData}) {
       getBooks()
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
     <div className='module-window'>
         <div className='module-content-wrapper'>
         <div className='module-header-row'>

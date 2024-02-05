@@ -24,7 +24,7 @@ function ViewDiscount(props) {
         getItem(props.editedID)
     },[])
   return (
-    <div className='module-wrapper' style={backgroundOverlayModule}>
+    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
                 <div className='module-header-row'>
@@ -64,7 +64,7 @@ function ViewDiscount(props) {
                 <div className='divider'></div>
                 <div className='flex flex-col my-1'>
                     <p className='column-info-title'>Książki objęte promocją</p>
-                    <div className='flex flex-col border-2 border-gray-200 dark:border-dracula-700 rounded-md'>
+                    <div className='flex flex-col border-2 border-gray-200 dark:border-dracula-700 rounded-md dark:text-white'>
                     {discount?.listOfBookItems?.map((item,index) => (                 
                         <div key={index} className={`p-3 text-sm flex flex-col ${index > 0 && 'border-t-2 border-gray-200 dark:border-dracula-700'}`}>
                             <p className='font-semibold'>{item.bookTitle}</p>

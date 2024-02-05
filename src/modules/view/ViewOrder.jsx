@@ -27,7 +27,7 @@ function ViewOrder(props) {
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>
-            <div className='module-content-wrapper'>
+            <div className='module-content-wrapper text-black dark:text-white'>
             <div className='module-header-row'>
                     <h1 className='module-header'>Zamówienie #{order?.id}</h1>
                     <CloseWindowButton handleCloseModule={handleCloseModule} />
@@ -104,7 +104,7 @@ function ViewOrder(props) {
                     <div className='flex flex-col p-3'>
                         {order?.orderItems?.map((item,index) => {
                             return(
-                                <div key={index} className={`flex flex-row items-center justify-between ${index > 0 && 'mt-2'}`}>
+                                <div key={index} className={`flex flex-row items-center justify-between ${index > 0 && 'mt-2 pt-2 border-t dark:border-dracula-600'}`}>
                                     <div className='flex flex-col'>
                                         <h1 className='font-semibold text-sm'>{item.bookTitle}</h1>
                                         <h2 className='font-light text-xs'>{item.authors?.map(author => {return(author.name + " " + author.surname + " ")})}</h2>
@@ -123,7 +123,7 @@ function ViewOrder(props) {
                                             <p>Cena brutto: </p>
                                             <p className='ml-2 font-medium'>{item.bruttoPrice?.toFixed(2)}zł</p>
                                         </div>
-                                        <div className='flex flex-row'>
+                                        <div className='flex flex-row mt-2'>
                                             <p>Kwota całkowita: </p>
                                             <p className='ml-2 font-medium'>{item.totalBruttoPrice?.toFixed(2)}zł</p>
                                         </div>

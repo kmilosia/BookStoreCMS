@@ -77,7 +77,7 @@ function Contact() {
                 <div className='flex justify-end'>
                   <button onClick={() => handleAnswer(item.id)} className='table-button'><TbWriting /></button>
                 </div>        
-                <div className='flex flex-col col-span-4 text-sm border-t mt-2 pt-2'>
+                <div className='flex flex-col col-span-4 text-sm border-t dark:border-dracula-600 mt-2 pt-2'>
                     <p>Wiadomość</p>                       
                     <p className='font-semibold'>{item.content}</p>                       
                 </div>     
