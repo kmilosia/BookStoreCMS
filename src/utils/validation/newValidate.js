@@ -154,8 +154,8 @@ export const bookValidate = (values) => {
 }
 export const bookItemValidate = (values) => {
     let errors = {}
-    if (!values.vat) {
-        errors.vat = "Wprowadź VAT!"
+    if (!values.tax) {
+        errors.tax = "Wprowadź podatek VAT!"
     } 
     if (!values.netto) {
         errors.netto = "Wprowadź NETTO!"

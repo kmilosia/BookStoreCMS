@@ -140,7 +140,6 @@ function NewBook({setShowNewModule, postData}) {
           position: index + 1,
         })),
       };     
-        console.log(data)
         postData(data)
         handleCloseModule()
       }

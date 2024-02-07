@@ -4,26 +4,29 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import { useEffect } from 'react'
 import axiosClient from '../../api/apiClient'
-import { convertDateToInput } from '../../utils/functions/convertDate'
+import { convertDate, convertDateToInput } from '../../utils/functions/convertDate'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { bookItemValidate } from '../../utils/validation/newValidate'
 
 function EditBookItem({setShowEditModule, putData, editedID}) {
-    const [item, setItem] = useState([])
-
-    const [vat, setVat] = useState(null)
-    const [netto, setNetto] = useState(null)
-    const [ISBN, setISBN] = useState('')
-    const [pages, setPages] = useState(null)
-    const [publishingDate, setPublishingDate] = useState('')
-    const [translator, setTranslator] = useState(null)
-    const [language, setLanguage] = useState(null)
-    const [edition, setEdition] = useState(null)
-    const [fileFormat, setFileFormat] = useState(null)
-    const [form, setForm] = useState(null)
-    const [availability, setAvailability] = useState(null)
-    const [book, setBook] = useState(null)
-
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [isEbook, setIsEbook] = useState(null)
+  const [values, setValues] = useState({
+    tax: '',
+    netto: '',
+    ISBN: '',
+    pages: '',
+    publishingDate: '',
+    translator: null,
+    language: null,
+    edition: null,
+    fileFormat: null,
+    form: null,
+    availability: null,
+    book: null,
+  })
     const [translatorOptions, setTranslatorOptions] = useState([])
     const [languageOptions, setLanguageOptions] = useState([])
     const [editionOptions, setEditionOptions] = useState([])
@@ -31,246 +34,214 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     const [formOptions, setFormOptions] = useState([])
     const [availabilityOptions, setAvailabilityOptions] = useState([])
     const [bookOptions, setBookOptions] = useState([])
-
-    const [selectedTranslator, setSelectedTranslator] = useState(null)
-    const [selectedLanguage, setSelectedLanguage] = useState(null)
-    const [selectedEdition, setSelectedEdition] = useState(null)
-    const [selectedFileFormat, setSelectedFileFormat] = useState(null)
-    const [selectedForm, setSelectedForm] = useState(null)
-    const [selectedAvailablity, setSelectedAvailability] = useState(null)
-    const [selectedBook, setSelectedBook] = useState(null)
-
-
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/BookItems/${id}`)
-          setItem(response.data)
-          setVat(response.data.vat)
-          setNetto(response.data.nettoPrice)
-          setISBN(response.data.isbn)
-          setPages(response.data.pages)
-          const pubDate = new Date(response.data.publishingDate)
-          setPublishingDate(convertDateToInput(pubDate))
-          setTranslator(response.data.translatorID)
-          setLanguage(response.data.languageID)
-          setBook(response.data.bookID)
-          setEdition(response.data.editionID)
-          setFileFormat(response.data.fileFormatID)
-          setForm(response.data.formID)
-          setAvailability(response.data.availabilityID)
-          console.log(response.data);
-        }catch(err){
-          console.error(err)
-        }
-      }
-
     const getTranslators = async () => {
         try{
           const response = await axiosClient.get(`/Translator`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name + " " + item.surname
           }))
           setTranslatorOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getLanguages = async () => {
         try{
           const response = await axiosClient.get(`/Language`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setLanguageOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getEditions = async () => {
         try{
           const response = await axiosClient.get(`/Edition`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setEditionOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getFileFormats = async () => {
         try{
           const response = await axiosClient.get(`/FileFormat`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setFileFormatOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getForms = async () => {
         try{
           const response = await axiosClient.get(`/Form`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setFormOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getAvailabilities = async () => {
         try{
           const response = await axiosClient.get(`/Availability`)
+          if(response.status === 200 || response.status === 204){
           const options = response.data.map(item => ({
             value: item.id,
             label: item.name
           }))
           setAvailabilityOptions(options)
+        }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
     const getBooks = async () => {
         try{
           const response = await axiosClient.get(`/Book`)
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.title
-          }))
-          setBookOptions(options)
+          if(response.status === 200 || response.status === 204){
+            const options = response.data.map(item => ({
+              value: item.id,
+              label: item.title
+            }))
+            setBookOptions(options)  
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const handleVat = (e) => {
-        setVat(Number(e.target.value))
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
-    const handleNetto = (e) => {
-        setNetto(Number(e.target.value))
+    const handleTranslator = (translator) => {
+      setValues({ ...values, translator })
     }
-    const handleISBN = (e) => {
-        setISBN(e.target.value)
+    const handleLanguage = (language) => {
+      setValues({ ...values, language })
     }
-    const handlePages = (e) => {
-        setPages(Number(e.target.value))
+    const handleEdition = (edition) => {
+      setValues({ ...values, edition })
     }
-    const handlePublishingDate = (e) => {
-        setPublishingDate(e.target.value)
+    const handleFileFormat = (fileFormat) => {
+      setValues({ ...values, fileFormat })
     }
-    const handleTranslator = (selectedTranslator) => {
-        setSelectedTranslator(selectedTranslator)
+    const handleForm = (form) => {
+      setValues({ ...values, form })
     }
-    const handleLanguage = (selectedLanguage) => {
-        setSelectedLanguage(selectedLanguage)
+    const handleAvailability = (availability) => {
+      setValues({ ...values, availability })
     }
-    const handleEdition = (selectedEdition) => {
-        setSelectedEdition(selectedEdition)
+    const handleBook = (book) => {
+      setValues({ ...values, book })
     }
-    const handleFileFormat = (selectedFileFormat) => {
-        setSelectedFileFormat(selectedFileFormat)
-    }
-    const handleForm = (selectedForm) => {
-        setSelectedForm(selectedForm)
-    }
-    const handleAvailability = (selectedAvailablity) => {
-        setSelectedAvailability(setSelectedAvailability)
-    }
-    const handleBook = (selectedBook) => {
-        setSelectedBook(selectedBook)
-    }
+
+    const getItem = async (id) => {
+        try{
+          const response = await axiosClient.get(`/BookItems/${id}`)
+          if(response.status === 200 || response.status === 204){
+            const newDate = new Date(response.data.publishingDate)
+            setValues({
+              tax: response.data.tax,
+              netto: response.data.nettoPrice,
+              ISBN: response.data.isbn,
+              pages: response.data.pages,
+              publishingDate: convertDateToInput(newDate),
+              translator: { value: response.data.translatorID, label: response.data.translatorName },
+              language: { value: response.data.languageID, label: response.data.languageName },
+              edition: { value: response.data.editionID, label: response.data.editionName },
+              fileFormat: { value: response.data.fileFormatID, label: response.data.fileFormatName },
+              form: { value: response.data.formID, label: response.data.formName },
+              availability: { value: response.data.availabilityID, label: response.data.availabilityName },
+              book: { value: response.data.bookID, label: response.data.bookName },
+            })
+          }
+  
+        }catch(err){
+          console.log(err)
+        }
+      }
     const handleCloseModule = () => {
         setShowEditModule(false)
     }   
     const handleAcceptButton = () => {
-        const data = {
-            id: item.id,
-            vat: vat,
-            nettoPrice: netto,
-            isbn: ISBN,
-            pages: pages,
-            publishingDate: publishingDate,
-            translatorID: selectedTranslator.value,
-            languageID: selectedLanguage.value,
-            editionID: selectedEdition.value,
-            fileFormatID: selectedFileFormat.value,
-            formID: selectedForm.value,
-            availabilityID: selectedAvailablity.value,
-            bookID: selectedBook.value,
-        }
-        putData(item.id,data)
-        handleCloseModule()
+      setSubmitting(true)
+      setErrors(bookItemValidate(values))
     } 
-    useEffect(() => {
-        const fetchAll = async () => {
-            try{
-                getTranslators()
-                getLanguages()
-                getEditions()
-                getFileFormats()
-                getForms()
-                getAvailabilities()
-                getBooks()
-                getItem(editedID)
-            }catch(error){
-                console.error(error)
-            }
+    const finishSubmit = () => {
+      const covertedDate = convertDate(values.publishingDate)
+      const data = {
+        tax: Number(values.tax),
+        nettoPrice: Number(values.netto),
+        isbn: values.ISBN,
+        pages: Number(values.pages),
+        publishingDate: covertedDate,
+        translatorID: values.translator.value,
+        languageID: values.language.value,
+        editionID: values.edition ? values.edition.value : null,
+        fileFormatID: values.fileFormat ? values.fileFormat.value : null,
+        formID: values.form.value,
+        availabilityID: values.availability.value,
+        bookID: values.book.value,
         }
-        fetchAll()
+        putData(editedID,data)
+        handleCloseModule()
+      }
+      useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+          finishSubmit()
+        }
+      }, [errors])
+      useEffect(() => {
+        if(values.form){
+          if(values.form.value === 1){
+            setIsEbook(false)
+            setValues({
+              ...values,
+              fileFormat: null
+            })
+          }else if(values.form.value === 2){
+            setIsEbook(true)
+            setValues({
+              ...values,
+              edition: null
+            })
+          }else{setIsEbook(null)}
+        }else{
+          setIsEbook(null)
+        }
+      },[values.form])
+    useEffect(() => {
+      getTranslators()
+      getLanguages()
+      getEditions()
+      getFileFormats()
+      getForms()
+      getAvailabilities()
+      getBooks()
+      getItem(editedID)
     },[])
-    useEffect(() => {
-        const selected = translatorOptions.find((x) => x.value === translator)
-        if(selected){
-          setSelectedTranslator(selected)
-        }
-      },[translatorOptions,translator])
-
-      useEffect(() => {
-        const selected = languageOptions.find((x) => x.value === language)
-        if(selected){
-          setSelectedLanguage(selected)
-        }
-      },[languageOptions,language])
-
-      useEffect(() => {
-        const selected = editionOptions.find((x) => x.value === edition)
-        if(selected){
-          setSelectedEdition(selected)
-        }
-      },[editionOptions,edition])
-
-      useEffect(() => {
-        const selected = fileFormatOptions.find((x) => x.value === fileFormat)
-        if(selected){
-          setSelectedFileFormat(selected)
-        }
-      },[fileFormatOptions,fileFormat])
-
-      useEffect(() => {
-        const selected = formOptions.find((x) => x.value === form)
-        if(selected){
-          setSelectedForm(selected)
-        }
-      },[formOptions,form])
-
-      useEffect(() => {
-        const selected = availabilityOptions.find((x) => x.value === availability)
-        if(selected){
-          setSelectedAvailability(selected)
-        }
-      },[availabilityOptions,availability])
-
-      useEffect(() => {
-        const selected = bookOptions.find((x) => x.value === book)
-        if(selected){
-          setSelectedBook(selected)
-        }
-      },[bookOptions,book])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
     <div className='module-window'>
@@ -280,31 +251,31 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               <CloseWindowButton handleCloseModule={handleCloseModule} />
             </div>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultInput value={vat} onChange={handleVat} placeholder="VAT" type="number" title="VAT"/>
-              <DefaultInput value={netto} onChange={handleNetto} placeholder="Netto" type="number" title="NETTO"/>
+              <DefaultInput name="tax" error={errors.tax} value={values.tax} onChange={handleChange} placeholder="Podatek VAT" type="number" title="Podatek VAT"/>
+              <DefaultInput name="netto" error={errors.netto} value={values.netto} onChange={handleChange} placeholder="Cena netto" type="number" title="Cena netto"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[1fr_2fr_2fr] gap-2'>
-              <DefaultInput value={pages} onChange={handlePages} placeholder="Liczba stron" type="number" title="Strony"/>
-              <DefaultInput value={ISBN} onChange={handleISBN} placeholder="ISBN" type="text" title="ISBN"/>
-              <DefaultInput onChange={handlePublishingDate} placeholder="Data wydania" type="date" value={publishingDate} title="Data wydania"/>
+              <DefaultInput name="pages" error={errors.pages} value={values.pages} onChange={handleChange} placeholder="Liczba stron" type="number" title="Strony"/>
+              <DefaultInput name="ISBN" error={errors.ISBN} value={values.ISBN} onChange={handleChange} placeholder="ISBN" type="text" title="ISBN"/>
+              <DefaultInput name="publishingDate" error={errors.publishingDate} value={values.publishingDate} onChange={handleChange} placeholder="Data wydania" type="date" title="Data wydania"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultSelect onChange={handleLanguage} placeholder="Język" options={languageOptions} value={selectedLanguage} title="Język"/>
-              <DefaultSelect onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={selectedTranslator} title="Translator"/>
+              <DefaultSelect name="language" error={errors.language} onChange={handleLanguage} placeholder="Język" options={languageOptions} value={values.language} title="Język"/>
+              <DefaultSelect name="translator" error={errors.translator} onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={values.translator} title="Translator"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-[2fr_1fr] gap-2'>
-              <DefaultSelect onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={selectedBook} title="Podstawowa książka"/>
-              <DefaultSelect onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={selectedAvailablity} title="Dostępność"/>
+              <DefaultSelect name="book" error={errors.book} onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={values.book} title="Podstawowa książka"/>
+              <DefaultSelect name="availability" error={errors.availability} onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={values.availability} title="Dostępność"/>
             </div>
             <div className='divider'/>
-            <div className='grid grid-cols-3 gap-2'>
-              <DefaultSelect onChange={handleForm} placeholder="Format książki" options={formOptions} value={selectedForm} title="Format książki"/>
-              <DefaultSelect onChange={handleEdition} placeholder="Edycja Okładki" options={editionOptions} value={selectedEdition} title="Edycja okładki"/>
-              <DefaultSelect onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={selectedFileFormat} title="Format pliku"/>
-            </div>
+            <div className='grid grid-cols-2 gap-2 my-1'>
+              <DefaultSelect name="form" error={errors.form} onChange={handleForm} placeholder="Format książki" options={formOptions} value={values.form} title="Format książki"/>
+              {isEbook && <DefaultSelect name="fileFormat" error={errors.fileFormat} onChange={handleFileFormat} placeholder="Format Pliku" options={fileFormatOptions} value={values.fileFormat} title="Format pliku"/>}
+              {isEbook === false && <DefaultSelect name="edition" error={errors.edition} onChange={handleEdition} placeholder="Okładka" options={editionOptions} value={values.edition} title="Edycja okładki"/>}
+            </div>        
             <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
         </div>
     </div>

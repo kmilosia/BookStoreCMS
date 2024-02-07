@@ -73,8 +73,8 @@ function ViewBookItem(props) {
             <div className='divider' />
             <div className='grid grid-cols-3 gap-2'>
               <div className='flex flex-col'>
-                  <p className='column-info-title'>VAT</p>
-                  <h2 className='column-info-text'>{item?.vat}%</h2>
+                  <p className='column-info-title'>Podatek VAT</p>
+                  <h2 className='column-info-text'>{item?.tax}%</h2>
               </div>
               <div className='flex flex-col'>
                   <p className='column-info-title'>Netto</p>

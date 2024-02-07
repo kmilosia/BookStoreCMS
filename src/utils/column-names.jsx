@@ -63,6 +63,7 @@ export const dictionaryColumns = [
 ]
 export const orderColumns = [
     { name: 'ID'},
+    { name: 'Klient'},
     { name: 'Data zamówienia'},
     { name: 'Kwota brutto'},
 ]

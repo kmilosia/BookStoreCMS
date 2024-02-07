@@ -96,7 +96,7 @@ const handleAddressTypeChange = (selectedAddressType) => {
                 postcode: newAddress.postcode,
                 cityID: { value: newAddress.cityID, label: newAddress.cityName },
                 countryID: { value: newAddress.countryID, label: newAddress.countryName },
-                addressTypeID: addressTypes.find((item) => item.value === newAddress.addressTypeID),
+                addressTypeID: { value: newAddress.addressTypeID, label: newSupplier.addressTypeName },
             })
           }
         }catch(err){

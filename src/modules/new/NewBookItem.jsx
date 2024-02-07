@@ -14,7 +14,7 @@ function NewBookItem({setShowNewModule, postData}) {
   const [submitting, setSubmitting] = useState(false)
   const [isEbook, setIsEbook] = useState(null)
   const [values, setValues] = useState({
-    vat: '',
+    tax: '',
     netto: '',
     ISBN: '',
     pages: '',
@@ -166,7 +166,7 @@ function NewBookItem({setShowNewModule, postData}) {
     const finishSubmit = () => {
       const covertedDate = convertDate(values.publishingDate)
       const data = {
-        vat: Number(values.vat),
+        tax: Number(values.tax),
         nettoPrice: Number(values.netto),
         isbn: values.ISBN,
         pages: Number(values.pages),
@@ -217,8 +217,8 @@ function NewBookItem({setShowNewModule, postData}) {
             </div>
             <h2 className='font-semibold dark:text-white'>Cena książki</h2>
             <div className='grid grid-cols-2 gap-2'>
-              <DefaultInput name="vat" error={errors.vat} onChange={handleChange} placeholder="VAT" type="number" title="VAT"/>
-              <DefaultInput name="netto" error={errors.netto} onChange={handleChange} placeholder="Netto" type="number" title="NETTO"/>
+              <DefaultInput name="tax" error={errors.tax} onChange={handleChange} placeholder="Podatek VAT" type="number" title="Podatek VAT"/>
+              <DefaultInput name="netto" error={errors.netto} onChange={handleChange} placeholder="Cena netto" type="number" title="Cena netto"/>
             </div>
             <h2 className='font-semibold dark:text-white mt-3'>Informacje szczegółowe</h2>
             <div className='grid grid-cols-[1fr_2fr_2fr] gap-2 my-1'>
