@@ -117,4 +117,36 @@ export const useAuthStore = create((set) => ({
             console.log(e)
         }
     },
+    recoverPassword: async(data, setSuccess) => {
+        try{
+            set({error: null, loading: true})
+                const response = await axiosClient.post('Account/ForgotPassword', data)
+                if(response.status === 200 || response.status === 204){
+                    setSuccess(true)
+                    set({error: null})
+                }else{
+                    set({error: 'Błąd podczas sprawdzania danych. Sprawdź czy podany email jest prawidłowy.'})
+                    setSuccess(false)
+                }
+        }catch(e){
+            console.log(e)
+        }
+        set({ loading: false })
+    },
+    newPassword: async(data, setSuccess) => {
+        try{
+            set({error: null, loading: true})
+                const response = await axiosClient.post('Account/ResetPassword', data)
+                if(response.status === 200 || response.status === 204){
+                    setSuccess(true)
+                    set({error: null})
+                }else{
+                    set({error: 'Błąd podczas resetowania hasła. Sprawdź czy wszystkie dane są prawidłowe.'})
+                    setSuccess(false)
+                }
+        }catch(e){
+            console.log(e)
+        }
+        set({ loading: false })
+    },
 }))

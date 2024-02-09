@@ -6,7 +6,7 @@ function DictionaryLinks({setIsSideMenuExpanded}) {
     setIsSideMenuExpanded(false)
   }
   return (
-    <div className='flex flex-col overflow-auto px-2 py-1 sidebar-scrollbar my-2'>
+    <div className='flex flex-col overflow-auto overflow-x-hidden px-2 py-1 sidebar-scrollbar my-2'>
         <Link to='/autor' onClick={handleClick} className='sidemenu-link'>Autor</Link>
         <Link to='/dostepnosc' onClick={handleClick} className='sidemenu-link'>Dostępność</Link>
         <Link to='/edycja-ksiazki' onClick={handleClick} className='sidemenu-link'>Edycja</Link>

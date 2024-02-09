@@ -1,23 +1,15 @@
 import React, { useState } from 'react'
-import { GiSecretBook } from 'react-icons/gi'
 import ShowPasswordButton from '../../components/buttons/ShowPasswordButton'
 import { loginValidate } from '../../utils/validation/loginValidate'
 import { useEffect } from 'react'
 import TextLink from '../../components/buttons/TextLink'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { loginUser, resetState } from '../../store/userSlice'
 import SubmitButton from '../../components/buttons/SubmitButton'
-// import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 
 function Login() {
   const signIn = useAuthStore((state) => state.signIn)
   const error = useAuthStore((state) => state.error)
   const loading = useAuthStore((state) => state.loading)
-
-  // const dispatch = useDispatch()
-  // const navigate = useNavigate()
-  // const {loading,error,isAuth,success} = useSelector((state) => state.user)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(true)
@@ -40,36 +32,14 @@ function Login() {
       audience: 'www',
     }
     signIn(data)
-    // dispatch(loginUser(data))
   }
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     navigate('/');
-  //   }
-  // }, [isAuth]);
-  // useEffect(() =>{
-  //   if(success){
-  //   navigate('/')
-  //   dispatch(resetState())
-  //   }
-  // },[success])
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();
     }
   }, [errors])
   return (
-    <div className='w-screen h-screen flex justify-center items-center' style={{
-      background: 'linear-gradient(319deg, rgba(168,85,247,1) 0%, rgba(250,245,255,1) 100%)'
-    }}>
-    <div className='grid grid-cols-2 w-4/5 h-4/5 bg-white rounded-md shadow-md p-4'>
-      <div className='flex flex-col items-center justify-center w-full h-full'>
-        <div className='flex flex-row text-purple-400 w-5/6 cursor-default'>
-          <GiSecretBook className='text-3xl mx-1'/>
-          <h1 className='text-lg font-semibold font-logo self-end'>Spellarium</h1>
-        </div>
-      <img src='https://iili.io/JnvTECJ.png' className='h-5/6 w-5/6' alt='Login Vector'/>
-      </div>
+    
       <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center'>
         <div className='flex flex-col justify-center items-start w-2/3'>
         <h1 className='text-3xl my-2 font-semibold text-dracula-500 cursor-default'>Zaloguj się</h1>
@@ -88,13 +58,11 @@ function Login() {
             </div>
         {errors.password && <span className='error-text'>{errors.password}</span>}
         </div>
-        <TextLink title="Zapomniałeś hasła?" path='/' />
+        <TextLink title="Zapomniałeś hasła?" path='/resetuj-haslo' />
         <SubmitButton loading={loading} title="Zaloguj się" />
       </div>
       {error && <p className='error-text my-1'>{error}</p>}
       </form>
-    </div>
-    </div>
   )
 }
 
