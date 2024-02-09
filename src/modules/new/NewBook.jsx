@@ -9,6 +9,7 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { bookValidate } from '../../utils/validation/newValidate'
+import { getAuthors, getCategories, getLanguages, getPublishers } from '../../api/selectAPI'
 
 function NewBook({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -28,62 +29,6 @@ function NewBook({setShowNewModule, postData}) {
       selectedAuthors: [],
       selectedImages: [],
     })
-    const getAuthors = async () => {
-      try{
-        const response = await axiosClient.get(`/Author`)
-        if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name + " " + item.surname
-          }))
-          setAuthorOptions(options)  
-        }
-      }catch(err){
-        console.log(err)
-      }
-  }
-  const getCategories = async () => {
-      try{
-        const response = await axiosClient.get(`/Category`)
-        if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCategoryOptions(options)  
-        }
-      }catch(err){
-        console.log(err)
-      }
-  }
-  const getLanguages = async () => {
-      try{
-        const response = await axiosClient.get(`/Language`)
-        if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setLanguageOptions(options)  
-        }
-      }catch(err){
-        console.log(err)
-      }
-  }
-  const getPublishers = async () => {
-      try{
-        const response = await axiosClient.get(`/Publisher`)
-        if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setPublisherOptions(options)  
-        }
-      }catch(err){
-        console.log(err)
-      }
-  }
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
     }
@@ -149,10 +94,10 @@ function NewBook({setShowNewModule, postData}) {
       }
     }, [errors])
     useEffect(() => {
-      getAuthors()
-      getPublishers()
-      getCategories()
-      getLanguages()
+      getAuthors(setAuthorOptions)
+      getPublishers(setPublisherOptions)
+      getCategories(setCategoryOptions)
+      getLanguages(setLanguageOptions)
     },[])
   return (
     <div className='module-wrapper shadow-module' style={backgroundOverlayModule}>

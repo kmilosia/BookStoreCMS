@@ -29,6 +29,16 @@ function Author() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id, setData) => {
+      try{
+        const response = await axiosClient.get(`/Author/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setData(response.data)
+        }
+      }catch(e){
+        console.log(e)
+      }
+    }
     const getAllData = async () => {
       try{
         setLoading(true)
@@ -126,8 +136,8 @@ function Author() {
       }
       </div>
       {module === 'new' ? <NewAuthor handleAfterSubmit={handleAfterSubmit} handleCloseModule={handleCloseModule} postData={postData}/> 
-      : module === 'edit' ? <EditAuthor handleAfterSubmit={handleAfterSubmit} handleCloseModule={handleCloseModule} editedID={editedID} putData={putData}/> 
-      : module === 'view' ? <ViewAuthor handleCloseModule={handleCloseModule} editedID={editedID}/> 
+      : module === 'edit' ? <EditAuthor getItem={getItem} handleAfterSubmit={handleAfterSubmit} handleCloseModule={handleCloseModule} editedID={editedID} putData={putData}/> 
+      : module === 'view' ? <ViewAuthor getItem={getItem} handleCloseModule={handleCloseModule} editedID={editedID}/> 
       : ''}
     </>
   )

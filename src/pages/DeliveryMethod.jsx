@@ -31,6 +31,14 @@ function DeliveryMethod() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/DeliveryMethod/${id}`)
+        setData(response.data)
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -133,7 +141,7 @@ function DeliveryMethod() {
         </div>
     {showNewModule && <NewDeliveryMethod postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditDeliveryMethod putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewDeliveryMethod editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewDeliveryMethod getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

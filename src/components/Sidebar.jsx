@@ -27,8 +27,7 @@ function Sidebar() {
     if(isSideMenuExpanded && sideMenu === menu){
       setIsSideMenuExpanded(false)
       setSideMenu(null)
-    }
-    else{
+    }else{
     setSideMenu(menu)
     setIsSideMenuExpanded(true)
     }

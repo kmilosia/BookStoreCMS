@@ -14,20 +14,6 @@ function EditPublisher(props) {
   })
   const [errors,setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/Publisher/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setValues({
-              ...values, 
-              name: response.data.name,
-              description: response.data.description
-            })
-            }
-          }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
@@ -47,7 +33,7 @@ function EditPublisher(props) {
     }
   }, [errors])
   useEffect(()=> {
-    getItem(props.editedID)
+    props.getItem(props.editedID,setValues)
   },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

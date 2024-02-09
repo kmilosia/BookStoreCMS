@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import { formatDisplayDate } from '../../utils/functions/formatDisplayDate'
 
 function ViewBookItem(props) {
     const [item, setItem] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/BookItems/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setItem(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
         props.setEditedID(null)
         props.setShowViewModule(false)
       }
     useEffect(()=>{
-        getItem(props.editedID)
+        props.getItem(props.editedID,setItem)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

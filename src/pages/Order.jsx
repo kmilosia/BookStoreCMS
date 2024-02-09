@@ -32,6 +32,16 @@ function Order() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/Order/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -84,7 +94,7 @@ function Order() {
       </div>
     }
     </div>
-    {showViewModule && <ViewOrder editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewOrder getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

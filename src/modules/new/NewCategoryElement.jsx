@@ -6,8 +6,8 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { categoryElementValidate } from '../../utils/validation/newValidate'
 import { useEffect } from 'react'
-import axiosClient from '../../api/apiClient'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { getCategories } from '../../api/selectAPI'
 
 function NewCategoryElement({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -35,32 +35,17 @@ function NewCategoryElement({setShowNewModule, postData}) {
         setSubmitting(true)
         setErrors(categoryElementValidate(values))
     } 
-    const getCategories = async () => {
-        try{
-          const response = await axiosClient.get(`/Category`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCategoryOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const finishSubmit = () => {
         const data = {
             ...values,
             position: Number(values.position),
             categoryID: selectedCategory.value
         }
-        console.log(data);
         postData(data)
         handleCloseModule()
     }
     useEffect(() => {
-        getCategories()
+        getCategories(setCategoryOptions)
     },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {

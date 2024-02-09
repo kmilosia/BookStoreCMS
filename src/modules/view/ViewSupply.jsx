@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import { formatDisplayDate } from '../../utils/functions/formatDisplayDate'
 import { BsDot } from 'react-icons/bs'
 
 function ViewSupply(props) {
     const [data, setData] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/Supply/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setData(response.data)
-          }
-        }catch(e){
-          console.log(e)
-        }
-    }
     const handleCloseModule = () => {
         props.setEditedID(null)
         props.setShowViewModule(false)
     }
     useEffect(()=>{
-        getItem(props.editedID)
+        props.getItem(props.editedID,setData)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

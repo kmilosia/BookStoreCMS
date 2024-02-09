@@ -37,6 +37,16 @@ function Image() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/Images/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -138,7 +148,7 @@ function Image() {
     </div>
     {showNewModule && <NewImage postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditImage putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewImage editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewImage getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

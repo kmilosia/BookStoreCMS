@@ -10,6 +10,7 @@ import { supplyEditValidate } from '../../utils/validation/newValidate'
 import { convertDate, convertDateToInput } from '../../utils/functions/convertDate'
 import Select from 'react-select'
 import { IoClose } from "react-icons/io5";
+import { getDeliveryStatuses, getFormBookItems, getSuppliers } from '../../api/selectAPI'
 
 function EditSupply(props) {
     const [errors,setErrors] = useState({})
@@ -27,48 +28,6 @@ function EditSupply(props) {
       deliveryStatusID: null,
       supplierID: null,
     })
-  const getSuppliers = async () => {
-    try{
-      const response = await axiosClient.get(`/Supplier`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setSuppliers(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const getDeliveryStatuses = async () => {
-    try{
-      const response = await axiosClient.get(`/DeliveryStatus`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setDeliveryStatuses(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const getBooks = async () => {
-    try{
-      const response = await axiosClient.get(`/BookItems`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item,
-        label: item.bookTitle + " (" + item.formName + ")"
-      }))
-      setBooks(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-    }
     const getItem = async (id) => {
       try{
         const response = await axiosClient.get(`/Supply/${id}`)
@@ -167,9 +126,9 @@ function EditSupply(props) {
         }
       }, [errors])
     useEffect(() => {
-      getBooks()
-      getDeliveryStatuses()
-      getSuppliers()
+      getFormBookItems(setBooks)
+      getDeliveryStatuses(setDeliveryStatuses)
+      getSuppliers(setSuppliers)
       getItem(props.editedID)
     },[])
   return (

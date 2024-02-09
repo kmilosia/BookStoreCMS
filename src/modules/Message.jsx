@@ -6,11 +6,9 @@ function Message() {
     const message = useMessageStore((state) => state.message)
     const hideMessage = useMessageStore((state) => state.hideMessage)
     useEffect(() => {
-        if(message.bool){
-            setTimeout(() => {
-                hideMessage()
-              }, 2000)
-        }
+      if(message.bool){
+        setTimeout(() => {hideMessage()}, 2000)
+      }
     },[message])
   return (
     message.bool && (

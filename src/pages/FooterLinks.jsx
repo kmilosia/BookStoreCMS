@@ -31,6 +31,16 @@ function FooterLinks() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/FooterLinks/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -133,7 +143,7 @@ function FooterLinks() {
      </div>
     {showNewModule && <NewFooterLink postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditFooterLink putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewFooterLink editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewFooterLink getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

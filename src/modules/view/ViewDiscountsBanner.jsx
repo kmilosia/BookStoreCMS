@@ -1,29 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 
 function ViewDiscountsBanner(props) {
     const [banner, setBanner] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/DiscountsBanner/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setBanner(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
         props.setEditedID(null)
         props.setShowViewModule(false)
       }
     useEffect(()=>{
-        getItem(props.editedID)
+        props.getItem(props.editedID,setBanner)
     },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -48,7 +37,7 @@ function ViewDiscountsBanner(props) {
                     <h2 className='column-info-text'>{banner?.imageURL}</h2>
                 </div>
                 <div className='col-span-2'>
-                    {banner.imageURL &&
+                    {banner?.imageURL &&
                     <img src={banner.imageURL} className='w-full h-auto object-contain' />
                     }
                 </div>

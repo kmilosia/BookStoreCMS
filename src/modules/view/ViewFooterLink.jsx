@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 
 function ViewFooterLink(props) {
     const [link, setLink] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/FooterLinks/${id}`)
-          if(response.status === 200 || response.status === 204){
-          setLink(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
         props.setEditedID(null)
         props.setShowViewModule(false)
       }
     useEffect(()=>{
-        getItem(props.editedID)
+        props.getItem(props.editedID,setLink)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

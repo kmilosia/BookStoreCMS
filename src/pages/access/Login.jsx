@@ -14,7 +14,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(true)
   const [inputValues, setInputValues] = useState({
-    username: '',
+    email: '',
     password: ''
   })
   const handleChange = (e) => {
@@ -27,7 +27,7 @@ function Login() {
   }
   const finishSubmit = () => {
     let data = {
-      email: inputValues.username, 
+      email: inputValues.email, 
       password: inputValues.password,
       audience: 'www',
     }
@@ -45,16 +45,16 @@ function Login() {
         <h1 className='text-3xl my-2 font-semibold text-dracula-500 cursor-default'>Zaloguj się</h1>
         <div className='my-2 w-full'>
             <div className="relative">
-              <input value={inputValues.username} onChange={handleChange} type="text" id='username' name='username' className="floating-form-input peer" placeholder=" " />
-              <label htmlFor='username' className="floating-form-label">Nazwa użytkownika</label>
+              <input value={inputValues.email} onChange={handleChange} type="text" name='email' className="floating-form-input peer" placeholder=" " />
+              <label className="floating-form-label">Email</label>
             </div>
-            {errors.username && <span className='error-text'>{errors.username}</span>}
+            {errors.email && <span className='error-text'>{errors.email}</span>}
             </div>
           <div className="my-2 w-full">
             <div className="relative">
               <ShowPasswordButton inputType='floating' setShowPassword={setShowPassword} showPassword={showPassword} />
-              <input value={inputValues.password} onChange={handleChange} type={`${showPassword ? 'password' : 'text'}`} id='password' name='password' className="floating-form-input peer" placeholder=" " />
-              <label htmlFor='password' className="floating-form-label">Hasło</label>
+              <input value={inputValues.password} onChange={handleChange} type={`${showPassword ? 'password' : 'text'}`} name='password' className="floating-form-input peer" placeholder=" " />
+              <label className="floating-form-label">Hasło</label>
             </div>
         {errors.password && <span className='error-text'>{errors.password}</span>}
         </div>

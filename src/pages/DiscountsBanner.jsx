@@ -3,7 +3,6 @@ import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
-import { filterItems } from '../utils/filter'
 import { discountsBannerSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -38,6 +37,16 @@ function DiscountsBanner() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setBanner) => {
+      try{
+        const response = await axiosClient.get(`/DiscountsBanner/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setBanner(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -137,8 +146,8 @@ function DiscountsBanner() {
       }
         </div>
     {showNewModule && <NewDiscountsBanner postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditDiscountsBanner putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewDiscountsBanner editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showEditModule && <EditDiscountsBanner getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewDiscountsBanner getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

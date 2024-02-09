@@ -9,6 +9,7 @@ import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { convertDate, convertDateToInput } from '../../utils/functions/convertDate'
 import { discountValidate } from '../../utils/validation/newValidate'
+import { getBookItems } from '../../api/selectAPI'
 
 function EditDiscount({setShowEditModule, putData, editedID}) {
   const [errors, setErrors] = useState({})
@@ -22,20 +23,6 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
     startingDate: '',
     selectedBooks: [],
   })
-  const getBookItems = async () => {
-    try{
-      const response = await axiosClient.get(`/BookItems`)
-      if(response.status === 200 || response.status === 204){
-        const options = response.data.map(item => ({
-        value: item.id,
-        label: item.bookTitle
-      }))
-      setBookItemOptions(options)
-    }
-    }catch(err){
-      console.log(err)
-    }
-  }
     const getItem = async (id) => {
       try{
         const response = await axiosClient.get(`/Discount/${id}`)
@@ -92,7 +79,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
       }
     }, [errors])
     useEffect(() => {
-      getBookItems()
+      getBookItems(setBookItemOptions)
       getItem(editedID)
     },[])
 

@@ -85,6 +85,16 @@ function RentalType() {
         setMessage({title: "Błąd podczas edytowania typu wypożyczenia", type: 'error'})
       }
     }
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/RentalType/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -133,8 +143,8 @@ function RentalType() {
       }
         </div>
     {showNewModule && <NewRentalType postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditRentalType putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewRentalType editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showEditModule && <EditRentalType getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewRentalType getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

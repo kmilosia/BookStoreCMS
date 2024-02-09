@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import { useEffect } from 'react'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { footerLinkValidate } from '../../utils/validation/newValidate'
+import { getFooterColumns } from '../../api/selectAPI'
 
 function NewFooterLink({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -19,20 +19,6 @@ function NewFooterLink({setShowNewModule, postData}) {
         position: '',
         column: null,
       })
-    const getFooterColumns = async () => {
-        try{
-          const response = await axiosClient.get(`/FooterColumns`)
-          if(response.status === 200 || response.status === 204){
-          const optionColumns = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setColumns(optionColumns)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
     }
@@ -63,7 +49,7 @@ function NewFooterLink({setShowNewModule, postData}) {
         }
       }, [errors]) 
     useEffect(() => {
-        getFooterColumns()
+        getFooterColumns(setColumns)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

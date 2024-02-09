@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 
 function ViewFooterColumn(props) {
     const [column, setColumn] = useState({})
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/FooterColumns/${id}`)
-          if(response.status === 200 || response.status === 204){
-          setColumn(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
         props.setEditedID(null)
         props.setShowViewModule(false)
       }
     useEffect(()=>{
-        getItem(props.editedID)
+        props.getItem(props.editedID,setColumn)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

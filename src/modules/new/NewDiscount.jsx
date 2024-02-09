@@ -4,11 +4,11 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import {convertDate}  from '../../utils/functions/convertDate'
 import { useEffect } from 'react'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { discountValidate } from '../../utils/validation/newValidate'
+import { getBookItems } from '../../api/selectAPI'
 
 function NewDiscount({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -24,20 +24,6 @@ function NewDiscount({setShowNewModule, postData}) {
     })
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
-    }
-    const getBooks = async () => {
-        try{
-          const response = await axiosClient.get(`/BookItems`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.bookTitle
-          }))
-          setBookOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
     }
     const handleBooks = (selectedBooks) => {
         setValues({ ...values, selectedBooks })
@@ -62,7 +48,6 @@ function NewDiscount({setShowNewModule, postData}) {
             id: item.value,
           })),
           }     
-          console.log(data)
           postData(data)
           handleCloseModule()
         }
@@ -72,7 +57,7 @@ function NewDiscount({setShowNewModule, postData}) {
         }
       }, [errors])
     useEffect(() => {
-        getBooks()
+        getBookItems(setBookOptions)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

@@ -8,6 +8,7 @@ import { convertDate, convertDateToInput } from '../../utils/functions/convertDa
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { bookItemValidate } from '../../utils/validation/newValidate'
+import { getAvailabilities, getBooks, getEditions, getFileFormats, getForms, getLanguages, getTranslators } from '../../api/selectAPI'
 
 function EditBookItem({setShowEditModule, putData, editedID}) {
   const [errors,setErrors] = useState({})
@@ -34,104 +35,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     const [formOptions, setFormOptions] = useState([])
     const [availabilityOptions, setAvailabilityOptions] = useState([])
     const [bookOptions, setBookOptions] = useState([])
-    const getTranslators = async () => {
-        try{
-          const response = await axiosClient.get(`/Translator`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name + " " + item.surname
-          }))
-          setTranslatorOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getLanguages = async () => {
-        try{
-          const response = await axiosClient.get(`/Language`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setLanguageOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getEditions = async () => {
-        try{
-          const response = await axiosClient.get(`/Edition`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setEditionOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getFileFormats = async () => {
-        try{
-          const response = await axiosClient.get(`/FileFormat`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setFileFormatOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getForms = async () => {
-        try{
-          const response = await axiosClient.get(`/Form`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setFormOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getAvailabilities = async () => {
-        try{
-          const response = await axiosClient.get(`/Availability`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setAvailabilityOptions(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getBooks = async () => {
-        try{
-          const response = await axiosClient.get(`/Book`)
-          if(response.status === 200 || response.status === 204){
-            const options = response.data.map(item => ({
-              value: item.id,
-              label: item.title
-            }))
-            setBookOptions(options)  
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
     }
@@ -156,7 +59,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     const handleBook = (book) => {
       setValues({ ...values, book })
     }
-
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/BookItems/${id}`)
@@ -233,13 +135,13 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
         }
       },[values.form])
     useEffect(() => {
-      getTranslators()
-      getLanguages()
-      getEditions()
-      getFileFormats()
-      getForms()
-      getAvailabilities()
-      getBooks()
+      getTranslators(setTranslatorOptions)
+      getLanguages(setLanguageOptions)
+      getEditions(setEditionOptions)
+      getFileFormats(setFileFormatOptions)
+      getForms(setFormOptions)
+      getAvailabilities(setAvailabilityOptions)
+      getBooks(setBookOptions)
       getItem(editedID)
     },[])
   return (

@@ -31,6 +31,16 @@ function FooterColumns() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setColumn) => {
+      try{
+        const response = await axiosClient.get(`/FooterColumns/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setColumn(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -133,7 +143,7 @@ function FooterColumns() {
       </div>
     {showNewModule && <NewFooterColumn postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditFooterColumn putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewFooterColumn editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewFooterColumn getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

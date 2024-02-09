@@ -91,6 +91,16 @@ function Book() {
           setMessage({title: "Błąd podczas edytowania książki", type: 'error'})
         }
       }
+      const getItem = async (id,setData) => {
+        try{
+          const response = await axiosClient.get(`/Book/${id}`)
+          if(response.status === 200 || response.status === 204){
+            setData(response.data)
+          }
+        }catch(err){
+          console.log(err)
+        }
+    }
     const handleEditClick = (itemID) => {
        setEditedID(itemID)
        setShowEditModule(true)
@@ -139,7 +149,7 @@ function Book() {
         </div>
     {showNewModule && <NewBook postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditBook putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewBook editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewBook getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

@@ -7,6 +7,7 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
 import { supplierValidate } from '../../utils/validation/newValidate'
+import { getAddressTypes, getCities, getCountries } from '../../api/selectAPI'
 
 function NewSupplier({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -30,48 +31,6 @@ function NewSupplier({setShowNewModule, postData}) {
       const { name, value } = e.target
       setValues({ ...values, [name]: value })
     }  
-    const getCities = async () => {
-        try{
-          const response = await axiosClient.get(`/City`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCities(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getCountries = async () => {
-        try{
-          const response = await axiosClient.get(`/Country`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setCountries(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
-    const getAddressTypes = async () => {
-        try{
-          const response = await axiosClient.get(`/AddressType`)
-          if(response.status === 200 || response.status === 204){
-          const options = response.data.map(item => ({
-            value: item.id,
-            label: item.name
-          }))
-          setAddressTypes(options)
-        }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCityChange = (selectedOption) => {
       setValues({ ...values, cityID: selectedOption })
     }
@@ -113,9 +72,9 @@ function NewSupplier({setShowNewModule, postData}) {
         }
       }, [errors])
     useEffect(() => {
-      getCities()
-      getCountries()
-      getAddressTypes()
+      getCities(setCities)
+      getCountries(setCountries)
+      getAddressTypes(setAddressTypes)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

@@ -13,28 +13,13 @@ function EditTranslator(props) {
     })
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/Translator/${id}`)
-          if(response.status === 200 || response.status === 204){
-          setValues({
-            ...values, 
-            name: response.data.name,
-            surname: response.data.surname
-          })
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const finishSubmit = () => {
         props.putData(props.editedID, values)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
+        handleCloseModule()
     }
     const handleSubmit = () => {
       setSubmitting(true)
@@ -46,7 +31,7 @@ function EditTranslator(props) {
     }
   }, [errors])
   useEffect(()=> {
-    getItem(props.editedID)
+    props.getItem(props.editedID,setValues)
   },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

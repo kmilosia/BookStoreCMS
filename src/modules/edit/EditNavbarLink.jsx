@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { navbarValidate } from '../../utils/validation/newValidate'
 
@@ -14,16 +13,6 @@ function EditNavbarLink(props) {
         name: '',
         position: '',
     })    
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/NavBarMenuLinks/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setValues(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
     }
@@ -42,7 +31,7 @@ function EditNavbarLink(props) {
       }
     }, [errors])
     useEffect(()=> {
-      getItem(props.editedID)
+      props.getItem(props.editedID,setValues)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

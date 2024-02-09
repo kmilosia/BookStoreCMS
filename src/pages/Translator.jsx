@@ -31,6 +31,16 @@ function Translator() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/Translator/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -132,8 +142,8 @@ function Translator() {
       }
         </div>
     {showNewModule && <NewTranslator postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditTranslator putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewTranslator editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showEditModule && <EditTranslator getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewTranslator getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

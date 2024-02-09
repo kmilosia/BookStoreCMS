@@ -5,9 +5,8 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { personValidate } from '../../utils/validation/newValidate'
-import axiosClient from '../../api/apiClient'
 
-function EditAuthor({handleAfterSubmit,handleCloseModule,editedID,putData}) {
+function EditAuthor({handleAfterSubmit,handleCloseModule,editedID,putData, getItem}) {
     const [author,setAuthor] = useState({})
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
@@ -19,26 +18,16 @@ function EditAuthor({handleAfterSubmit,handleCloseModule,editedID,putData}) {
     const handleSaveClick = () => {
       setErrors(personValidate(author))
       setSubmitting(true)
-  }
-  const getItem = async (id) => {
-    try{
-      const response = await axiosClient.get(`/Author/${id}`)
-      if(response.status === 200 || response.status === 204){
-        setAuthor(response.data)
+    }
+    useEffect(()=> {
+      getItem(editedID, setAuthor)
+    },[])
+    useEffect(() => {
+      if (Object.keys(errors).length === 0 && submitting) {
+        putData(author)
+        handleAfterSubmit()
       }
-    }catch(e){
-      console.log(e)
-    }
-}
-  useEffect(()=> {
-    getItem(editedID)
-  },[])
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      putData(author)
-      handleAfterSubmit()
-    }
-  }, [errors])
+    }, [errors])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
         <div className='module-window'>

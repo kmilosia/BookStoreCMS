@@ -6,6 +6,7 @@ import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { footerLinkValidate } from '../../utils/validation/newValidate'
+import { getFooterColumns } from '../../api/selectAPI'
 
 function EditFooterLink(props) {
   const [errors,setErrors] = useState({})
@@ -18,20 +19,6 @@ function EditFooterLink(props) {
       position: '',
       column: null,
     })
-  const getFooterColumns = async () => {
-    try{
-      const response = await axiosClient.get(`/FooterColumns`)
-      if(response.status === 200 || response.status === 204){
-      const optionColumns = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setColumns(optionColumns)
-    }
-    }catch(err){
-      console.log(err)
-    }
-  }
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/FooterLinks/${id}`)
@@ -80,7 +67,7 @@ function EditFooterLink(props) {
     }
   }, [errors])  
   useEffect(() => {
-    getFooterColumns()
+    getFooterColumns(setColumns)
     getItem(props.editedID)
   }, [])
   return (

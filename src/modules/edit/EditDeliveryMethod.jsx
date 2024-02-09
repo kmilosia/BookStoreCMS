@@ -34,7 +34,6 @@ function EditDeliveryMethod(props) {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
- 
   const handleSaveClick = () => {
     setSubmitting(true)
     setErrors(namePriceValidate(values))
@@ -42,8 +41,7 @@ function EditDeliveryMethod(props) {
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       props.putData(props.editedID, values)
-      props.setEditedID(null)
-      props.setShowEditModule(false)
+      handleCloseModule()
   }
   }, [errors])
   useEffect(()=> {

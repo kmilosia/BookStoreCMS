@@ -6,6 +6,7 @@ import { backgroundOverlayModule } from '../../styles'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { supplierValidate } from '../../utils/validation/newValidate'
+import { getAddressTypes, getCities, getCountries } from '../../api/selectAPI'
 
 function EditSupplier(props) {
   const [errors,setErrors] = useState({})
@@ -38,48 +39,6 @@ const handleCountryChange = (selectedCountry) => {
 const handleAddressTypeChange = (selectedAddressType) => {
     setValues(prevValues => ({...prevValues,addressTypeID: selectedAddressType}))
 }
-  const getCities = async () => {
-      try{
-        const response = await axiosClient.get(`/City`)
-        if(response.status === 200 || response.status === 204){
-        const options = response.data.map(item => ({
-          value: item.id,
-          label: item.name
-        }))
-        setCities(options)
-      }
-      }catch(err){
-        console.log(err)
-      }
-  }
-  const getCountries = async () => {
-      try{
-        const response = await axiosClient.get(`/Country`)
-        if(response.status === 200 || response.status === 204){
-        const options = response.data.map(item => ({
-          value: item.id,
-          label: item.name
-        }))
-        setCountries(options)
-      }
-      }catch(err){
-        console.log(err)
-      }
-  }
-  const getAddressTypes = async () => {
-      try{
-        const response = await axiosClient.get(`/AddressType`)
-        if(response.status === 200 || response.status === 204){
-        const options = response.data.map(item => ({
-          value: item.id,
-          label: item.name
-        }))
-        setAddressTypes(options)
-      }
-      }catch(err){
-        console.log(err)
-      }
-  }
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/Supplier/${id}`)
@@ -130,9 +89,9 @@ const handleAddressTypeChange = (selectedAddressType) => {
       handleCloseModule()
     }
   useEffect(()=> {
-    getCities()
-    getCountries()
-    getAddressTypes()
+    getCities(setCities)
+    getCountries(setCountries)
+    getAddressTypes(setAddressTypes)
     getItem(props.editedID)
   },[])
   useEffect(() => {

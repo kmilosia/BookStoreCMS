@@ -31,6 +31,16 @@ function Publisher() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setPublisher) => {
+      try{
+        const response = await axiosClient.get(`/Publisher/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setPublisher(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -131,8 +141,8 @@ function Publisher() {
     }
     </div>
     {showNewModule && <NewPublisher postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditPublisher putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewPublisher editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showEditModule && <EditPublisher getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewPublisher getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

@@ -5,108 +5,78 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { getCategories } from '../../api/selectAPI'
+import { categoryElementValidate } from '../../utils/validation/newValidate'
 
 function EditCategoryElement(props) {
-    const setMessage = useMessageStore((state) => state.setMessage)
-    const [path, setPath] = useState('')
-    const [logo, setLogo] = useState('')
-    const [content, setContent] = useState('')
-    const [position, setPosition] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
+    const [values,setValues] = useState({
+      path: '',
+      logo: '',
+      content: '',
+      position: '',
+      imageTitle: '',
+      imageURL: '',
+      category: null,
+    })
     const [selectedCategory, setSelectedCategory] = useState(null)
-    const [categoryID, setCategoryID] = useState(null)
     const [categoryOptions, setCategoryOptions] = useState([])
-    const [element,setElement] = useState({})
+    const [errors,setErrors] = useState({})
+    const [submitting, setSubmitting] = useState(false)
     const getItem = async (id) => {
         try{
           const response = await axiosClient.get(`/CategoryElements/${id}`)
-          setElement(response.data)
-          setPath(response.data.path)
-          setLogo(response.data.logo)
-          setContent(response.data.content)
-          setPosition(response.data.position)
-          setImageTitle(response.data.imageTitle)
-          setImageURL(response.data.imageURL)
-          setCategoryID(response.data.categoryID)
+          if(response.status === 200 || response.status === 204){
+            setValues({
+              path: response.data.path,
+              logo: response.data.logo,
+              content: response.data.content,
+              position: response.data.position,
+              imageTitle: response.data.imageTitle,
+              imageURL: response.data.imageURL,
+              category: { value: response.data.categoryID, label: response.data.categoryName },
+            })
+          }
         }catch(err){
-          console.error(err)
+          console.log(err)
         }
     }
-    const getCategories = async () => {
-      try{
-        const response = await axiosClient.get(`/Category`)
-        const options = response.data.map(item => ({
-          value: item.id,
-          label: item.name
-        }))
-        setCategoryOptions(options)
-      }catch(err){
-        console.error(err)
-      }
-  }
-    const handlePath = (e) => {
-        setPath(e.target.value)
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
-    const handleContent = (e) => {
-        setContent(e.target.value)
-    }
-    const handleLogo = (e) => {
-        setLogo(e.target.value)
-    }
-    const handlePosition = (e) => {
-        setPosition(e.target.value)
-    }
-    const handleImageTitle = (e) => {
-      setImageTitle(e.target.value)
-    }
-    const handleImageURL = (e) => {
-      setImageURL(e.target.value)
-    }
-    const handleSelect = (selectedCategory) => {
-      if (selectedCategory) {
-          setSelectedCategory(selectedCategory)
-          setCategoryID(selectedCategory.value)
-      } else {
-          setSelectedCategory(null)
-          setCategoryID(null)
-      }
+    const handleCategory = (category) => {
+      setValues({ ...values, category })
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
+      setSubmitting(true)
+      setErrors(categoryElementValidate(values))
+  } 
+    const finishSubmit = () => {
       const data = {
-        id: element.id,
-        path: path,
-        content: content,
-        logo: logo,
-        position: position,
-        imageTitle: imageTitle,
-        imageURL: imageURL,
-        categoryID: categoryID
-    }
-        props.putData(element.id, data)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-        setMessage({title: "Element kategorii został edytowany", type: 'success'})
+        path: values.path,
+        content: values.content,
+        logo: values.logo,
+        position: values.position,
+        imageTitle: values.imageTitle,
+        imageURL: values.imageURL,
+        categoryID: values.category.value,
+        }
+        props.putData(props.editedID, data)
+        handleCloseModule()
       }
   useEffect(() => {
-    const fetchAllData = async () => {
-      await getCategories()
-      await getItem(props.editedID)
-    }
-    fetchAllData()
+    getCategories(setCategoryOptions)
+    getItem(props.editedID)
   }, [])
   useEffect(() => {
-    const selected = categoryOptions.find((col) => col.value === categoryID);
-    if (selected) {
-      setSelectedCategory(selected);
+    if (Object.keys(errors).length === 0 && submitting) {
+        finishSubmit()
     }
-  }, [categoryOptions, categoryID]);
+  }, [errors])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
@@ -116,24 +86,24 @@ function EditCategoryElement(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                <DefaultInput name="path" value={path} onChange={handlePath} type='text' placeholder='Ścieżka' title='Ścieżka do kategorii'/>
-                    <DefaultInput name="logo" value={logo} onChange={handleLogo} type='text' placeholder='Logo' title='Logo kategorii'/>
-                    {logo &&
+                    <DefaultInput name="path" error={errors.path} value={values.path} onChange={handleChange} type='text' placeholder='Ścieżka' title='Ścieżka do kategorii'/>
+                    <DefaultInput name="logo" error={errors.logo} value={values.logo} onChange={handleChange} type='text' placeholder='Logo' title='Logo kategorii'/>
+                    {values.logo &&
                     <div className='w-1/3 h-auto my-2 col-span-2'>
-                        <img src={logo} className='h-auto w-full object-contain' />
+                        <img src={values.logo} className='h-auto w-full object-contain' />
                     </div>
                     }
-                    <DefaultInput name="position" value={position} onChange={handlePosition} type='number' placeholder='Pozycja' title='Pozycja'/>
-                    <DefaultSelect value={selectedCategory} onChange={handleSelect} options={categoryOptions} title='Kategoria' placeholder='Kategoria'/>
-                    {imageURL &&
+                    <DefaultInput name="position" error={errors.position} value={values.position} onChange={handleChange} type='number' placeholder='Pozycja' title='Pozycja'/>
+                    <DefaultSelect error={errors.category} name="category" value={values.category} onChange={handleCategory} options={categoryOptions} title='Kategoria' placeholder='Kategoria'/>
+                    {values.imageURL &&
                     <div className='w-1/3 h-auto col-span-2'>
-                        <img src={imageURL} className='h-auto w-full object-contain' />
+                        <img src={values.imageURL} className='h-auto w-full object-contain' />
                     </div>
                     }
-                    <DefaultInput name="imageURL" value={imageURL} onChange={handleImageURL} type='text' placeholder='URL zdjęcia' title='Adres URL zdjęcia'/>
-                    <DefaultInput name="imageTitle" value={imageTitle} onChange={handleImageTitle} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
+                    <DefaultInput name="imageURL" error={errors.imageURL} value={values.imageURL} onChange={handleChange} type='text' placeholder='URL zdjęcia' title='Adres URL zdjęcia'/>
+                    <DefaultInput name="imageTitle" error={errors.imageTitle} value={values.imageTitle} onChange={handleChange} type='text' placeholder='Tytuł' title='Tytuł zdjęcia'/>
                 </div>
-                <DefaultTextarea name="content" onChange={handleContent} value={content} placeholder='Treść' title="Treść kategorii"/>
+                <DefaultTextarea name="content" error={errors.content} onChange={handleChange} value={values.content} placeholder='Treść' title="Treść kategorii"/>
                 <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
             </div>
         </div>

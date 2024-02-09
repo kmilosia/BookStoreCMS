@@ -4,7 +4,6 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
 import { rentalTypeValidate } from '../../utils/validation/newValidate'
 
 function EditRentalType(props) {
@@ -15,21 +14,6 @@ function EditRentalType(props) {
       days: '',
       price: '',
     })
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/RentalType/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setValues({
-              ...values, 
-              name: response.data.name,
-              days: response.data.days,
-              price: response.data.price
-            })
-            }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
   }
@@ -46,7 +30,7 @@ function EditRentalType(props) {
       setErrors(rentalTypeValidate(values))
     } 
   useEffect(()=> {
-    getItem(props.editedID)
+    props.getItem(props.editedID,setValues)
   },[])
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {

@@ -31,6 +31,16 @@ function BookItemReview() {
     })
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/BookItemReview?bookItemId=${id}`)
+        if(response.status === 200 || response.status === 204){
+          setData(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -82,7 +92,7 @@ function BookItemReview() {
       </div>
       }
         </div>
-    {showViewModule && <ViewBookItemReview editedItem={editedItem} setShowViewModule={setShowViewModule} setEditedItem={setEditedItem}/>}
+    {showViewModule && <ViewBookItemReview getItem={getItem} editedItem={editedItem} setShowViewModule={setShowViewModule} setEditedItem={setEditedItem}/>}
     </>
   )
 }

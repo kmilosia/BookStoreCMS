@@ -12,7 +12,6 @@ import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
-import EditSupplier from '../modules/edit/EditSupplier'
 import { formatDisplayDate } from '../utils/functions/formatDisplayDate'
 import ViewSupply from '../modules/view/ViewSupply'
 import NewSupply from '../modules/new/NewSupply'
@@ -39,6 +38,16 @@ function Supply() {
     })
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
+    const getItem = async (id,setData) => {
+      try{
+        const response = await axiosClient.get(`/Supply/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setData(response.data)
+        }
+      }catch(e){
+        console.log(e)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -141,7 +150,7 @@ function Supply() {
         </div>
     {showNewModule && <NewSupply postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditSupply putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewSupply editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewSupply getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

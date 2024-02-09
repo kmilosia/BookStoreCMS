@@ -37,7 +37,16 @@ function BookItem() {
     })
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
-
+    const getItem = async (id,setItem) => {
+      try{
+        const response = await axiosClient.get(`/BookItems/${id}`)
+        if(response.status === 200 || response.status === 204){
+          setItem(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -141,7 +150,7 @@ function BookItem() {
     </div>
     {showNewModule && <NewBookItem postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditBookItem putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewBookItem editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewBookItem getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }

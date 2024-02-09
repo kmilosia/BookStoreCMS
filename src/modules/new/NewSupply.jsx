@@ -4,12 +4,12 @@ import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
-import axiosClient from '../../api/apiClient'
 import { useEffect } from 'react'
 import { supplyValidate } from '../../utils/validation/newValidate'
 import { convertDate } from '../../utils/functions/convertDate'
 import Select from 'react-select'
 import { IoClose } from "react-icons/io5";
+import { getDeliveryStatuses, getFormBookItems, getPaymentMethods, getSuppliers } from '../../api/selectAPI'
 
 function NewSupply({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -29,62 +29,6 @@ function NewSupply({setShowNewModule, postData}) {
       deliveryStatusID: null,
       supplierID: null,
     })
-  const getSuppliers = async () => {
-    try{
-      const response = await axiosClient.get(`/Supplier`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setSuppliers(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const getPaymentMethods = async () => {
-    try{
-      const response = await axiosClient.get(`/PaymentMethod`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setPaymentMethods(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const getDeliveryStatuses = async () => {
-    try{
-      const response = await axiosClient.get(`/DeliveryStatus`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-      setDeliveryStatuses(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const getBooks = async () => {
-    try{
-      const response = await axiosClient.get(`/BookItems`)
-      if(response.status === 200 || response.status === 204){
-      const options = response.data.map(item => ({
-        value: item,
-        label: item.bookTitle + " (" + item.formName + ")"
-      }))
-      setBooks(options)
-    }
-    }catch(e){
-      console.log(e)
-    }
-    }
     const handleDateChange = (e) => {
       setValues({ ...values, deliveryDate: e.target.value })
     }   
@@ -161,10 +105,10 @@ function NewSupply({setShowNewModule, postData}) {
         }
       }, [errors])
     useEffect(() => {
-      getBooks()
-      getPaymentMethods()
-      getDeliveryStatuses()
-      getSuppliers()
+      getFormBookItems(setBooks)
+      getPaymentMethods(setPaymentMethods)
+      getDeliveryStatuses(setDeliveryStatuses)
+      getSuppliers(setSuppliers)
     },[])
   return (
     <div className='module-wrapper center-elements' style={backgroundOverlayModule}>

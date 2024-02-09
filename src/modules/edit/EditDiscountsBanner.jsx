@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { discountsBannerValidate } from '../../utils/validation/newValidate'
 
@@ -15,16 +14,6 @@ function EditDiscountsBanner(props) {
       imageTitle: '',
       imageURL: '',      
     })
-    const getItem = async (id) => {
-        try{
-          const response = await axiosClient.get(`/DiscountsBanner/${id}`)
-          if(response.status === 200 || response.status === 204){
-            setBanner(response.data)
-          }
-        }catch(err){
-          console.log(err)
-        }
-    }
     const handleChange = (e) => {
       setBanner({ ...banner, [e.target.name]: e.target.value })
     }
@@ -43,10 +32,10 @@ function EditDiscountsBanner(props) {
       }
     }, [errors])
   useEffect(()=> {
-    getItem(props.editedID)
+    props.getItem(props.editedID,setBanner)
   },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>

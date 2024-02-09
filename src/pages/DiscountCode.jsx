@@ -3,7 +3,6 @@ import SortBar from '../components/SortBar'
 import Searchbar from '../components/Searchbar'
 import AddNewButton from '../components/buttons/AddNewButton'
 import { sortItems } from '../utils/sort'
-import { filterItems } from '../utils/filter'
 import { discountSortOptions } from '../utils/select-options'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -38,6 +37,16 @@ function DiscountCode() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setDiscount) => {
+      try{
+        const response = await axiosClient.get(`/DiscountCodes/${id}`)
+        if(response.status === 200 || response.status === 204){
+        setDiscount(response.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -140,7 +149,7 @@ function DiscountCode() {
         </div>
     {showNewModule && <NewDiscountCode postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditDiscountCode putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewDiscountCode editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showViewModule && <ViewDiscountCode getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
