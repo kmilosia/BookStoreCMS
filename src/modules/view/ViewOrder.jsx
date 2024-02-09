@@ -14,7 +14,7 @@ function ViewOrder(props) {
         props.getItem(props.editedID,setOrder)
     },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper text-black dark:text-white'>
             <div className='module-header-row'>

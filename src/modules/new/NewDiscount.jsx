@@ -8,7 +8,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { discountValidate } from '../../utils/validation/newValidate'
-import { getBookItems } from '../../api/selectAPI'
+import { getBookItems, getFormBookItems } from '../../api/selectAPI'
 
 function NewDiscount({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -57,10 +57,10 @@ function NewDiscount({setShowNewModule, postData}) {
         }
       }, [errors])
     useEffect(() => {
-        getBookItems(setBookOptions)
+        getFormBookItems(setBookOptions)
     },[])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>

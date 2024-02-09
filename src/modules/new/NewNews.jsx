@@ -34,7 +34,7 @@ function NewNews({setShowNewModule, postData}) {
         }
       }, [errors])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>

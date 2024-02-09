@@ -59,6 +59,7 @@ export const useAuthStore = create((set) => ({
                         'Content-Type': 'application/json',
                 }})
                 if(response.status === 200 || response.status === 204){
+                    console.log(response.data);
                     set({userData: response.data})
                 }else{
                     set({error: 'Nie można pobrać danych'})

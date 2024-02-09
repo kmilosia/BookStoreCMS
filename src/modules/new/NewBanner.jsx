@@ -32,7 +32,7 @@ function NewBanner({setShowNewModule, postData}) {
         }
       }, [errors])
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -48,8 +48,8 @@ function NewBanner({setShowNewModule, postData}) {
                     <DefaultInput name="imageURL" error={errors.imageURL} onChange={handleChange} type='text' placeholder='Adres zdjęcia' title='Adres zdjęcia baneru'/>
                 </div>
                 {values.imageURL &&
-                <div className='w-full h-auto'>
-                    <img src={values.imageURL} className='w-full h-auto object-contain' />
+                <div className='w-1/2 h-auto'>
+                    <img src={values.imageURL} className='w-1/2 h-auto object-contain' />
                 </div>
                 }
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
