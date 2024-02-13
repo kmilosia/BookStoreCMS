@@ -19,8 +19,10 @@ import BooksLinks from './links/BooksLinks'
 import DiscountsLinks from './links/DiscountsLinks'
 import { FiPackage } from 'react-icons/fi'
 import AdminLinks from './links/AdminLinks'
+import { useAuthStore } from '../store/authStore'
 
 function Sidebar() {
+  const decodedToken = useAuthStore((state) => state.decodedToken)
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
   const [isSideMenuExpanded, setIsSideMenuExpanded] = useState(false)
   const [sideMenu, setSideMenu] = useState(null)

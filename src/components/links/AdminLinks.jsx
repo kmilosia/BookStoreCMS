@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
 
-function AdminLinks({setIsSideMenuExpanded}) {
+function AdminLinks({setIsSideMenuExpanded}){
+  const decodedToken = useAuthStore((state) => state.decodedToken)
   const handleClick = () => {
     setIsSideMenuExpanded(false)
   }

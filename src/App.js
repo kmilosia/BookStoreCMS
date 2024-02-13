@@ -6,11 +6,8 @@ import { Layout } from './Layout';
 import Splash from './pages/Splash';
 import { useAuthStore } from './store/authStore';
 import Message from './modules/Message';
-import { jwtDecode } from 'jwt-decode';
 
 function App() {
-  // const newtoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRkb2IxMTEiLCJuYW1laWQiOiI1ODEzOGNiZC01NDlmLTRmZDYtYjNjZS1hN2IwYTMxNmRiNzciLCJqdGkiOiI4ODNkMDc1Zi1kMDU3LTQxNGQtYTE3NS0zMDgzOTBhNDFhMDYiLCJSYXBvcnQiOiIxNSIsIkNNUyI6WyJyIiwidyJdLCJBdXRob3IiOiJyIiwiQm9va0l0ZW1zIjpbInIiLCJ3IiwiZSJdLCJuYmYiOjE3MDc3NjQ5NTAsImV4cCI6MjA2Nzc2NDk1MCwiaWF0IjoxNzA3NzY0OTUwLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjQ3IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI0NyJ9.pg7GqTno_p5-fyyFzNTGiaSMxSCsYPskc5F9a2Xg22c"
-  // const payload = jwtDecode(newtoken)
   const token = useAuthStore((state) => state.token)
   const decodedToken = useAuthStore((state) => state.decodedToken)
   const restoring = useAuthStore((state) => state.restoring)

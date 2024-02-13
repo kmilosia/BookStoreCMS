@@ -94,7 +94,7 @@ function Claims() {
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.name}</p>
                 <div className='flex justify-end'>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  <button onClick={() => handleDeleteClick(item.name)} className='table-button'><BsTrash3Fill /></button>
                 </div>             
             </div>        
         ))}

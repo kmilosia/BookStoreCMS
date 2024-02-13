@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
 
 function DictionaryLinks({setIsSideMenuExpanded}) {
+  const decodedToken = useAuthStore((state) => state.decodedToken)
   const handleClick = () => {
     setIsSideMenuExpanded(false)
   }

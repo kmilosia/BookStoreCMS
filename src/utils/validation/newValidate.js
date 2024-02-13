@@ -22,6 +22,13 @@ export const publisherValidate = (values) => {
     } 
     return errors
 }
+export const claimValidate = (value) => {
+    let errors = {}
+    if (value.length <= 0) {
+        errors.value = "Dodaj przynajmniej jedno uprawnienie!"
+    } 
+    return errors
+}
 export const employeeValidate = (values) => {
     let errors = {}
     if (!values.name) {
