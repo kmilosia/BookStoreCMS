@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import axiosClient from "../api/apiClient";
+import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = create((set) => ({
     restoring: true,
     token: null,
+    decodedToken: null,
     loading: false,
     error: null,
     userData: null,
@@ -13,7 +15,9 @@ export const useAuthStore = create((set) => ({
             const response = await axiosClient.post('/Account/login', data)
             if(response.status === 200){
                 const userToken = response.data
+                const decoded = jwtDecode(userToken)
                 set({token: userToken})
+                set({decodedToken: decoded})
                 localStorage.setItem('token', JSON.stringify(userToken))
             }else{
                 set({error: 'Nieudane logowanie'})
@@ -36,11 +40,15 @@ export const useAuthStore = create((set) => ({
                 const response = await axiosClient.post(`/Account/CheckTokenValidity?token=${userToken}`)
                 if(response.status === 200 || response.status === 204){
                     set({ token: userToken })
+                    const decoded = jwtDecode(userToken)
+                    set({decodedToken: decoded})
                 }else{
                     set({token: null})
+                    set({decodedToken: null})
                 }
             }else{
                 set({ token: null })
+                set({decodedToken: null})
             }
         }catch(e){
             console.log(e)
@@ -59,13 +67,13 @@ export const useAuthStore = create((set) => ({
                         'Content-Type': 'application/json',
                 }})
                 if(response.status === 200 || response.status === 204){
-                    console.log(response.data);
                     set({userData: response.data})
                 }else{
                     set({error: 'Nie można pobrać danych'})
                 }
             }else{
                 set({ token: null })
+                set({decodedToken: null})
             }
             set({loading: false})
         }catch(e){
@@ -90,6 +98,7 @@ export const useAuthStore = create((set) => ({
                 }
             }else{
                 set({ token: null })
+                set({decodedToken: null})
             }
         }catch(e){
             console.log(e)
@@ -113,6 +122,7 @@ export const useAuthStore = create((set) => ({
                 }
             }else{
                 set({ token: null })
+                set({decodedToken: null})
             }
         }catch(e){
             console.log(e)

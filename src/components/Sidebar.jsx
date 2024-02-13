@@ -5,7 +5,7 @@ import {AiOutlineClose,AiOutlineMessage } from 'react-icons/ai'
 import {FaRegImage} from 'react-icons/fa'
 import {CgWebsite} from 'react-icons/cg'
 import {PiBooks} from 'react-icons/pi'
-import {MdOutlineDiscount,MdOutlineAccountCircle, MdOutlineNewspaper} from 'react-icons/md'
+import {MdOutlineDiscount,MdOutlineAccountCircle, MdOutlineNewspaper, MdOutlineAdminPanelSettings} from 'react-icons/md'
 import { FaRegNewspaper } from "react-icons/fa6"
 import {BsMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import { checkTheme } from '../utils/theme'
@@ -18,6 +18,7 @@ import StockLinks from './links/StockLinks'
 import BooksLinks from './links/BooksLinks'
 import DiscountsLinks from './links/DiscountsLinks'
 import { FiPackage } from 'react-icons/fi'
+import AdminLinks from './links/AdminLinks'
 
 function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
@@ -115,7 +116,13 @@ function Sidebar() {
             <FiPackage className='text-xl mx-1'/>
             <span>Zamówienia</span>
           </div>
-        </Link>         
+        </Link>   
+        <button onClick={()=> toggleSideMenu("adminpanel")} className='default-link'>
+          <div className='flex flex-row items-center'>
+            <MdOutlineAdminPanelSettings className='text-xl mx-1'/>
+            <span className='whitespace-nowrap'>Panel admina</span>
+          </div>
+        </button>       
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>
@@ -161,6 +168,13 @@ function Sidebar() {
             <h1 className='text-base font-semibold whitespace-nowrap'>Książki</h1>
           </div>
           <BooksLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          </>
+          : sideMenu === "adminpanel" ?
+          <>
+          <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Panel admina</h1>
+          </div>
+          <AdminLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
           </>
           : sideMenu === "discount" ?
           <>

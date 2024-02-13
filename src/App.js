@@ -1,19 +1,27 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, RecoverPassword, NewPassword } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, RecoverPassword, NewPassword, Roles, Employee, ClaimValues, Claims, RoleClaims } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
 import { useAuthStore } from './store/authStore';
 import Message from './modules/Message';
+import { jwtDecode } from 'jwt-decode';
 
 function App() {
+  // const newtoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRkb2IxMTEiLCJuYW1laWQiOiI1ODEzOGNiZC01NDlmLTRmZDYtYjNjZS1hN2IwYTMxNmRiNzciLCJqdGkiOiI4ODNkMDc1Zi1kMDU3LTQxNGQtYTE3NS0zMDgzOTBhNDFhMDYiLCJSYXBvcnQiOiIxNSIsIkNNUyI6WyJyIiwidyJdLCJBdXRob3IiOiJyIiwiQm9va0l0ZW1zIjpbInIiLCJ3IiwiZSJdLCJuYmYiOjE3MDc3NjQ5NTAsImV4cCI6MjA2Nzc2NDk1MCwiaWF0IjoxNzA3NzY0OTUwLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjQ3IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI0NyJ9.pg7GqTno_p5-fyyFzNTGiaSMxSCsYPskc5F9a2Xg22c"
+  // const payload = jwtDecode(newtoken)
   const token = useAuthStore((state) => state.token)
+  const decodedToken = useAuthStore((state) => state.decodedToken)
   const restoring = useAuthStore((state) => state.restoring)
   const restoreToken = useAuthStore((state) => state.restoreToken)
   useEffect(() => {
     restoreToken()
   },[])
+  useEffect(() => {
+    console.log(decodedToken);
+  },[decodedToken])
+
   return (
     restoring ? <Splash /> :
     <>
@@ -29,7 +37,26 @@ function App() {
           :
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />}/>
-            <Route path='/autor' element={<Author />}/>
+            {/* {payload.Author && Array.isArray(payload.Author) ? (
+              payload.Author.map((item, index) => {
+                if (item === 'r') {
+                  return <Route key={index} path='/autor' element={<Author />} />;
+                } else {
+                  return null
+                }
+              })
+            ) : (
+              payload?.Author === 'r' ? (
+                <>
+                  <Route path='/autor' element={<Author />} />
+                </>
+              ) : (
+                <>
+                  {console.log(payload.Author)}
+                </>
+              )
+            )}           */}
+            {/* <Route path='/autor' element={<Author />}/> */}
             <Route path='/slownik' element={<Dictionary />}/>
             <Route path='/konto' element={<Account />}/>
             <Route path='/ksiazka' element={<Book />}/>         
@@ -71,6 +98,11 @@ function App() {
             <Route path='/kontakt' element={<Contact />}/>
             <Route path='/ocena' element={<Score />}/>
             <Route path='/zamowienie' element={<Order />}/>
+            <Route path='/role' element={<Roles />}/>
+            <Route path='/pracownik' element={<Employee />}/>
+            <Route path='/wartosci-uprawnien' element={<ClaimValues />}/>
+            <Route path='/widoki-uprawnien' element={<Claims />}/>
+            <Route path='/uprawnienia-dostepu' element={<RoleClaims />}/>
             <Route path='/strona-klienta' element={<WebsiteLayout />}/>
           </Route>
           }

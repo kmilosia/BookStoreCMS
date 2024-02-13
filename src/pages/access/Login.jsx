@@ -29,7 +29,7 @@ function Login() {
     let data = {
       email: inputValues.email, 
       password: inputValues.password,
-      audience: 'www',
+      audience: 'API',
     }
     signIn(data)
   }
@@ -39,7 +39,6 @@ function Login() {
     }
   }, [errors])
   return (
-    
       <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center'>
         <div className='flex flex-col justify-center items-start w-2/3'>
         <h1 className='text-3xl my-2 font-semibold text-dracula-500 cursor-default'>Zaloguj się</h1>

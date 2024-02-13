@@ -61,6 +61,24 @@ export const dictionaryColumns = [
     { name: 'ID'},
     { name: 'Nazwa'}
 ]
+export const rolesColumns = [
+    { name: 'Nazwa'}
+]
+export const employeeColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa użytkownika'},
+    { name: 'Email'},
+    { name: 'Rola'},
+]
+export const claimValuesColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+    { name: 'Wartość'},
+]
+export const claimsColumns = [
+    { name: 'ID'},
+    { name: 'Nazwa'},
+]
 export const orderColumns = [
     { name: 'ID'},
     { name: 'Klient'},

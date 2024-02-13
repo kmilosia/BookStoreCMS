@@ -22,6 +22,41 @@ export const publisherValidate = (values) => {
     } 
     return errors
 }
+export const employeeValidate = (values) => {
+    let errors = {}
+    if (!values.name) {
+        errors.name = "Wprowadź imię!"
+    } 
+    if (!values.surname) {
+        errors.surname = "Wprowadź nazwisko!"
+    }
+    if (!values.username) {
+        errors.username = "Wprowadź nazwę użytkownika!"
+    }
+    if (!values.email) {
+        errors.email = "Wprowadź email!"
+    }
+    else if (!/\S+@\S+\.\S+/.test(values.email)) {
+        errors.email = "Nieprawidłowy format email!"
+    }
+    if (!values.phoneNumber) {
+        errors.phoneNumber = "Wprowadź numer telefonu!"
+    }
+    if (!values.password) {
+        errors.password = "Wprowadź hasło!"
+    }
+    else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}/.test(values.password)) {
+        errors.password = "Nieprawidłowy format - hasło powinno się składać z minimum 6 znaków, minimum jednego znaku specjalnego oraz jednej wielkiej litery.";
+    } 
+    return errors
+}
+export const rolesValidate = (name) => {
+    let errors = {}
+    if (!name) {
+        errors.name = "Wprowadź nazwę!"
+    } 
+    return errors
+}
 export const navbarValidate = (values) => {
     let errors = {}
     if (!values.name) {

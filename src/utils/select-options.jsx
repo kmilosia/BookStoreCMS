@@ -2,9 +2,26 @@ export const dictionarySortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
+export const rolesSortOptions = [
+    {value: 'name', label: 'Nazwa', type: 'string'}
+]
+export const employeeSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'username', label: 'Nazwa użytkownika', type: 'string'},
+    {value: 'roleName', label: 'Rola', type: 'string'}
+]
 export const orderSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
     {value: 'totalBruttoPrice', label: 'Kwota', type: 'number'}
+]
+export const claimValuesSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
+    {value: 'value', label: 'Wartość', type: 'string'},
+]
+export const claimsSortOptions = [
+    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'name', label: 'Nazwa', type: 'string'},
 ]
 export const footerLinksSortOptions = [
     {value: 'id', label: 'ID', type: 'number'},
