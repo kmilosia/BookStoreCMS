@@ -8,6 +8,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { getCategories } from '../../api/selectAPI'
 import { categoryElementValidate } from '../../utils/validation/newValidate'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditCategoryElement(props) {
     const [values,setValues] = useState({
@@ -19,13 +20,18 @@ function EditCategoryElement(props) {
       imageURL: '',
       category: null,
     })
-    const [selectedCategory, setSelectedCategory] = useState(null)
     const [categoryOptions, setCategoryOptions] = useState([])
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/CategoryElements/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/CategoryElements/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setValues({
               path: response.data.path,
@@ -36,7 +42,7 @@ function EditCategoryElement(props) {
               imageURL: response.data.imageURL,
               category: { value: response.data.categoryID, label: response.data.categoryName },
             })
-          }
+          }}
         }catch(err){
           console.log(err)
         }

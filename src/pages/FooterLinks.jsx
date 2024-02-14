@@ -17,6 +17,7 @@ import EditFooterLink from '../modules/edit/EditFooterLink'
 import ViewFooterLink from '../modules/view/ViewFooterLink'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function FooterLinks() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function FooterLinks() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/FooterLinks/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/FooterLinks/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function FooterLinks() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/FooterLinks`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/FooterLinks`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -58,39 +71,57 @@ function FooterLinks() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/FooterLinks/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/FooterLinks/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link footera został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/FooterLinks`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/FooterLinks`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link footera został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/FooterLinks/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/FooterLinks/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link footera został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
       }

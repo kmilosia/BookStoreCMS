@@ -5,6 +5,7 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function Edition() {
     const title = "Edycja"
@@ -21,10 +22,16 @@ function Edition() {
     const getAllData = async () => {
       try{
           setIsDataLoading(true)
-          const response = await axiosClient.get(`/Edition`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Edition`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)
@@ -33,44 +40,62 @@ function Edition() {
     }
     const postData = async (name) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.post(`/Edition`, {
               name: name,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Edycja książki została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania edycji książki", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania edycji książki", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.put(`/Edition/${id}`, {
               id: id,
               name: nameValue,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Edycja książki została edytowana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania edycji książki", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania edycji książki", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Edition/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Edition/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Edycja książki została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania edycji książki", type: 'error'})
-          }
+          }}
         }catch(err){
           setMessage({title: "Błąd podczas usuwania edycji książki", type: 'error'})
         }

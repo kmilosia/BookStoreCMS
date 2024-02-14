@@ -42,7 +42,7 @@ function ViewEmployee(props) {
                     </div>  
                     <div className='flex flex-col my-1'>
                         <p className='column-info-title'>Rola</p>
-                        <h2 className='column-info-text'>{data?.roleNames?.map((item) => {return(item)})}</h2>
+                        <h2 className='column-info-text'>{data?.roleNames?.map((item, index) => {return(<span>{index > 0 && ' ,'}{item}</span>)})}</h2>
                     </div>             
                 </div>              
             </div>

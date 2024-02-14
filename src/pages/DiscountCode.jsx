@@ -16,6 +16,7 @@ import ViewDiscountCode from '../modules/view/ViewDiscountCode'
 import NewDiscountCode from '../modules/new/NewDiscountCode'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function DiscountCode() {
     const [data, setData] = useState([])
@@ -39,10 +40,16 @@ function DiscountCode() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setDiscount) => {
       try{
-        const response = await axiosClient.get(`/DiscountCodes/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/DiscountCodes/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setDiscount(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -50,12 +57,18 @@ function DiscountCode() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/DiscountCodes`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/DiscountCodes`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -63,39 +76,57 @@ function DiscountCode() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/DiscountCodes`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/DiscountCodes`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano kod rabatowy", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania kodu rabatowego", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas dodawania kodu rabatowego", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/DiscountCodes/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/DiscountCodes/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie usunięto kod rabatowy", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania kodu rabatowego", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas usuwania kodu rabatowego", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/DiscountCodes/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/DiscountCodes/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie edytowano kod rabatowy", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania kodu rabatowego", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania kodu rabatowego", type: 'error'})
       }

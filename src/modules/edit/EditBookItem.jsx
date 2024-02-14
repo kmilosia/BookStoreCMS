@@ -9,6 +9,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { bookItemValidate } from '../../utils/validation/newValidate'
 import { getAvailabilities, getBooks, getEditions, getFileFormats, getForms, getLanguages, getTranslators } from '../../api/selectAPI'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditBookItem({setShowEditModule, putData, editedID}) {
   const [errors,setErrors] = useState({})
@@ -61,7 +62,13 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     }
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/BookItems/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/BookItems/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             const newDate = new Date(response.data.publishingDate)
             setValues({
@@ -78,8 +85,7 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               availability: { value: response.data.availabilityID, label: response.data.availabilityName },
               book: { value: response.data.bookID, label: response.data.bookName },
             })
-          }
-  
+          }}
         }catch(err){
           console.log(err)
         }

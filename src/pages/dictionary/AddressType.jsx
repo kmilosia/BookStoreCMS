@@ -5,6 +5,7 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function AddressType() {
     const title = "Typ Adresu"
@@ -21,10 +22,16 @@ function AddressType() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/AddressType`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/AddressType`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)
@@ -33,15 +40,21 @@ function AddressType() {
     }
     const postData = async (name) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.post(`/AddressType`, {
               name: name,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Nowy typ adresu został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd przy dodawaniu nowego typu adresu", type: 'error'})
-          }
+          }}
       }catch(err){
           console.log(err)
           setMessage({title: "Błąd przy dodawaniu nowego typu adresu", type: 'error'})
@@ -49,16 +62,22 @@ function AddressType() {
     }
     const putData = async (id, nameValue) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.put(`/AddressType/${id}`, {
               id: id,
               name: nameValue,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Typ adresu został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd przy edytowania typu adresu", type: 'error'})
-          }
+          }}
       }catch(err){
         console.log(err)
         setMessage({title: "Błąd przy edytowania typu adresu", type: 'error'})
@@ -66,13 +85,19 @@ function AddressType() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/AddressType/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/AddressType/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Typ adresu został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd przy usuwaniu typu adresu", type: 'error'})
-          }
+          }}
       }catch(err){
           console.log(err)
           setMessage({title: "Błąd przy usuwaniu typu adresu", type: 'error'})

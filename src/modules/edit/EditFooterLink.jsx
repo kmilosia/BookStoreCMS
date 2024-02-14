@@ -7,6 +7,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { footerLinkValidate } from '../../utils/validation/newValidate'
 import { getFooterColumns } from '../../api/selectAPI'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditFooterLink(props) {
   const [errors,setErrors] = useState({})
@@ -21,7 +22,13 @@ function EditFooterLink(props) {
     })
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/FooterLinks/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/FooterLinks/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             const newData = response.data
             setValues({
@@ -31,7 +38,7 @@ function EditFooterLink(props) {
               url: newData.url,
               column: { value: newData.columnId, label: newData.columnName },
             })
-          }          
+          }}          
         }catch(err){
           console.log(err)
         }

@@ -10,6 +10,7 @@ import Searchbar from '../../components/Searchbar'
 import SortBar from '../../components/SortBar'
 import { claimValuesSortOptions } from '../../utils/select-options'
 import axiosClient from '../../api/apiClient'
+import { getValidToken } from '../../api/getValidToken'
 
 function ClaimValues() {
     const [data, setData] = useState([])
@@ -23,12 +24,18 @@ function ClaimValues() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/ClaimValues`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Admin/ClaimValues`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)

@@ -17,6 +17,7 @@ import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function Translator() {
     const [data, setData] = useState([])
@@ -33,10 +34,17 @@ function Translator() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Translator/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Translator/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setData(response.data)
         }
+      }
       }catch(err){
         console.log(err)
       }
@@ -44,12 +52,19 @@ function Translator() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Translator`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Translator`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
           }
+        }
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -58,39 +73,57 @@ function Translator() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Translator/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Translator/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Translator został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania translatora", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania translatora", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Translator`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Translator`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Translator został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania translatora", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania translatora", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/Translator/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Translator/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Translator został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania translatora", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania translatora", type: 'error'})
       }

@@ -5,6 +5,7 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function Language() {
     const title = "Język"
@@ -21,10 +22,16 @@ function Language() {
     const getAllData = async () => {
       try{
           setIsDataLoading(true)
-          const response = await axiosClient.get(`/Language`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Language`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)
@@ -33,44 +40,62 @@ function Language() {
     }
     const postData = async (name) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.post(`/Language`, {
               name: name,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Język został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania języka", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania języka", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.put(`/Language/${id}`, {
               id: id,
               name: nameValue,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Język został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania języka", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania języka", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Language/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Language/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Język został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania języka", type: 'error'})
-          }
+          }}
         }catch(err){
           setMessage({title: "Błąd podczas usuwania języka", type: 'error'})
         }

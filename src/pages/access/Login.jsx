@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import ShowPasswordButton from '../../components/buttons/ShowPasswordButton'
 import { loginValidate } from '../../utils/validation/loginValidate'
 import { useEffect } from 'react'
-import TextLink from '../../components/buttons/TextLink'
 import SubmitButton from '../../components/buttons/SubmitButton'
 import { useAuthStore } from '../../store/authStore'
 
@@ -29,7 +28,7 @@ function Login() {
     let data = {
       email: inputValues.email, 
       password: inputValues.password,
-      audience: 'API',
+      audience: 'CMS',
     }
     signIn(data)
   }
@@ -57,7 +56,6 @@ function Login() {
             </div>
         {errors.password && <span className='error-text'>{errors.password}</span>}
         </div>
-        <TextLink title="Zapomniałeś hasła?" path='/resetuj-haslo' />
         <SubmitButton loading={loading} title="Zaloguj się" />
       </div>
       {error && <p className='error-text my-1'>{error}</p>}

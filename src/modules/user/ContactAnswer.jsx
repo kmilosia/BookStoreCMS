@@ -5,6 +5,7 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { useMessageStore } from '../../store/messageStore'
 import axiosClient from '../../api/apiClient'
+import { getValidToken } from '../../api/getValidToken'
 
 function ContactAnswer({setShowModule,setItemId,itemId}) {
     const setMessage = useMessageStore((state) => state.setMessage)
@@ -22,12 +23,18 @@ function ContactAnswer({setShowModule,setItemId,itemId}) {
     } 
     const postData = async (id, content) => {
         try{
-            const response = await axiosClient.post(`/Contact/${id}?content=${content}`)
+          const token = getValidToken()
+          if(token){    
+            const response = await axiosClient.post(`/Contact/${id}?content=${content}`,{
+              headers:{
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+            }})
             if(response.status === 200 || response.status === 204){
               setMessage({title: "Wiadomość została wysłana", type: 'success'})
             }else{
               setMessage({title: "Błąd podczas wysyłania wiadomości", type: 'error'})
-            }
+            }}
         }catch(err){
             setMessage({title: "Błąd podczas wysyłania wiadomości", type: 'error'})
         }

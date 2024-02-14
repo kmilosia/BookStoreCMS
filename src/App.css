@@ -93,7 +93,7 @@
       @apply my-1 font-light text-dracula-500 dark:text-dracula-400 text-sm;
     }
     .column-info-text{
-      @apply my-1 font-medium text-dracula-900 dark:text-dracula-100;
+      @apply my-1 break-words font-medium text-dracula-900 dark:text-dracula-100;
     }
     .info-button{
       @apply bg-purple-400 text-dracula-100 rounded-md cursor-default px-3 py-1 mr-2 flex flex-row flex-wrap;

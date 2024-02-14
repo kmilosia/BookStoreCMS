@@ -13,6 +13,7 @@ import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import {formatDisplayDate} from '../utils/functions/formatDisplayDate'
 import ViewOrder from '../modules/view/ViewOrder'
+import { getValidToken } from '../api/getValidToken'
 
 function Order() {
     const [data, setData] = useState([])
@@ -34,10 +35,16 @@ function Order() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Order/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Order/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -45,12 +52,18 @@ function Order() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Order`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Order`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)

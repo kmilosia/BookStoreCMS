@@ -16,6 +16,7 @@ import NewCategoryElement from '../modules/new/NewCategoryElement'
 import EditCategoryElement from '../modules/edit/EditCategoryElement'
 import ViewCategoryElement from '../modules/view/ViewCategoryElement'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function CategoryElement() {
     const [data, setData] = useState([])
@@ -39,10 +40,16 @@ function CategoryElement() {
     const filteredItems = filterItems(sortedItems, searchValue)
     const getItem = async (id,setElement) => {
       try{
-        const response = await axiosClient.get(`/CategoryElements/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/CategoryElements/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setElement(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -50,12 +57,18 @@ function CategoryElement() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/CategoryElements`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/CategoryElements`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -64,39 +77,57 @@ function CategoryElement() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/CategoryElements`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/CategoryElements`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Element kategorii został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania elementu", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania elementu", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/CategoryElements/${id}?categoryElementId=${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/CategoryElements/${id}?categoryElementId=${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Element kategorii został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania elementu", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas usuwania elementu", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/CategoryElements/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/CategoryElements/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Element kategorii został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania elementu", type: 'error'})
-          }
+          }}
         } catch (err) {
           setMessage({title: "Błąd podczas edytowania elementu", type: 'error'})
         }

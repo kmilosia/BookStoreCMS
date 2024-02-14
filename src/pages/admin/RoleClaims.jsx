@@ -8,6 +8,7 @@ import ListHeader from '../../components/ListHeader'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import EditRoleClaims from '../../modules/edit/EditRoleClaims'
+import { getValidToken } from '../../api/getValidToken'
 
 function RoleClaims() {
     const [data, setData] = useState([])
@@ -18,12 +19,18 @@ function RoleClaims() {
     const getRoles = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/Roles`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Admin/Roles`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -32,12 +39,18 @@ function RoleClaims() {
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Admin/Roles/Claims`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Admin/Roles/Claims`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Uprawnienia zostały zmienione", type: 'success'})
           }else{
             setMessage({title: "Błąd podczas zmiany uprawnień", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas zmiany uprawnień", type: 'error'})
       }

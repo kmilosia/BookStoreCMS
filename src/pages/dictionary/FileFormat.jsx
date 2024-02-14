@@ -5,6 +5,7 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function FileFormat() {
     const title = "Format Pliku"
@@ -21,10 +22,16 @@ function FileFormat() {
     const getAllData = async () => {
       try{
           setIsDataLoading(true)
-          const response = await axiosClient.get(`/FileFormat`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/FileFormat`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)
@@ -33,44 +40,62 @@ function FileFormat() {
     }
     const postData = async (name) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.post(`/FileFormat`, {
               name: name,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Format pliku został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania formatu pliku", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania formatu pliku", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.put(`/FileFormat/${id}`, {
               id: id,
               name: nameValue,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Format pliku został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania formatu pliku", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania formatu pliku", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/FileFormat/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/FileFormat/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Format pliku został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania formatu pliku", type: 'error'})
-          }
+          }}
         }catch(err){
           setMessage({title: "Błąd podczas usuwania formatu pliku", type: 'error'})
         }

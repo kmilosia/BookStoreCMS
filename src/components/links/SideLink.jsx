@@ -7,8 +7,7 @@ function SideLink({attribute, title, path, handleLinkClick}) {
     
   return (
     (decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) && decodedToken[attribute].includes('r')) ||
-    (decodedToken?.[attribute] === 'r') ||
-    (decodedToken?.Role === 'Admin' || (Array.isArray(decodedToken.Role) && decodedToken.Role.includes('Admin')))
+    (decodedToken?.[attribute] === 'r') || (decodedToken?.role === 'Admin')
     ) && (
     <Link to={path} onClick={handleLinkClick} className='sidemenu-link'>{title}</Link>
 )

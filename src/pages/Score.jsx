@@ -14,6 +14,7 @@ import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import NewScore from '../modules/new/NewScore'
 import { FaSave } from 'react-icons/fa'
+import { getValidToken } from '../api/getValidToken'
 
 function Score() {
     const inputRef = useRef(null)
@@ -30,12 +31,18 @@ function Score() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Score`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Score`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -44,39 +51,57 @@ function Score() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Score/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Score/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Ocena została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania oceny", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania oceny", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Score`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Score`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Ocena została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania oceny", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania oceny", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/Score/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Score/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Ocena została edytowana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania oceny", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania oceny", type: 'error'})
       }

@@ -80,24 +80,27 @@ function Sidebar() {
             <span>Magazyn</span>
           </div>
         </button>
+        {(decodedToken?.News && Array.isArray(decodedToken.News) && decodedToken.News.includes('r')) || (decodedToken?.News === 'r') || (decodedToken?.role === 'Admin') && 
         <Link to="/wiadomosci" className='default-link'>
-        <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center'>
             <FaRegNewspaper className='text-xl mx-1'/>
             <span>Wiadomości</span>
           </div>
-        </Link>
+        </Link>}
+        {(decodedToken?.Images && Array.isArray(decodedToken.Images) && decodedToken.Images.includes('r')) || (decodedToken?.Images === 'r') || (decodedToken?.role === 'Admin') && 
         <Link to="/zdjecie" className='default-link'>
-        <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center'>
             <FaRegImage className='text-xl mx-1'/>
             <span>Zdjęcia</span>
           </div>
-        </Link>
+        </Link>}
+        {(decodedToken?.Newsletter && Array.isArray(decodedToken.Newsletter) && decodedToken.Newsletter.includes('r')) || (decodedToken?.Newsletter === 'r') || (decodedToken?.role === 'Admin') && 
         <Link to="/newsletter" className='default-link'>
-        <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center'>
             <MdOutlineNewspaper className='text-xl mx-1'/>
             <span>Newsletter</span>
           </div>
-        </Link>
+        </Link>}
         <button onClick={() => toggleSideMenu("discount")} className='default-link'>
           <div className='flex flex-row items-center'>
             <MdOutlineDiscount className='text-xl mx-1'/>
@@ -110,24 +113,28 @@ function Sidebar() {
             <span className='whitespace-nowrap'>Strona Klienta</span>
           </div>
         </button>   
+        {(decodedToken?.Contact && Array.isArray(decodedToken.Contact) && decodedToken.Contact.includes('r')) || (decodedToken?.Contact === 'r') || (decodedToken?.role === 'Admin') && 
         <Link to="/kontakt" className='default-link'>
-        <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center'>
             <AiOutlineMessage className='text-xl mx-1'/>
             <span>Kontakt</span>
           </div>
-        </Link>   
+        </Link>}  
+        {(decodedToken?.Order && Array.isArray(decodedToken.Order) && decodedToken.Order.includes('r')) || (decodedToken?.Order === 'r') || (decodedToken?.role === 'Admin') && 
         <Link to="/zamowienie" className='default-link'>
-        <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center'>
             <FiPackage className='text-xl mx-1'/>
             <span>Zamówienia</span>
           </div>
-        </Link>   
+        </Link>}  
+        {decodedToken?.role === 'Admin' &&
         <button onClick={()=> toggleSideMenu("adminpanel")} className='default-link'>
           <div className='flex flex-row items-center'>
             <MdOutlineAdminPanelSettings className='text-xl mx-1'/>
             <span className='whitespace-nowrap'>Panel admina</span>
           </div>
-        </button>       
+        </button>    
+        }   
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>

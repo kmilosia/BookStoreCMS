@@ -17,6 +17,7 @@ import ViewSupply from '../modules/view/ViewSupply'
 import NewSupply from '../modules/new/NewSupply'
 import { useMessageStore } from '../store/messageStore'
 import EditSupply from '../modules/edit/EditSupply'
+import { getValidToken } from '../api/getValidToken'
 
 function Supply() {
     const setMessage = useMessageStore((state) => state.setMessage)
@@ -40,10 +41,16 @@ function Supply() {
     const filteredItems = filterItems(sortedItems, searchValue)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Supply/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Supply/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setData(response.data)
-        }
+        }}
       }catch(e){
         console.log(e)
       }
@@ -51,12 +58,18 @@ function Supply() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Supply`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Supply`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -65,39 +78,57 @@ function Supply() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Supply`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Supply`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Nowa dostawa została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd przy dodawaniu nowej dostawy", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Supply/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Supply/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Dostawa została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas usuwania", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Supply/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Supply/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             getAllData()
             setMessage({title: "Dostawa została edytowana", type: 'success'})
           }else{
             setMessage({title: "Błąd podczas edycji danych", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edycji danych", type: 'error'})
       }

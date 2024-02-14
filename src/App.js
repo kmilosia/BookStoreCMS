@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, RecoverPassword, NewPassword, Roles, Employee, ClaimValues, Claims, RoleClaims } from './import'
+import { Book,Author,City,Country, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, Roles, Employee, ClaimValues, Claims, RoleClaims } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -14,11 +14,9 @@ function App() {
   const restoreToken = useAuthStore((state) => state.restoreToken)
   const generatePermissionRoute = (attribute,path, component) => {
     return (decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) && decodedToken[attribute].includes('r')) ||
-    (decodedToken?.[attribute] === 'r') ||
-    (decodedToken?.Role === 'Admin' || (Array.isArray(decodedToken.Role) && decodedToken.Role.includes('Admin')))
+    (decodedToken?.[attribute] === 'r') || (decodedToken?.role === 'Admin')
      && <Route path={path} element={component} />
   }
-  
   useEffect(() => {
     restoreToken()
   },[])
@@ -32,59 +30,61 @@ function App() {
           {token === null ?
           <Route path='/' element={<Access/>}>
             <Route index element={<Login />}/>
-            <Route path='/resetuj-haslo' element={<RecoverPassword/>}/>
-            <Route path='/dostep/odzyskaj-konto/resetuj-haslo' element={<NewPassword/>}/>
           </Route>
           :
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />}/>
-            {generatePermissionRoute('Author', '/autor', <Author />)}
-            <Route path='/slownik' element={<Dictionary />}/>
             <Route path='/konto' element={<Account />}/>
-            <Route path='/ksiazka' element={<Book />}/>         
-            <Route path='/miasto' element={<City />}/>         
-            <Route path='/jezyk' element={<Language />}/>         
-            <Route path='/kraj' element={<Country />}/>         
-            <Route path='/egzemplarz' element={<BookItem />}/>         
-            <Route path='/typ-adresu' element={<AddressType />}/>
-            <Route path='/dostepnosc' element={<Availability />}/>
-            <Route path='/kategoria' element={<Category />}/>
-            <Route path='/promocja' element={<Discount />}/>
-            <Route path='/kod-rabatowy' element={<DiscountCode />}/>
-            <Route path='/edycja-ksiazki' element={<Edition />}/>
-            <Route path='/format-pliku' element={<FileFormat />}/>
-            <Route path='/format' element={<Form />}/>
-            <Route path='/zdjecie' element={<Image />}/>
-            <Route path='/translator' element={<Translator />}/>
-            <Route path='/wydawnictwo' element={<Publisher />}/>
-            <Route path='/dostawa' element={<Supply />}/>
-            <Route path='/dostawca' element={<Supplier />}/>
-            <Route path='/status-zamowienia' element={<OrderStatus />}/>
-            <Route path='/status-wypozyczenia' element={<RentalStatus />}/>
-            <Route path='/typ-wypozyczenia' element={<RentalType />}/>
-            <Route path='/status-transakcji' element={<TransactionStatus />}/>
-            <Route path='/metoda-platnosci' element={<PaymentMethod />}/>
-            <Route path='/metoda-dostawy' element={<DeliveryMethod />}/>
-            <Route path='/status-dostawy' element={<DeliveryStatus />}/>
-            <Route path='/footer-kolumna' element={<FooterColumns />}/>
-            <Route path='/footer-link' element={<FooterLinks />}/>
-            <Route path='/stan-magazynu' element={<StockAmount />}/>
-            <Route path='/wiadomosci' element={<News />}/>
-            <Route path='/baner' element={<Banner />}/>
-            <Route path='/recenzja' element={<BookItemReview />}/>
-            <Route path='/navbar-link' element={<NavbarLink />}/>
-            <Route path='/newsletter' element={<Newsletter />}/>
-            <Route path='/element-kategorii' element={<CategoryElement />}/>
-            <Route path='/baner-promocyjny' element={<DiscountsBanner />}/>
-            <Route path='/kontakt' element={<Contact />}/>
-            <Route path='/ocena' element={<Score />}/>
-            <Route path='/zamowienie' element={<Order />}/>
+            {generatePermissionRoute('Author', '/autor', <Author />)}
+            {generatePermissionRoute('Books', '/ksiazka', <Book />)}
+            {generatePermissionRoute('City', '/miasto', <City />)}
+            {generatePermissionRoute('Language', '/jezyk', <Language />)}
+            {generatePermissionRoute('Country', '/kraj', <Country />)}
+            {generatePermissionRoute('BookItems', '/egzemplarz', <BookItem />)}
+            {generatePermissionRoute('AddressType', '/typ-adresu', <AddressType />)}
+            {generatePermissionRoute('Availability', '/dostepnosc', <Availability />)}
+            {generatePermissionRoute('Category', '/kategoria', <Category />)}
+            {generatePermissionRoute('Discount', '/promocja', <Discount />)}
+            {generatePermissionRoute('DiscountCodes', '/kod-rabatowy', <DiscountCode />)}
+            {generatePermissionRoute('Edition', '/edycja-ksiazki', <Edition />)}
+            {generatePermissionRoute('FileFormat', '/format-pliku', <FileFormat />)}
+            {generatePermissionRoute('Form', '/format', <Form />)}
+            {generatePermissionRoute('Image', '/zdjecie', <Image />)}
+            {generatePermissionRoute('Translator', '/translator', <Translator />)}
+            {generatePermissionRoute('Supply', '/dostawa', <Supply />)}
+            {generatePermissionRoute('Supplier', '/dostawca', <Supplier />)}
+            {generatePermissionRoute('OrderStatus', '/status-zamowienia', <OrderStatus />)}
+            {generatePermissionRoute('RentalStatus', '/status-wypozyczenia', <RentalStatus />)}
+            {generatePermissionRoute('RentalType', '/typ-wypozyczenia', <RentalType />)}
+            {generatePermissionRoute('TransactionStatus', '/status-transakcji', <TransactionStatus />)}
+            {generatePermissionRoute('PaymentMethod', '/metoda-platnosci', <PaymentMethod />)}
+            {generatePermissionRoute('DeliveryMethod', '/metoda-dostawy', <DeliveryMethod />)}
+            {generatePermissionRoute('DeliveryStatus', '/status-dostawy', <DeliveryStatus />)}
+            {generatePermissionRoute('FooterColumns', '/footer-kolumna', <FooterColumns />)}
+            {generatePermissionRoute('FooterLinks', '/footer-link', <FooterLinks />)}
+            {generatePermissionRoute('StockAmount', '/stan-magazynu', <StockAmount />)}
+            {generatePermissionRoute('Publisher', '/wydawnictwo', <Publisher />)}
+            {generatePermissionRoute('News', '/wiadomosci', <News />)}
+            {generatePermissionRoute('Banner', '/baner', <Banner />)}
+            {generatePermissionRoute('BookItemReview', '/recenzja', <BookItemReview />)}
+            {generatePermissionRoute('NavbarLink', '/navbar-link', <NavbarLink />)}
+            {generatePermissionRoute('Newsletter', '/newsletter', <Newsletter />)}
+            {generatePermissionRoute('CategoryElement', '/element-kategorii', <CategoryElement />)}
+            {generatePermissionRoute('DiscountsBanner', '/baner-promocyjny', <DiscountsBanner />)}
+            {generatePermissionRoute('Contact', '/kontakt', <Contact />)}
+            {generatePermissionRoute('Score', '/ocena', <Score />)}
+            {generatePermissionRoute('Order', '/kontakt', <Order />)}
+            {generatePermissionRoute('Roles', '/role', <Roles />)}
+            {generatePermissionRoute('Employee', '/pracownik', <Employee />)}
+            {decodedToken?.role === 'Admin' &&
+            <>
             <Route path='/role' element={<Roles />}/>
             <Route path='/pracownik' element={<Employee />}/>
             <Route path='/wartosci-uprawnien' element={<ClaimValues />}/>
             <Route path='/widoki-uprawnien' element={<Claims />}/>
             <Route path='/uprawnienia-dostepu' element={<RoleClaims />}/>
-            <Route path='/strona-klienta' element={<WebsiteLayout />}/>
+            </>
+            }
           </Route>
           }
           <Route path='*' element={<PageNotFound />}/>

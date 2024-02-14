@@ -17,6 +17,7 @@ import ViewAuthor from '../modules/view/ViewAuthor'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import axiosClient from '../api/apiClient'
+import { getValidToken } from '../api/getValidToken'
 
 function Author() {
     const [data, setData] = useState([])
@@ -31,10 +32,16 @@ function Author() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id, setData) => {
       try{
-        const response = await axiosClient.get(`/Author/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Author/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setData(response.data)
-        }
+        }}
       }catch(e){
         console.log(e)
       }
@@ -42,12 +49,18 @@ function Author() {
     const getAllData = async () => {
       try{
         setLoading(true)
-          const response = await axiosClient.get(`/Author`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Author`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setLoading(false)
       }catch(err){
         setLoading(false)
@@ -56,39 +69,57 @@ function Author() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Author/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Author/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Autor został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Author`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Author`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Autor został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania autora", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania autora", type: 'error'})
       }
     }
     const putData = async (data) => {
       try{
-          const response = await axiosClient.put(`/Author/${data.id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Author/${data.id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Autor został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania autora", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania autora", type: 'error'})
       }

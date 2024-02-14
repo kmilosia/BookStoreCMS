@@ -17,6 +17,7 @@ import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function Publisher() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function Publisher() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setPublisher) => {
       try{
-        const response = await axiosClient.get(`/Publisher/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Publisher/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setPublisher(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function Publisher() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Publisher`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Publisher`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -58,39 +71,57 @@ function Publisher() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Publisher/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Publisher/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Wydawnictwo zostało usunięte", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania wydawnictwa", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania wydawnictwa", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Publisher`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Publisher`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Wydawnictwo zostało dodane", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania wydawnictwa", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania wydawnictwa", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/Publisher/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Publisher/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Wydawnictwo zostało edytowane", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania wydawnictwa", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania wydawnictwa", type: 'error'})
       }

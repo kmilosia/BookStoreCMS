@@ -9,6 +9,7 @@ import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { stockItemsColumns } from '../utils/column-names'
+import { getValidToken } from '../api/getValidToken'
 
 function StockAmount() {
     const [data, setData] = useState([])
@@ -29,12 +30,18 @@ function StockAmount() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/StockAmount`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/StockAmount`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data.value)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})

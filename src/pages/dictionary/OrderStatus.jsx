@@ -5,6 +5,7 @@ import DictionaryComponent from './DictionaryComponent'
 import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function OrderStatus() {
     const title = "Status Zamówienia"
@@ -21,10 +22,16 @@ function OrderStatus() {
     const getAllData = async () => {
       try{
           setIsDataLoading(true)
-          const response = await axiosClient.get(`/OrderStatus`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/OrderStatus`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)
@@ -33,44 +40,62 @@ function OrderStatus() {
     }
     const postData = async (name) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.post(`/OrderStatus`, {
               name: name,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Status zamówienia został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania statusu zamówienia", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania statusu zamówienia", type: 'error'})
       }
     }
     const putData = async (id, nameValue) => {
       try{
+        const token = getValidToken()
+        if(token){  
           const response = await axiosClient.put(`/OrderStatus/${id}`, {
               id: id,
               name: nameValue,
-          })
+          },{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Status zamówienia został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania statusu zamówienia", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania statusu zamówienia", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/OrderStatus/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/OrderStatus/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Status zamówienia został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania statusu zamówienia", type: 'error'})
-          }
+          }}
         }catch(err){
           setMessage({title: "Błąd podczas usuwania statusu zamówienia", type: 'error'})
         }

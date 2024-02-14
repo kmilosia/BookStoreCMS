@@ -16,6 +16,7 @@ import NewDiscountsBanner from '../modules/new/NewDiscountsBanner'
 import EditDiscountsBanner from '../modules/edit/EditDiscountsBanner'
 import ViewDiscountsBanner from '../modules/view/ViewDiscountsBanner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function DiscountsBanner() {
     const [data, setData] = useState([])
@@ -39,10 +40,16 @@ function DiscountsBanner() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setBanner) => {
       try{
-        const response = await axiosClient.get(`/DiscountsBanner/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/DiscountsBanner/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setBanner(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -50,12 +57,18 @@ function DiscountsBanner() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/DiscountsBanner`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/DiscountsBanner`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -63,39 +76,57 @@ function DiscountsBanner() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/DiscountsBanner`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/DiscountsBanner`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano nową baner", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania baneru", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas dodawania baneru", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/DiscountsBanner/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/DiscountsBanner/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie usunięto baner", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas usuwania baneru", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/DiscountsBanner/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/DiscountsBanner/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie edytowano baner", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania baneru", type: 'error'})
       }

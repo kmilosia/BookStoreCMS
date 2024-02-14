@@ -8,6 +8,7 @@ import { convertDate, convertDateToInput } from '../../utils/functions/convertDa
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { discountCodeValidate } from '../../utils/validation/newValidate'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditDiscountCode({setShowEditModule, putData, editedID}) {
   const [errors, setErrors] = useState({})
@@ -21,7 +22,13 @@ function EditDiscountCode({setShowEditModule, putData, editedID}) {
   })
     const getItem = async (id) => {
       try{
-        const response = await axiosClient.get(`/DiscountCodes/${id}`)
+        const token = getValidToken()
+        if(token){    
+        const response = await axiosClient.get(`/DiscountCodes/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           const newData = response.data
           const newStartDate = new Date(response.data.startingDate)
@@ -33,7 +40,7 @@ function EditDiscountCode({setShowEditModule, putData, editedID}) {
             expiryDate: convertDateToInput(newExpiryDate),
             startingDate: convertDateToInput(newStartDate),
           })
-        }
+        }}
       }catch(err){
         console.log(err)
       }

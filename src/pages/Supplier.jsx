@@ -17,6 +17,7 @@ import NewSupplier from '../modules/new/NewSupplier'
 import EditSupplier from '../modules/edit/EditSupplier'
 import ViewSupplier from '../modules/view/ViewSupplier'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function Supplier() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function Supplier() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Supplier/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Supplier/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function Supplier() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Supplier`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Supplier`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -58,39 +71,57 @@ function Supplier() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Supplier`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Supplier`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Dostawca został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania dostawcy", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania dostawcy", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Supplier/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Supplier/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Dostawca został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania dostawcy", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas usuwania dostawcy", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Supplier/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Supplier/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Dostawca został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania dostawcy", type: 'error'})
-          }
+          }}
         } catch (err) {
           setMessage({title: "Błąd podczas edytowania dostawcy", type: 'error'})
         }

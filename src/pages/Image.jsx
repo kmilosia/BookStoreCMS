@@ -16,6 +16,7 @@ import ViewImage from '../modules/view/ViewImage'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import NewImage from '../modules/new/NewImage'
+import { getValidToken } from '../api/getValidToken'
 
 function Image() {
     const [data, setData] = useState([])
@@ -39,10 +40,16 @@ function Image() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Images/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Images/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -50,12 +57,18 @@ function Image() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Images`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Images`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -63,39 +76,57 @@ function Image() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Images`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Images`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano nowe zdjęcie", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania nowego zdjęcie", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas dodawania nowego zdjęcie", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Images/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Images/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie usunięto zdjęcie", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania zdjęcie", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas usuwania zdjęcie", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Images/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Images/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie edytowano zdjęcie", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania zdjęcie", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania zdjęcie", type: 'error'})
       }

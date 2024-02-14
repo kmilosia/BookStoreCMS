@@ -6,6 +6,7 @@ import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditNews(props) {
     const setMessage = useMessageStore((state) => state.setMessage)
@@ -17,13 +18,20 @@ function EditNews(props) {
     const [news,setNews] = useState({})
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/News/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/News/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           setNews(response.data)
           setTopic(response.data.topic)
           setContent(response.data.content)
           setAuthorName(response.data.authorName)
           setImageTitle(response.data.imageTitle)
           setImageURL(response.data.imageURL)
+          }
         }catch(err){
           console.error(err)
         }

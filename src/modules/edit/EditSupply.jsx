@@ -11,6 +11,7 @@ import { convertDate, convertDateToInput } from '../../utils/functions/convertDa
 import Select from 'react-select'
 import { IoClose } from "react-icons/io5";
 import { getDeliveryStatuses, getFormBookItems, getSuppliers } from '../../api/selectAPI'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditSupply(props) {
     const [errors,setErrors] = useState({})
@@ -30,7 +31,13 @@ function EditSupply(props) {
     })
     const getItem = async (id) => {
       try{
-        const response = await axiosClient.get(`/Supply/${id}`)
+        const token = getValidToken()
+        if(token){    
+        const response = await axiosClient.get(`/Supply/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           const newDate = new Date(response.data.deliveryDate)
           setValues({
@@ -45,7 +52,7 @@ function EditSupply(props) {
               quantity: item.quantity,
             })),
           })
-        }
+        }}
       }catch(err){
         console.log(err)
       }

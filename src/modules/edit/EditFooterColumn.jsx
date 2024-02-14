@@ -6,6 +6,7 @@ import { backgroundOverlayModule } from '../../styles'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { footerColumnValidate } from '../../utils/validation/newValidate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditFooterColumn(props) {
   const [errors,setErrors] = useState({})
@@ -29,7 +30,13 @@ function EditFooterColumn(props) {
   }
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/FooterColumns/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/FooterColumns/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             const newData = response.data
             const newDir = directionOptions.find((item) => item.value === response.data.direction)
@@ -39,7 +46,7 @@ function EditFooterColumn(props) {
               htmlObject: newData.htmlObject,
               direction: newDir
             })
-          }
+          }}
         }catch(err){
           console.log(err)
         }

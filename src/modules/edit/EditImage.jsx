@@ -5,6 +5,7 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { imageValidate } from '../../utils/validation/newValidate'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditImage(props) {
   const [errors,setErrors] = useState({})
@@ -16,14 +17,20 @@ function EditImage(props) {
   })
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Images/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Images/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setValues({
               title: response.data.title,
               position: response.data.position,
               imageURL: response.data.imageURL
             })
-          }
+          }}
         }catch(err){
           console.log(err)
         }

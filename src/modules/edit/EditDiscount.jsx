@@ -10,6 +10,7 @@ import DefaultSelect from '../../components/forms/DefaultSelect'
 import { convertDate, convertDateToInput } from '../../utils/functions/convertDate'
 import { discountValidate } from '../../utils/validation/newValidate'
 import { getBookItems } from '../../api/selectAPI'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditDiscount({setShowEditModule, putData, editedID}) {
   const [errors, setErrors] = useState({})
@@ -25,7 +26,13 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
   })
     const getItem = async (id) => {
       try{
-        const response = await axiosClient.get(`/Discount/${id}`)
+        const token = getValidToken()
+        if(token){    
+        const response = await axiosClient.get(`/Discount/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           const newData = response.data
           const newStartDate = new Date(response.data.startingDate)
@@ -38,7 +45,7 @@ function EditDiscount({setShowEditModule, putData, editedID}) {
             startingDate: convertDateToInput(newStartDate),
             selectedBooks: newData.listOfBookItems.map(item => ({ value: item.id, label: item.bookTitle })),
           })
-        }
+        }}
       }catch(err){
         console.log(err)
       }

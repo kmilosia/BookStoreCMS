@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import { publisherValidate } from '../../utils/validation/newValidate'
@@ -20,8 +19,7 @@ function EditPublisher(props) {
     }
     const finishSubmit = () => {
       props.putData(props.editedID, values)
-      props.setEditedID(null)
-      props.setShowEditModule(false)
+      handleCloseModule()
   }
   const handleSubmit = () => {
     setSubmitting(true)

@@ -17,6 +17,7 @@ import NewNavbarLink from '../modules/new/NewNavbarLink'
 import EditNavbarLink from '../modules/edit/EditNavbarLink'
 import ViewNavbarLink from '../modules/view/ViewNavbarLink'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function NavbarLink() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function NavbarLink() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/NavBarMenuLinks/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/NavBarMenuLinks/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function NavbarLink() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/NavBarMenuLinks`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/NavBarMenuLinks`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -58,39 +71,57 @@ function NavbarLink() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/NavBarMenuLinks/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/NavBarMenuLinks/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania linku", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/NavBarMenuLinks`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/NavBarMenuLinks`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania linku", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/NavBarMenuLinks/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/NavBarMenuLinks/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Link został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania linku", type: 'error'})
       }

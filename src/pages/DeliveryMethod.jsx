@@ -17,6 +17,7 @@ import NewDeliveryMethod from '../modules/new/NewDeliveryMethod'
 import EditDeliveryMethod from '../modules/edit/EditDeliveryMethod'
 import ViewDeliveryMethod from '../modules/view/ViewDeliveryMethod'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function DeliveryMethod() {
     const [data, setData] = useState([])
@@ -33,8 +34,16 @@ function DeliveryMethod() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/DeliveryMethod/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/DeliveryMethod/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
+        if(response.status === 200 || response.status === 204){
         setData(response.data)
+        }}
       }catch(err){
         console.log(err)
       }
@@ -42,12 +51,18 @@ function DeliveryMethod() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/DeliveryMethod`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/DeliveryMethod`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -56,39 +71,57 @@ function DeliveryMethod() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/DeliveryMethod/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/DeliveryMethod/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Metoda dostawy została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania danych", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/DeliveryMethod`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/DeliveryMethod`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Metoda dostawy została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania metody dostawy", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania metody dostawy", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/DeliveryMethod/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/DeliveryMethod/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Metoda dostawy została edytowana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania metody dostawy", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania metody dostawy", type: 'error'})
       }

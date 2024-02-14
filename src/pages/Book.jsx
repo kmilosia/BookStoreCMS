@@ -16,6 +16,7 @@ import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function Book() {
     const [data, setData] = useState([])
@@ -40,12 +41,18 @@ function Book() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Book`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Book`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -54,49 +61,73 @@ function Book() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Book`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Book`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Książka została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania książki", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania książki", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/Book/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Book/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Książka została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania książki", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas usuwania książki", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Book/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Book/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Książka została edytowana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania książki", type: 'error'})
-          }
+          }}
         } catch (err) {
           setMessage({title: "Błąd podczas edytowania książki", type: 'error'})
         }
       }
       const getItem = async (id,setData) => {
         try{
-          const response = await axiosClient.get(`/Book/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Book/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
-          }
+          }}
         }catch(err){
           console.log(err)
         }

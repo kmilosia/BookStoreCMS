@@ -17,6 +17,7 @@ import { BsTrash3Fill } from 'react-icons/bs'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function RentalType() {
     const [data, setData] = useState([])
@@ -34,12 +35,18 @@ function RentalType() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/RentalType`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/RentalType`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -48,49 +55,73 @@ function RentalType() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/RentalType/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/RentalType/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Typ wypożyczenia został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania typu wypożyczenia", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania typu wypożyczenia", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/RentalType`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/RentalType`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Typ wypożyczenia został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania typu wypożyczenia", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania typu wypożyczenia", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/RentalType/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/RentalType/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Typ wypożyczenia został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania typu wypożyczenia", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania typu wypożyczenia", type: 'error'})
       }
     }
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/RentalType/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/RentalType/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }

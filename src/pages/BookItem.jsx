@@ -16,6 +16,7 @@ import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import NewBookItem from '../modules/new/NewBookItem'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function BookItem() {
     const [data, setData] = useState([])
@@ -39,10 +40,16 @@ function BookItem() {
     const filteredItems = filterItems(sortedItems, searchValue)
     const getItem = async (id,setItem) => {
       try{
-        const response = await axiosClient.get(`/BookItems/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/BookItems/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setItem(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -50,12 +57,18 @@ function BookItem() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/BookItems`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/BookItems`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -64,39 +77,57 @@ function BookItem() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/BookItems`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/BookItems`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Egzemplarz został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania egzemplarza", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas dodawania egzemplarza", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/BookItems/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/BookItems/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Egzemplarz został usunięty", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania egzemplarza", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas usuwania egzemplarza", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/BookItems/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/BookItems/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Egzemplarz został edytowany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania egzemplarza", type: 'error'})
-          }
+          }}
         } catch (err) {
           setMessage({title: "Błąd podczas edytowania egzemplarza", type: 'error'})
         }

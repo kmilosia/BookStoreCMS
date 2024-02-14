@@ -17,6 +17,7 @@ import NewNewsletter from '../modules/new/NewNewsletter'
 import EditNewsletter from '../modules/edit/EditNewsletter'
 import ViewNewsletter from '../modules/view/ViewNewsletter'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function Newsletter() {
     const [data, setData] = useState([])
@@ -42,12 +43,18 @@ function Newsletter() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Newsletter`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Newsletter`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -55,26 +62,38 @@ function Newsletter() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post(`/Newsletter`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Newsletter`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano nowego newslettera", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania nowego newslettera", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas dodawania nowego newslettera", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/Newsletter/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/Newsletter/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie edytowano newslettera", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania newslettera", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania newslettera", type: 'error'})
       }
@@ -82,12 +101,18 @@ function Newsletter() {
     const sendData = async () => {
       try{
           setSendingLoading(true)
-          const response = await axiosClient.get(`/Newsletter/SEND`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Newsletter/SEND`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Newsletter został wysłany", type: 'success'})
           }else{
             setMessage({title: "Błąd podczas wysyłania newslettera", type: 'error'})
-          }
+          }}
           setSendingLoading(false)
       }catch(err){
         setSendingLoading(false)

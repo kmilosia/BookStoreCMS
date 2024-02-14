@@ -5,6 +5,7 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import Spinner from '../../components/Spinner'
 import RoleCheckboxes from '../../components/forms/RoleCheckboxes'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditRoleClaims(props) {
   const [loading, setLoading] = useState(true)
@@ -13,10 +14,16 @@ function EditRoleClaims(props) {
   const [claimValues, setClaimValues] = useState(null)
     const getRoleClaims = async (name) => {
       try{
-          const response = await axiosClient.get(`/Admin/Roles/Claims?roleName=${name}`)
+        const token = getValidToken()
+        if(token){    
+          const response = await axiosClient.get(`/Admin/Roles/Claims?roleName=${name}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setClaimPosts(response.data.claimPost)
-          }
+          }}
       }catch(err){
         console.log(err);
       }
@@ -24,20 +31,32 @@ function EditRoleClaims(props) {
     }
     const getClaimValues = async () => {
       try{
-          const response = await axiosClient.get(`/Admin/ClaimValues`)
+        const token = getValidToken()
+        if(token){    
+          const response = await axiosClient.get(`/Admin/ClaimValues`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setClaimValues(response.data)
-          }
+          }}
       }catch(err){
         console.log(err);
       }
     }
     const getClaims = async () => {
       try{
-          const response = await axiosClient.get(`/Admin/Claims`)
+        const token = getValidToken()
+        if(token){    
+          const response = await axiosClient.get(`/Admin/Claims`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setClaims(response.data)
-          }
+          }}
       }catch(err){
         console.log(err);
       }

@@ -14,6 +14,7 @@ import NewClaims from '../../modules/new/NewClaims'
 import axiosClient from '../../api/apiClient'
 import { claimsColumns } from '../../utils/column-names'
 import { claimsSortOptions } from '../../utils/select-options'
+import { getValidToken } from '../../api/getValidToken'
 
 function Claims() {
     const [data, setData] = useState([])
@@ -28,12 +29,18 @@ function Claims() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/Claims`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Admin/Claims`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -42,26 +49,38 @@ function Claims() {
     }
     const deleteData = async (name) => {
       try{
-          const response = await axiosClient.delete(`/Admin/Claims?claimName=${name}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Admin/Claims?claimName=${name}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Uprawnienie zostało usunięte", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania uprawnienia", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania uprawnienia", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Admin/Claims`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Admin/Claims`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Uprawnienie zostało dodane", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania uprawnienia", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania uprawnienia", type: 'error'})
       }

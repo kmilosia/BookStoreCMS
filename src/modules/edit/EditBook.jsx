@@ -8,6 +8,7 @@ import DefaultInput from '../../components/forms/DefaultInput';
 import DefaultTextarea from '../../components/forms/DefaultTextarea';
 import { bookValidate } from '../../utils/validation/newValidate';
 import { getAuthors, getCategories, getLanguages, getPublishers } from '../../api/selectAPI';
+import { getValidToken } from '../../api/getValidToken';
 
 function EditBook({ setShowEditModule, putData, editedID }) {
   const [errors, setErrors] = useState({})
@@ -34,7 +35,13 @@ function EditBook({ setShowEditModule, putData, editedID }) {
     getLanguages(setLanguageOptions)
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get(`/Book/${editedID}`)
+        const token = getValidToken()
+        if(token){    
+        const response = await axiosClient.get(`/Book/${editedID}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           const bookData = response.data
           setValues({
@@ -48,7 +55,7 @@ function EditBook({ setShowEditModule, putData, editedID }) {
             newImageTitle: '',
             newImageURL: ''
           })
-        }
+        }}
       } catch (error) {
         console.log(error)
       }

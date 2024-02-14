@@ -14,6 +14,8 @@ import SortBar from '../../components/SortBar'
 import axiosClient from '../../api/apiClient'
 import { sortItems } from '../../utils/sort'
 import { useMessageStore } from '../../store/messageStore'
+import { getValidToken } from '../../api/getValidToken'
+import { BsTrash3Fill } from 'react-icons/bs'
 
 function Employee() {
     const [data, setData] = useState([])
@@ -36,10 +38,16 @@ function Employee() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/Admin/Employees/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/Admin/Employees/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -47,12 +55,18 @@ function Employee() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/Employees`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Admin/Employees`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -61,20 +75,48 @@ function Employee() {
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Admin/Register/Employee`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Admin/Register/Employee`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pracownik został dodany", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania pracownika", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania pracownika", type: 'error'})
+      }
+    }
+    const deleteData = async (id) => {
+      try{
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Admin/Employee/Delete?userId=${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pracownik został usunięty", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas usuwania pracownika", type: 'error'})
+          }}
+        }catch(err){
+          setMessage({title: "Błąd podczas usuwania pracownika", type: 'error'})
       }
     }
     const handleViewClick = (itemID) => {
       setEditedID(itemID)
       setShowViewModule(true)
+    }
+    const handleDeleteClick = (itemID) => {
+      deleteData(itemID)
     }
     useEffect(()=>{
         getAllData()
@@ -104,6 +146,7 @@ function Employee() {
                 <p className='px-2'>{item.roleName}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
                 </div>             
             </div>        
         ))}

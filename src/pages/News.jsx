@@ -41,12 +41,18 @@ function News() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/News`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/News`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
@@ -54,39 +60,57 @@ function News() {
     }
     const postData = async (object) => {
       try{
-          const response = await axiosClient.post('News', object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post('News', object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie dodano nową wiadomość", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania wiadomości", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas dodawania wiadomości", type: 'error'})
       }
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/News/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/News/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie usunięto wiadomość", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania wiadomości", type: 'error'})
-          }
+          }}
       }catch(err){
           setMessage({title: "Błąd podczas usuwania wiadomości", type: 'error'})
       }
     }
     const putData = async (id, object) => {
       try{
-          const response = await axiosClient.put(`/News/${id}`, object)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/News/${id}`, object,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Pomyślnie edytowano wiadomość", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania wiadomości", type: 'error'})
-          }
+          }}
       }catch(err){
         setMessage({title: "Błąd podczas edytowania wiadomości", type: 'error'})
       }

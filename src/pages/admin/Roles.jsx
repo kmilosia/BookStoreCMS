@@ -9,6 +9,7 @@ import axiosClient from '../../api/apiClient'
 import Spinner from '../../components/Spinner'
 import { useMessageStore } from '../../store/messageStore'
 import NewRoles from '../../modules/new/NewRoles'
+import { getValidToken } from '../../api/getValidToken'
 
 function Roles() {
     const [data, setData] = useState([])
@@ -18,12 +19,18 @@ function Roles() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/Roles`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/Admin/Roles`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -32,26 +39,38 @@ function Roles() {
     }
     const deleteData = async (name) => {
       try{
-          const response = await axiosClient.delete(`/Admin/Roles/${name}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/Admin/Roles/${name}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Rola została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania roli", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania roli", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/Admin/Roles?roleName=${data}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Admin/Roles?roleName=${data}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Rola została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania roli", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania roli", type: 'error'})
       }

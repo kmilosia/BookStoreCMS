@@ -7,6 +7,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { supplierValidate } from '../../utils/validation/newValidate'
 import { getAddressTypes, getCities, getCountries } from '../../api/selectAPI'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditSupplier(props) {
   const [errors,setErrors] = useState({})
@@ -41,7 +42,13 @@ const handleAddressTypeChange = (selectedAddressType) => {
 }
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/Supplier/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/Supplier/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             const newSupplier = response.data
             const newAddress = response.data.supplierAddress
@@ -57,7 +64,7 @@ const handleAddressTypeChange = (selectedAddressType) => {
                 countryID: { value: newAddress.countryID, label: newAddress.countryName },
                 addressTypeID: { value: newAddress.addressTypeID, label: newSupplier.addressTypeName },
             })
-          }
+          }}
         }catch(err){
           console.log(err)
         }

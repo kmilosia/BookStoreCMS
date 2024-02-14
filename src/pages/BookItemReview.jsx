@@ -12,6 +12,7 @@ import { AiFillEye } from 'react-icons/ai'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function BookItemReview() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function BookItemReview() {
     const filteredItems = filterItems(sortedItems, searchValue)
     const getItem = async (id,setData) => {
       try{
-        const response = await axiosClient.get(`/BookItemReview?bookItemId=${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/BookItemReview?bookItemId=${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
           setData(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function BookItemReview() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/BookItems`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/BookItems`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
           console.log(err)

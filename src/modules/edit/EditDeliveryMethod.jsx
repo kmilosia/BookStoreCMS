@@ -5,6 +5,7 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import axiosClient from '../../api/apiClient'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { namePriceValidate } from '../../utils/validation/newValidate'
+import { getValidToken } from '../../api/getValidToken'
 
 function EditDeliveryMethod(props) {
   const [errors,setErrors] = useState({})
@@ -15,14 +16,20 @@ function EditDeliveryMethod(props) {
   })
     const getItem = async (id) => {
         try{
-          const response = await axiosClient.get(`/DeliveryMethod/${id}`)
+          const token = getValidToken()
+          if(token){    
+          const response = await axiosClient.get(`/DeliveryMethod/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setValues({
               ...values,
               name: response.data.name,
               price: response.data.price
             })
-          }
+          }}
         }catch(err){
           console.log(err)
         }

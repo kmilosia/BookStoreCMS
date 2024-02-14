@@ -16,10 +16,8 @@ function EditBanner(props) {
       props.setShowEditModule(false)
     }
     const handleSaveClick = () => {
-      console.log(banner);
         props.putData(banner.id, banner)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
+        handleCloseModule()
       }
   useEffect(()=> {
     props.getItem(props.editedID,setBanner)

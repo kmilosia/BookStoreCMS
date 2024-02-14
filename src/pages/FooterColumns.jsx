@@ -17,6 +17,7 @@ import ViewFooterColumn from '../modules/view/ViewFooterColumn'
 import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
+import { getValidToken } from '../api/getValidToken'
 
 function FooterColumns() {
     const [data, setData] = useState([])
@@ -33,10 +34,16 @@ function FooterColumns() {
     const setMessage = useMessageStore((state) => state.setMessage)
     const getItem = async (id,setColumn) => {
       try{
-        const response = await axiosClient.get(`/FooterColumns/${id}`)
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/FooterColumns/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
         if(response.status === 200 || response.status === 204){
         setColumn(response.data)
-        }
+        }}
       }catch(err){
         console.log(err)
       }
@@ -44,12 +51,18 @@ function FooterColumns() {
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/FooterColumns`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.get(`/FooterColumns`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
             setMessage({title: "Błąd przy pobieraniu danych", type: 'error'})
-          }
+          }}
           setIsDataLoading(false)
       }catch(err){
         setIsDataLoading(false)
@@ -58,39 +71,57 @@ function FooterColumns() {
     }
     const deleteData = async (id) => {
       try{
-          const response = await axiosClient.delete(`/FooterColumns/${id}`)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.delete(`/FooterColumns/${id}`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Kolumna footera została usunięta", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas usuwania kolumny", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas usuwania kolumny", type: 'error'})
       }
     }
   const postData = async (data) => {
       try{
-          const response = await axiosClient.post(`/FooterColumns`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/FooterColumns`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Kolumna footera została dodana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas dodawania kolumny", type: 'error'})
-          }
+          }}
         }catch(e){
           setMessage({title: "Błąd podczas dodawania kolumny", type: 'error'})
       }
     }
     const putData = async (id,data) => {
       try{
-          const response = await axiosClient.put(`/FooterColumns/${id}`, data)
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.put(`/FooterColumns/${id}`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Kolumna footera została edytowana", type: 'success'})
             getAllData()
           }else{
             setMessage({title: "Błąd podczas edytowania kolumny", type: 'error'})
-          }
+          }}
       }catch(e){
         setMessage({title: "Błąd podczas edytowania kolumny", type: 'error'})
       }
