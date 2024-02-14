@@ -61,7 +61,7 @@ export const useAuthStore = create((set) => ({
             const rawToken = localStorage.getItem('token')
             if(rawToken){
                 const token = rawToken.replace(/^"|"$/g, '')
-                const response = await axiosClient.get('User',{
+                const response = await axiosClient.get('Employee/Data',{
                     headers:{
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',

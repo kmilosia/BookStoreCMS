@@ -12,19 +12,13 @@ function App() {
   const decodedToken = useAuthStore((state) => state.decodedToken)
   const restoring = useAuthStore((state) => state.restoring)
   const restoreToken = useAuthStore((state) => state.restoreToken)
-  const generateDynamicRoutes = (attribute,path, component) => {
-    return decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) ? (
-      decodedToken[attribute].map((item) => {
-        if (item === 'r') {
-          return <Route path={path} element={component} />
-        } else {
-          return null;
-        }
-      })
-    ) : (
-      decodedToken?.[attribute] === 'r' && <Route path={path} element={component} />
-    )
+  const generatePermissionRoute = (attribute,path, component) => {
+    return (decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) && decodedToken[attribute].includes('r')) ||
+    (decodedToken?.[attribute] === 'r') ||
+    (decodedToken?.Role === 'Admin' || (Array.isArray(decodedToken.Role) && decodedToken.Role.includes('Admin')))
+     && <Route path={path} element={component} />
   }
+  
   useEffect(() => {
     restoreToken()
   },[])
@@ -44,7 +38,7 @@ function App() {
           :
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />}/>
-            {generateDynamicRoutes('Author', '/autor', <Author />)}
+            {generatePermissionRoute('Author', '/autor', <Author />)}
             <Route path='/slownik' element={<Dictionary />}/>
             <Route path='/konto' element={<Account />}/>
             <Route path='/ksiazka' element={<Book />}/>         
