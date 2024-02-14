@@ -31,6 +31,9 @@ export const claimValidate = (value) => {
 }
 export const employeeValidate = (values) => {
     let errors = {}
+    if (!values.roleName) {
+        errors.roleName = "Wybierz rolę!"
+    } 
     if (!values.name) {
         errors.name = "Wprowadź imię!"
     } 
@@ -53,6 +56,34 @@ export const employeeValidate = (values) => {
         errors.password = "Wprowadź hasło!"
     }
     else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}/.test(values.password)) {
+        errors.password = "Nieprawidłowy format - hasło powinno się składać z minimum 6 znaków, minimum jednego znaku specjalnego oraz jednej wielkiej litery.";
+    } 
+    return errors
+}
+export const editEmployeeValidate = (values) => {
+    let errors = {}
+    if (!values.roleNames || values?.roleNames?.length === 0) {
+        errors.roleNames = "Wybierz role!"
+    } 
+    if (!values.name) {
+        errors.name = "Wprowadź imię!"
+    } 
+    if (!values.surname) {
+        errors.surname = "Wprowadź nazwisko!"
+    }
+    if (!values.username) {
+        errors.username = "Wprowadź nazwę użytkownika!"
+    }
+    if (!values.email) {
+        errors.email = "Wprowadź email!"
+    }
+    else if (!/\S+@\S+\.\S+/.test(values.email)) {
+        errors.email = "Nieprawidłowy format email!"
+    }
+    if (!values.phoneNumber) {
+        errors.phoneNumber = "Wprowadź numer telefonu!"
+    }
+    if (values.password && !/(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}/.test(values.password)) {
         errors.password = "Nieprawidłowy format - hasło powinno się składać z minimum 6 znaków, minimum jednego znaku specjalnego oraz jednej wielkiej litery.";
     } 
     return errors

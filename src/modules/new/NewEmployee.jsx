@@ -5,10 +5,13 @@ import CloseWindowButton from '../../components/buttons/CloseWindowButton'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { useEffect } from 'react'
 import { employeeValidate } from '../../utils/validation/newValidate'
+import { getValidToken } from '../../api/getValidToken'
+import axiosClient from '../../api/apiClient'
 
 function NewEmployee({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
+    const [roles,setRoles] = useState([])
     const [values,setValues] = useState({
         username: '',
         email: '',
@@ -16,7 +19,7 @@ function NewEmployee({setShowNewModule, postData}) {
         name: '',
         surname: '',
         phoneNumber: '',
-        isSubscribed: false,
+        roleName: '',
     })
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -28,6 +31,25 @@ function NewEmployee({setShowNewModule, postData}) {
         setSubmitting(true)
         setErrors(employeeValidate(values))
     } 
+    const getRoles = async () => {
+        try{
+          const token = getValidToken()
+          if(token){  
+            const response = await axiosClient.get(`/Admin/Roles`,{
+              headers:{
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+            }})
+            if(response.status === 200 || response.status === 204){
+              setRoles(response.data)
+            }}
+        }catch(err){
+            console.log(err);
+        }
+      }
+      useEffect(() => {
+        getRoles()
+      },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
             postData(values)
@@ -49,6 +71,18 @@ function NewEmployee({setShowNewModule, postData}) {
                     <DefaultInput name="email" error={errors.email} onChange={handleChange} type='text' placeholder='Email' title='Email'/>
                     <DefaultInput name="phoneNumber" error={errors.phoneNumber} onChange={handleChange} type='text' placeholder='Numer telefonu' title='Numer telefonu'/>
                     <DefaultInput name="password" error={errors.password} onChange={handleChange} type='text' placeholder='Hasło' title='Hasło'/>
+                    <div className='flex flex-col mb-1'>
+                        <label htmlFor="roleName" className='font-semibold text-xs text-dracula-500 mx-1 my-1 dark:text-dracula-400'>Rola</label>
+                        <select name="roleName" id="roleName" onChange={handleChange} value={values.roleName} className='dark:border-dracula-600 border-2 text-black dark:text-white rounded-md dark:bg-dracula-700 p-1.5'>
+                            <option className='text-black dark:text-white' defaultChecked disabled value="">Wybierz rolę</option>
+                            {roles?.map((item,index) => {
+                                return(
+                                    <option value={item} key={index}>{item}</option>
+                                )
+                            })}
+                        </select>
+                        {errors.roleName && <p className='error-text'>{errors.roleName}</p>}
+                    </div>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { AiFillEye } from 'react-icons/ai'
+import { AiFillEdit, AiFillEye } from 'react-icons/ai'
 import ViewEmployee from '../../modules/view/ViewEmployee'
 import { employeeColumns } from '../../utils/column-names'
 import { employeeSortOptions } from '../../utils/select-options'
@@ -16,6 +16,7 @@ import { sortItems } from '../../utils/sort'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
 import { BsTrash3Fill } from 'react-icons/bs'
+import EditEmployee from '../../modules/edit/EditEmployee'
 
 function Employee() {
     const [data, setData] = useState([])
@@ -24,6 +25,7 @@ function Employee() {
     const [searchValue, setSearchValue] = useState('')
     const [showNewModule, setShowNewModule] = useState(false)
     const [showViewModule, setShowViewModule] = useState(false)
+    const [showEditModule, setShowEditModule] = useState(false)
     const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
     const filterItems = (list, value) => list.filter((item) => {
@@ -92,6 +94,25 @@ function Employee() {
           setMessage({title: "Błąd podczas dodawania pracownika", type: 'error'})
       }
     }
+    const putData = async (data) => {
+      try{
+        const token = getValidToken()
+        if(token){  
+          const response = await axiosClient.post(`/Admin/Employee/Edit`, data,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+          }})
+          if(response.status === 200 || response.status === 204){
+            setMessage({title: "Pracownik został edytowany", type: 'success'})
+            getAllData()
+          }else{
+            setMessage({title: "Błąd podczas edytowania pracownika", type: 'error'})
+          }}
+        }catch(e){
+          setMessage({title: "Błąd podczas edytowania pracownika", type: 'error'})
+      }
+    }
     const deleteData = async (id) => {
       try{
         const token = getValidToken()
@@ -111,6 +132,10 @@ function Employee() {
           setMessage({title: "Błąd podczas usuwania pracownika", type: 'error'})
       }
     }
+    const handleEditClick = (itemID) => {
+      setEditedID(itemID)
+      setShowEditModule(true)
+   }
     const handleViewClick = (itemID) => {
       setEditedID(itemID)
       setShowViewModule(true)
@@ -146,6 +171,7 @@ function Employee() {
                 <p className='px-2'>{item.roleName}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
                   <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
                 </div>             
             </div>        
@@ -154,6 +180,7 @@ function Employee() {
     }
     </div>
     {showNewModule && <NewEmployee postData={postData} setShowNewModule={setShowNewModule}/>}
+    {showEditModule && <EditEmployee getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewEmployee getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
