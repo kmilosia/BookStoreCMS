@@ -1,14 +1,14 @@
 import React from 'react'
-import SideLink from './SideLink'
+import { Link } from 'react-router-dom'
 
 function AdminLinks({handleLinkClick}){
   return (
     <div className='flex flex-col overflow-auto overflow-x-hidden px-2 py-1 sidebar-scrollbar my-2'>
-        <SideLink handleLinkClick={handleLinkClick} attribute="Employees" title="Pracownik" path="/pracownik" />
-        <SideLink handleLinkClick={handleLinkClick} attribute="Roles" title="Role" path="/role" />
-        <SideLink handleLinkClick={handleLinkClick} attribute="RolesClaims" title="Uprawnienia dostępu" path="/uprawnienia-dostepu" />
-        <SideLink handleLinkClick={handleLinkClick} attribute="ClaimValues" title="Wartości uprawnień" path="/wartosci-uprawnien" />
-        <SideLink handleLinkClick={handleLinkClick} attribute="Claims" title="Widoki uprawnień" path="/widoki-uprawnien" />
+          <Link to='/pracownik' onClick={handleLinkClick} className='sidemenu-link'>Pracownik</Link>
+          <Link to='/role' onClick={handleLinkClick} className='sidemenu-link'>Role</Link>
+          <Link to='/uprawnienia-dostepu' onClick={handleLinkClick} className='sidemenu-link'>Uprawnienia dostępu</Link>
+          <Link to='/wartosci-uprawnien' onClick={handleLinkClick} className='sidemenu-link'>Wartości uprawnień</Link>
+          <Link to='/widoki-uprawnien' onClick={handleLinkClick} className='sidemenu-link'>Widoki uprawnień</Link>
     </div>
   )
 }

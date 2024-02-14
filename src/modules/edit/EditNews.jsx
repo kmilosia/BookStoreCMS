@@ -11,7 +11,6 @@ function EditNews(props) {
   const [submitting, setSubmitting] = useState(false)
   const [values,setValues] = useState({
       topic: '',
-      authorName: '',
       content: '',
       imageTitle: '',
       imageURL: '',
@@ -46,8 +45,9 @@ function EditNews(props) {
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput error={errors.topic} name='topic' onChange={handleChange} value={values.topic} type='text' placeholder='Tytuł' title='Tytuł wiadomośći'/>
-                    <DefaultInput error={errors.authorName} name='authorName' onChange={handleChange} value={values.authorName} type='text' placeholder='Autor' title='Autor wiadomości'/>
                     <DefaultInput error={errors.imageTitle} name='imageTitle' onChange={handleChange} value={values.imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
+                </div>
+                <div className='grid grid-cols-1 gap-2'>
                     <DefaultInput error={errors.imageURL} name='imageURL' onChange={handleChange} value={values.imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
                 </div>
                 {values.imageURL &&

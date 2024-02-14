@@ -12,7 +12,6 @@ function NewNews({setShowNewModule, postData}) {
     const [submitting, setSubmitting] = useState(false)
     const [values,setValues] = useState({
         topic: '',
-        authorName: '',
         content: '',
         imageTitle: '',
         imageURL: '',
@@ -43,10 +42,9 @@ function NewNews({setShowNewModule, postData}) {
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput name="topic" error={errors.topic} onChange={handleChange} type='text' placeholder='Temat' title='Temat wiadomości'/>
-                    <DefaultInput name="authorName" error={errors.authorName} onChange={handleChange} type='text' placeholder='Autor' title='Autor wiadomości'/>
-                </div>
-                <div className='grid grid-cols-2 gap-2'>
                     <DefaultInput name="imageTitle" error={errors.imageTitle} onChange={handleChange} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
+                </div>
+                <div className='grid grid-cols-1 gap-2'>
                     <DefaultInput name="imageURL" error={errors.imageURL} onChange={handleChange} type='text' placeholder='Adres zdjęcia' title='Adres zdjęcia'/>
                 </div>
                 {values.imageURL &&

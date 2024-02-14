@@ -13,8 +13,8 @@ function ClientAppLinks({handleLinkClick}) {
           <SideLink handleLinkClick={handleLinkClick} attribute="NavBarMenuLinks" title="Menu Linki" path="/navbar-link" />
           <h1 className='text-sm my-2 font-semibold cursor-default text-dracula-500 dark:text-dracula-400'>Elementy stron</h1>
           <SideLink handleLinkClick={handleLinkClick} attribute="Banner" title="Baner" path="/baner" />
-          <SideLink handleLinkClick={handleLinkClick} attribute="DiscountsBanner" title="Baner promocyjny" path="/baner-promocyjny" />
-          <SideLink handleLinkClick={handleLinkClick} attribute="CategoryElements" title="Element kategorii" path="/element-kategorii" />
+          <SideLink handleLinkClick={handleLinkClick} attribute="DiscountBanner" title="Baner promocyjny" path="/baner-promocyjny" />
+          <SideLink handleLinkClick={handleLinkClick} attribute="CategoryElement" title="Element kategorii" path="/element-kategorii" />
         </div>
     </div>
   )

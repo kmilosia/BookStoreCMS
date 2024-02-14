@@ -419,8 +419,5 @@ export const newsValidate = (values) => {
     if (!values.imageURL) {
         errors.imageURL = "Wprowadź adres zdjęcia!"
     }
-    if (!values.authorName) {
-        errors.authorName = "Wprowadź autora wiadomości!"
-    }
     return errors
 }

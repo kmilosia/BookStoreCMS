@@ -13,9 +13,7 @@ function App() {
   const restoring = useAuthStore((state) => state.restoring)
   const restoreToken = useAuthStore((state) => state.restoreToken)
   const generatePermissionRoute = (attribute,path, component) => {
-    return (decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) && decodedToken[attribute].includes('r')) ||
-    (decodedToken?.[attribute] === 'r') || (decodedToken?.role === 'Admin')
-     && <Route path={path} element={component} />
+    return (decodedToken?.[attribute]?.includes('r') || decodedToken?.role === 'Admin') && <Route path={path} element={component} />
   }
   useEffect(() => {
     restoreToken()
@@ -36,7 +34,7 @@ function App() {
             <Route index element={<Home />}/>
             <Route path='/konto' element={<Account />}/>
             {generatePermissionRoute('Author', '/autor', <Author />)}
-            {generatePermissionRoute('Books', '/ksiazka', <Book />)}
+            {generatePermissionRoute('Book', '/ksiazka', <Book />)}
             {generatePermissionRoute('City', '/miasto', <City />)}
             {generatePermissionRoute('Language', '/jezyk', <Language />)}
             {generatePermissionRoute('Country', '/kraj', <Country />)}
@@ -49,7 +47,7 @@ function App() {
             {generatePermissionRoute('Edition', '/edycja-ksiazki', <Edition />)}
             {generatePermissionRoute('FileFormat', '/format-pliku', <FileFormat />)}
             {generatePermissionRoute('Form', '/format', <Form />)}
-            {generatePermissionRoute('Image', '/zdjecie', <Image />)}
+            {generatePermissionRoute('Images', '/zdjecie', <Image />)}
             {generatePermissionRoute('Translator', '/translator', <Translator />)}
             {generatePermissionRoute('Supply', '/dostawa', <Supply />)}
             {generatePermissionRoute('Supplier', '/dostawca', <Supplier />)}
@@ -66,11 +64,11 @@ function App() {
             {generatePermissionRoute('Publisher', '/wydawnictwo', <Publisher />)}
             {generatePermissionRoute('News', '/wiadomosci', <News />)}
             {generatePermissionRoute('Banner', '/baner', <Banner />)}
-            {generatePermissionRoute('BookItemReview', '/recenzja', <BookItemReview />)}
-            {generatePermissionRoute('NavbarLink', '/navbar-link', <NavbarLink />)}
+            {generatePermissionRoute('BookItems', '/recenzja', <BookItemReview />)}
+            {generatePermissionRoute('NavBarMenuLinks', '/navbar-link', <NavbarLink />)}
             {generatePermissionRoute('Newsletter', '/newsletter', <Newsletter />)}
             {generatePermissionRoute('CategoryElement', '/element-kategorii', <CategoryElement />)}
-            {generatePermissionRoute('DiscountsBanner', '/baner-promocyjny', <DiscountsBanner />)}
+            {generatePermissionRoute('DiscountBanner', '/baner-promocyjny', <DiscountsBanner />)}
             {generatePermissionRoute('Contact', '/kontakt', <Contact />)}
             {generatePermissionRoute('Score', '/ocena', <Score />)}
             {generatePermissionRoute('Order', '/kontakt', <Order />)}
