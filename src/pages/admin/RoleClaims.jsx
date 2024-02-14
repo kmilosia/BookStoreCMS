@@ -2,39 +2,23 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { AiFillEdit } from 'react-icons/ai'
-import { employeeColumns } from '../../utils/column-names'
-import { employeeSortOptions } from '../../utils/select-options'
+import { rolesColumns } from '../../utils/column-names'
 import Spinner from '../../components/Spinner'
 import ListHeader from '../../components/ListHeader'
-import Searchbar from '../../components/Searchbar'
-import SortBar from '../../components/SortBar'
 import axiosClient from '../../api/apiClient'
-import { sortItems } from '../../utils/sort'
 import { useMessageStore } from '../../store/messageStore'
 import EditRoleClaims from '../../modules/edit/EditRoleClaims'
 
 function RoleClaims() {
     const [data, setData] = useState([])
     const [editedName, setEditedName] = useState(null)
-    const [selectedOption, setSelectedOption] = useState(null)
-    const [searchValue, setSearchValue] = useState('')
     const [showEditModule, setShowEditModule] = useState(false)
-    const [isAscending, setIsAscending] = useState(true)
     const [isDataLoading, setIsDataLoading] = useState(false)
-    const filterItems = (list, value) => list.filter((item) => {
-        if (!value) {
-            return true;
-        }
-        const itemName = item.roleName.toLowerCase()
-        return itemName.includes(value.toLowerCase())
-    })
-    const sortedItems = sortItems(data, selectedOption, isAscending)
-    const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
-    const getAllData = async () => {
+    const getRoles = async () => {
       try{
         setIsDataLoading(true)
-          const response = await axiosClient.get(`/Admin/Roles/Claims`)
+          const response = await axiosClient.get(`/Admin/Roles`)
           if(response.status === 200 || response.status === 204){
             setData(response.data)
           }else{
@@ -51,7 +35,6 @@ function RoleClaims() {
           const response = await axiosClient.post(`/Admin/Roles/Claims`, data)
           if(response.status === 200 || response.status === 204){
             setMessage({title: "Uprawnienia zostały zmienione", type: 'success'})
-            getAllData()
           }else{
             setMessage({title: "Błąd podczas zmiany uprawnień", type: 'error'})
           }
@@ -64,43 +47,25 @@ function RoleClaims() {
         setShowEditModule(true)
      }
     useEffect(()=>{
-        getAllData()
+        getRoles()
     },[])
       
   return (
     <>
     <div className='main-wrapper'>
       <div className='flex flex-col'>
-        <h1 className='main-header'>Uprawnienia dostępu</h1>    
-        <div className='filter-panel'>
-          <SortBar options={employeeSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-        </div>
-        <ListHeader columnNames={employeeColumns}/>
+        <h1 className='main-header mb-4'>Uprawnienia dostępu</h1>    
+        <ListHeader columnNames={rolesColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
       :
       <div className='main-list-wrapper'>
-      {filteredItems.map((item,index) => (             
-            <div key={index} className='table-row-wrapper grid-cols-3'>
-                <p className='px-2'>{item.roleName}</p>      
-                <div className='flex flex-col'>
-                    {item.claimPost?.map((claim,index) => {
-                        return(
-                            <p key={index}>
-                                <strong>{claim.claimName}</strong> : 
-                                {claim.claimValues?.map((value) => {
-                                    return(
-                                        value
-                                    )
-                                })}
-                            </p>
-                        )
-                    })}
-                </div>                 
+      {data.map((item,index) => (             
+            <div key={index} className='table-row-wrapper grid-cols-2'>
+                <p className='px-2'>{item}</p>                 
                 <div className='flex justify-end'>
-                    <button onClick={() => handleEditClick(item.roleName)} className='table-button'><AiFillEdit /></button>
+                    <button onClick={() => handleEditClick(item)} className='table-button'><AiFillEdit /></button>
                 </div>             
             </div>        
         ))}
