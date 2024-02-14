@@ -2,72 +2,39 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { backgroundOverlayModule } from '../../styles'
 import CloseWindowButton from '../../components/buttons/CloseWindowButton'
-import axiosClient from '../../api/apiClient'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultInput from '../../components/forms/DefaultInput'
-import { useMessageStore } from '../../store/messageStore'
-import { getValidToken } from '../../api/getValidToken'
+import { newsValidate } from '../../utils/validation/newValidate'
 
 function EditNews(props) {
-    const setMessage = useMessageStore((state) => state.setMessage)
-    const [topic, setTopic] = useState('')
-    const [content, setContent] = useState('')
-    const [authorName, setAuthorName] = useState('')
-    const [imageTitle, setImageTitle] = useState('')
-    const [imageURL, setImageURL] = useState('')
-    const [news,setNews] = useState({})
-    const getItem = async (id) => {
-        try{
-          const token = getValidToken()
-          if(token){    
-          const response = await axiosClient.get(`/News/${id}`,{
-            headers:{
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-          }})
-          setNews(response.data)
-          setTopic(response.data.topic)
-          setContent(response.data.content)
-          setAuthorName(response.data.authorName)
-          setImageTitle(response.data.imageTitle)
-          setImageURL(response.data.imageURL)
-          }
-        }catch(err){
-          console.error(err)
-        }
-    }
-    const handleTopic = (e) => {
-        setTopic(e.target.value)
-    }
-    const handleAuthorName = (e) => {
-        setAuthorName(e.target.value)
-    }
-    const handleContent = (e) => {
-        setContent(e.target.value)
-    }
-    const handleImageURL = (e) => {
-        setImageURL(e.target.value)
-    }
-    const handleImageTitle = (e) => {
-        setImageTitle(e.target.value)
+  const [errors,setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [values,setValues] = useState({
+      topic: '',
+      authorName: '',
+      content: '',
+      imageTitle: '',
+      imageURL: '',
+  })
+    const handleChange = (e) => {
+      setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleCloseModule = () => {
       props.setEditedID(null)
       props.setShowEditModule(false)
     }
-    const handleSaveClick = () => {
-        news.topic = topic
-        news.authorName = authorName
-        news.content = content
-        news.imageTitle = imageTitle
-        news.imageURL = imageURL
-        props.putData(news.id, news)
-        props.setEditedID(null)
-        props.setShowEditModule(false)
-        setMessage({title: "Wiadomość została edytowana", type: 'success'})
-      }
+    const handleAcceptButton = () => {
+        setSubmitting(true)
+        setErrors(newsValidate(values))
+    } 
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && submitting) {
+            props.putData(props.editedID,values)
+            handleCloseModule()
+        }
+      }, [errors])
   useEffect(()=> {
-    getItem(props.editedID)
+    props.getItem(props.editedID,setValues)
   },[])
   return (
     <div className='module-wrapper' style={backgroundOverlayModule}>
@@ -78,18 +45,18 @@ function EditNews(props) {
                   <CloseWindowButton handleCloseModule={handleCloseModule} />
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput onChange={handleTopic} value={topic} type='text' placeholder='Tytuł' title='Tytuł wiadomośći'/>
-                    <DefaultInput onChange={handleAuthorName} value={authorName} type='text' placeholder='Autor' title='Autor wiadomości'/>
-                    <DefaultInput onChange={handleImageTitle} value={imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
-                    <DefaultInput onChange={handleImageURL} value={imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
+                    <DefaultInput error={errors.topic} name='topic' onChange={handleChange} value={values.topic} type='text' placeholder='Tytuł' title='Tytuł wiadomośći'/>
+                    <DefaultInput error={errors.authorName} name='authorName' onChange={handleChange} value={values.authorName} type='text' placeholder='Autor' title='Autor wiadomości'/>
+                    <DefaultInput error={errors.imageTitle} name='imageTitle' onChange={handleChange} value={values.imageTitle} type='text' placeholder='Tytuł zdjęcia' title='Tytuł zdjęcia'/>
+                    <DefaultInput error={errors.imageURL} name='imageURL' onChange={handleChange} value={values.imageURL} type='text' placeholder='Adres zdjęcia' title='Adres URL zdjęcia'/>
                 </div>
-                {imageURL &&
+                {values.imageURL &&
                 <div className='w-full h-auto my-2'>
-                    <img src={imageURL} className='w-full h-auto object-contain' />
+                    <img src={values.imageURL} className='w-full h-auto object-contain' />
                 </div>
                 }
-                <DefaultTextarea name="content" onChange={handleContent} value={content} placeholder='Treść' title="Treść wiadomości"/>
-                <button onClick={handleSaveClick} className='module-button'>Akceptuj</button>
+                <DefaultTextarea error={errors.content} name="content" onChange={handleChange} value={values.content} placeholder='Treść' title="Treść wiadomości"/>
+                <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>
             </div>
         </div>
     </div>

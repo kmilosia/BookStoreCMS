@@ -38,6 +38,22 @@ function News() {
     const sortedItems = sortItems(data, selectedOption, isAscending)
     const filteredItems = filterItems(sortedItems, searchValue)
     const setMessage = useMessageStore((state) => state.setMessage)
+    const getItem = async (id,setData) => {
+      try{
+        const token = getValidToken()
+        if(token){  
+        const response = await axiosClient.get(`/News/${id}`,{
+          headers:{
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+        }})
+        if(response.status === 200 || response.status === 204){
+        setData(response.data)
+        }}
+      }catch(err){
+        console.log(err)
+      }
+    }
     const getAllData = async () => {
       try{
         setIsDataLoading(true)
@@ -81,7 +97,7 @@ function News() {
       try{
         const token = getValidToken()
         if(token){  
-          const response = await axiosClient.delete(`/News/${id}`,{
+          const response = await axiosClient.delete(`/News?id=${id}`,{
             headers:{
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -161,8 +177,8 @@ function News() {
       }
         </div>
     {showNewModule && <NewNews postData={postData} setShowNewModule={setShowNewModule}/>}
-    {showEditModule && <EditNews putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
-    {showViewModule && <ViewNews editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
+    {showEditModule && <EditNews getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
+    {showViewModule && <ViewNews getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}
     </>
   )
 }
