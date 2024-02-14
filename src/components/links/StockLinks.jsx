@@ -1,17 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../store/authStore'
+import SideLink from './SideLink'
 
-function StockLinks({setIsSideMenuExpanded}) {
-  const decodedToken = useAuthStore((state) => state.decodedToken)
-  const handleClick = () => {
-    setIsSideMenuExpanded(false)
-  }
+function StockLinks({handleLinkClick}) {
+
   return (
     <div className='flex flex-col overflow-auto px-2 py-1 sidebar-scrollbar my-2'>
-        <Link to='/stan-magazynu' onClick={handleClick} className='sidemenu-link'>Stan magazynu</Link>
-        <Link to='/dostawca' onClick={handleClick} className='sidemenu-link'>Dostawca</Link>
-        <Link to='/dostawa' onClick={handleClick} className='sidemenu-link'>Nowa dostawa</Link>
+        <SideLink handleLinkClick={handleLinkClick} attribute="StockAmount" title="Stan magazynu" path="/stan-magazynu" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Supplier" title="Dostawca" path="/dostawca" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Supply" title="Nowa dostawa" path="/dostawa" />
     </div>
   )
 }

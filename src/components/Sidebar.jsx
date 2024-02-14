@@ -26,6 +26,9 @@ function Sidebar() {
   const [isDarkTheme, setIsDarkTheme] = useState(checkTheme())
   const [isSideMenuExpanded, setIsSideMenuExpanded] = useState(false)
   const [sideMenu, setSideMenu] = useState(null)
+  const handleLinkClick = () => {
+    setIsSideMenuExpanded(false)
+  }
   const toggleSideMenu = (menu) => {
     if(isSideMenuExpanded && sideMenu === menu){
       setIsSideMenuExpanded(false)
@@ -148,42 +151,42 @@ function Sidebar() {
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold'>Słownik</h1>
           </div>
-          <DictionaryLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/> 
+          <DictionaryLinks handleLinkClick={handleLinkClick}/> 
           </>
           : sideMenu === "clientapp" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold whitespace-nowrap'>Strona Klienta</h1>
           </div>
-          <ClientAppLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <ClientAppLinks handleLinkClick={handleLinkClick}/>
           </>
           : sideMenu === "stock" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold whitespace-nowrap'>Magazyn</h1>
           </div>
-          <StockLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <StockLinks handleLinkClick={handleLinkClick}/>
           </>
           : sideMenu === "books" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold whitespace-nowrap'>Książki</h1>
           </div>
-          <BooksLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <BooksLinks handleLinkClick={handleLinkClick}/>
           </>
           : sideMenu === "adminpanel" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold whitespace-nowrap'>Panel admina</h1>
           </div>
-          <AdminLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <AdminLinks handleLinkClick={handleLinkClick}/>
           </>
           : sideMenu === "discount" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
             <h1 className='text-base font-semibold whitespace-nowrap'>Promocje</h1>
           </div>
-          <DiscountsLinks setIsSideMenuExpanded={setIsSideMenuExpanded}/>
+          <DiscountsLinks handleLinkClick={handleLinkClick}/>
           </>
            : ""}
           <div className='w-full flex justify-center pt-4 pb-2'>

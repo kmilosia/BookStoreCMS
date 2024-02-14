@@ -1,16 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../store/authStore'
+import SideLink from './SideLink'
 
-function DiscountsLinks({setIsSideMenuExpanded}) {
-  const decodedToken = useAuthStore((state) => state.decodedToken)
-  const handleClick = () => {
-    setIsSideMenuExpanded(false)
-  }
+function DiscountsLinks({handleLinkClick}) {
+  
   return (
     <div className='flex flex-col overflow-auto px-2 py-1 sidebar-scrollbar my-2'>
-        <Link to='/promocja' onClick={handleClick} className='sidemenu-link'>Promocje tymczasowe</Link>
-        <Link to='/kod-rabatowy' onClick={handleClick} className='sidemenu-link'>Kody rabatowe</Link>
+        <SideLink handleLinkClick={handleLinkClick} attribute="Discount" title="Promocje tymczasowe" path="/promocja" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="DiscountCodes" title="Kody rabatowe" path="/kod-rabatowy" />
     </div>
   )
 }

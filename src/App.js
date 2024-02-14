@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Permission, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, RecoverPassword, NewPassword, Roles, Employee, ClaimValues, Claims, RoleClaims } from './import'
+import { Book,Author,City,Country,Dictionary, Home,RentalStatus, DeliveryStatus,FooterColumns,FooterLinks, Login,Availability,Category,Edition,FileFormat,OrderStatus,TransactionStatus, Language, PaymentMethod, DeliveryMethod, PageNotFound, Publisher, Form, Translator, Image, RentalType, BookItem, Discount, DiscountCode, Account, StockAmount, Supplier, AddressType, WebsiteLayout, Banner, NavbarLink, CategoryElement, DiscountsBanner, News, Newsletter, Supply, BookItemReview, Contact, Score, Order, Access, RecoverPassword, NewPassword, Roles, Employee, ClaimValues, Claims, RoleClaims } from './import'
 import { useEffect } from 'react';
 import { Layout } from './Layout';
 import Splash from './pages/Splash';
@@ -12,12 +12,22 @@ function App() {
   const decodedToken = useAuthStore((state) => state.decodedToken)
   const restoring = useAuthStore((state) => state.restoring)
   const restoreToken = useAuthStore((state) => state.restoreToken)
+  const generateDynamicRoutes = (attribute,path, component) => {
+    return decodedToken?.[attribute] && Array.isArray(decodedToken[attribute]) ? (
+      decodedToken[attribute].map((item) => {
+        if (item === 'r') {
+          return <Route path={path} element={component} />
+        } else {
+          return null;
+        }
+      })
+    ) : (
+      decodedToken?.[attribute] === 'r' && <Route path={path} element={component} />
+    )
+  }
   useEffect(() => {
     restoreToken()
   },[])
-  useEffect(() => {
-    console.log(decodedToken);
-  },[decodedToken])
 
   return (
     restoring ? <Splash /> :
@@ -34,26 +44,7 @@ function App() {
           :
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />}/>
-            {/* {payload.Author && Array.isArray(payload.Author) ? (
-              payload.Author.map((item, index) => {
-                if (item === 'r') {
-                  return <Route key={index} path='/autor' element={<Author />} />;
-                } else {
-                  return null
-                }
-              })
-            ) : (
-              payload?.Author === 'r' ? (
-                <>
-                  <Route path='/autor' element={<Author />} />
-                </>
-              ) : (
-                <>
-                  {console.log(payload.Author)}
-                </>
-              )
-            )}           */}
-            {/* <Route path='/autor' element={<Author />}/> */}
+            {generateDynamicRoutes('Author', '/autor', <Author />)}
             <Route path='/slownik' element={<Dictionary />}/>
             <Route path='/konto' element={<Account />}/>
             <Route path='/ksiazka' element={<Book />}/>         
@@ -62,7 +53,6 @@ function App() {
             <Route path='/kraj' element={<Country />}/>         
             <Route path='/egzemplarz' element={<BookItem />}/>         
             <Route path='/typ-adresu' element={<AddressType />}/>
-            <Route path='/przywileje' element={<Permission />}/>
             <Route path='/dostepnosc' element={<Availability />}/>
             <Route path='/kategoria' element={<Category />}/>
             <Route path='/promocja' element={<Discount />}/>

@@ -1,19 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../store/authStore'
+import SideLink from './SideLink'
 
-function AdminLinks({setIsSideMenuExpanded}){
-  const decodedToken = useAuthStore((state) => state.decodedToken)
-  const handleClick = () => {
-    setIsSideMenuExpanded(false)
-  }
+function AdminLinks({handleLinkClick}){
   return (
     <div className='flex flex-col overflow-auto overflow-x-hidden px-2 py-1 sidebar-scrollbar my-2'>
-        <Link to='/role' onClick={handleClick} className='sidemenu-link'>Role</Link>
-        <Link to='/pracownik' onClick={handleClick} className='sidemenu-link'>Pracownik</Link>
-        <Link to='/wartosci-uprawnien' onClick={handleClick} className='sidemenu-link'>Wartości uprawnień</Link>
-        <Link to='/widoki-uprawnien' onClick={handleClick} className='sidemenu-link'>Widoki uprawnień</Link>
-        <Link to='/uprawnienia-dostepu' onClick={handleClick} className='sidemenu-link'>Uprawnienia dostępu</Link>
+        <SideLink handleLinkClick={handleLinkClick} attribute="Employees" title="Pracownik" path="/pracownik" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Roles" title="Role" path="/role" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="RolesClaims" title="Uprawnienia dostępu" path="/uprawnienia-dostepu" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="ClaimValues" title="Wartości uprawnień" path="/wartosci-uprawnien" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Claims" title="Widoki uprawnień" path="/widoki-uprawnien" />
     </div>
   )
 }

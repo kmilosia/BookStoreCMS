@@ -1,35 +1,30 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../store/authStore'
+import SideLink from './SideLink'
 
-function DictionaryLinks({setIsSideMenuExpanded}) {
-  const decodedToken = useAuthStore((state) => state.decodedToken)
-  const handleClick = () => {
-    setIsSideMenuExpanded(false)
-  }
+function DictionaryLinks({handleLinkClick}) { 
+  
   return (
     <div className='flex flex-col overflow-auto overflow-x-hidden px-2 py-1 sidebar-scrollbar my-2'>
-        <Link to='/autor' onClick={handleClick} className='sidemenu-link'>Autor</Link>
-        <Link to='/dostepnosc' onClick={handleClick} className='sidemenu-link'>Dostępność</Link>
-        <Link to='/edycja-ksiazki' onClick={handleClick} className='sidemenu-link'>Edycja</Link>
-        <Link to='/format' onClick={handleClick} className='sidemenu-link'>Format Książki</Link>
-        <Link to='/format-pliku' onClick={handleClick} className='sidemenu-link'>Format Pliku</Link>
-        <Link to='/jezyk' onClick={handleClick} className='sidemenu-link'>Język</Link>
-        <Link to='/kategoria' onClick={handleClick} className='sidemenu-link'>Kategoria</Link>
-        <Link to='/kraj' onClick={handleClick} className='sidemenu-link'>Kraj</Link>
-        <Link to='/metoda-dostawy' onClick={handleClick} className='sidemenu-link'>Metoda Dostawy</Link>
-        <Link to='/metoda-platnosci' onClick={handleClick} className='sidemenu-link'>Metoda Płatności</Link>  
-        <Link to='/miasto' onClick={handleClick} className='sidemenu-link'>Miasto</Link>
-        <Link to='/ocena' onClick={handleClick} className='sidemenu-link'>Ocena</Link>
-        <Link to='/przywileje' onClick={handleClick} className='sidemenu-link'>Przywileje</Link>  
-        <Link to='/status-dostawy' onClick={handleClick} className='sidemenu-link'>Status Dostawy</Link>
-        <Link to='/status-transakcji' onClick={handleClick} className='sidemenu-link'>Status Transakcji</Link>  
-        <Link to='/status-wypozyczenia' onClick={handleClick} className='sidemenu-link'>Status Wypożyczenia</Link> 
-        <Link to='/status-zamowienia' onClick={handleClick} className='sidemenu-link'>Status Zamówienia</Link>
-        <Link to='/translator' onClick={handleClick} className='sidemenu-link'>Translator</Link>
-        <Link to='/typ-adresu' onClick={handleClick} className='sidemenu-link'>Typ Adresu</Link>
-        <Link to='/typ-wypozyczenia' onClick={handleClick} className='sidemenu-link'>Typ Wypożyczenia</Link>       
-        <Link to='/wydawnictwo' onClick={handleClick} className='sidemenu-link'>Wydawnictwo</Link>
+        <SideLink handleLinkClick={handleLinkClick} attribute="Author" title="Autor" path="/autor" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Availability" title="Dostępność" path="/dostepnosc" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Edition" title="Edycja książki" path="/edycja-ksiazki" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Form" title="Format książki" path="/format" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="FileFormat" title="Format pliku" path="/format-pliku" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Language" title="Język" path="/jezyk" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Category" title="Kategoria" path="/kategoria" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Country" title="Kraj" path="/kraj" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="DeliveryMethod" title="Metoda dostawy" path="/metoda-dostawy" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="PaymentMethod" title="Metoda płatności" path="/metoda-platnosci" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="City" title="Miasto" path="/miasto" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Score" title="Ocena" path="/ocena" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="DeliveryStatus" title="Status Dostawy" path="/status-dostawy" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="TransactionsStatus" title="Status Transakcji" path="/status-transakcji" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="RentalStatus" title="Status Wypożyczenia" path="/status-wypozyczenia" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="OrderStatus" title="Status Zamówienia" path="/status-zamowienia" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Translator" title="Translator" path="/translator" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="AddressType" title="Typ Adresu" path="/typ-adresu" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="RentalType" title="Typ Wypożyczenia" path="/typ-wypozyczenia" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Publisher" title="Wydawnictwo" path="/wydawnictwo" />
     </div>
   )
 }

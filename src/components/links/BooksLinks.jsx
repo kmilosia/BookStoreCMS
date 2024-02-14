@@ -1,17 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../store/authStore'
+import SideLink from './SideLink'
 
-function BooksLinks({setIsSideMenuExpanded}) {
-  const decodedToken = useAuthStore((state) => state.decodedToken)
-  const handleClick = () => {
-    setIsSideMenuExpanded(false)
-  }
+function BooksLinks({handleLinkClick}) {
+
   return (
     <div className='flex flex-col overflow-auto overflow-x-hidden px-2 py-1 sidebar-scrollbar my-2'>
-        <Link to='/ksiazka' onClick={handleClick} className='sidemenu-link'>Książka bazowa</Link>
-        <Link to='/egzemplarz' onClick={handleClick} className='sidemenu-link'>Egzemplarz książki</Link>
-        <Link to='/recenzja' onClick={handleClick} className='sidemenu-link'>Recenzje</Link>
+        <SideLink handleLinkClick={handleLinkClick} attribute="Books" title="Książka bazowa" path="/ksiazka" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="BookItems" title="Egzemplarz książki" path="/egzemplarz" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="BookItemsReviews" title="Recenzje" path="/recenzja" />
     </div>
   )
 }
