@@ -18,8 +18,10 @@ import EditNewsletter from '../modules/edit/EditNewsletter'
 import ViewNewsletter from '../modules/view/ViewNewsletter'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Newsletter() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedItem, setEditedItem] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -142,8 +144,9 @@ function Newsletter() {
             <span className='text-purple-400 text-sm font-medium group-hover:text-white'>Wyślij ostatniego Newslettera</span>}
           </button> 
           <SortBar options={newsletterSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Newsletter"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>     
+          {(decodedToken?.Newsletter?.includes('w') || decodedToken?.role === 'Admin') &&                           
+          <AddNewButton setShowNewModule={setShowNewModule} title="Newsletter"/>}                  
         </div>
         <ListHeader  columnNames={newsletterColumns}/>
       </div>
@@ -158,7 +161,8 @@ function Newsletter() {
                 <p className='px-2'>{formatDisplayDate(item.publicationDate)}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item)} className='table-button'><AiFillEdit /></button>
+                  {(decodedToken?.Newsletter?.includes('e') || decodedToken?.role === 'Admin') &&                       
+                  <button onClick={() => handleEditClick(item)} className='table-button'><AiFillEdit /></button>}
                 </div>             
             </div>        
         ))}

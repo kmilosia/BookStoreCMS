@@ -152,10 +152,11 @@ function Translator() {
         <h1 className='main-header'>Translator</h1>    
         <div className='filter-panel'>
           <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Translatora"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>      
+          {(decodedToken?.Translator?.includes('w') || decodedToken?.role === 'Admin') &&    
+          <AddNewButton setShowNewModule={setShowNewModule} title="Translatora"/>}                 
         </div>
-        <ListHeader  columnNames={personColumns}/>
+        <ListHeader columnNames={personColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -168,14 +169,16 @@ function Translator() {
                 <p className='px-2'>{item.surname}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Translator?.includes('e') || decodedToken?.role === 'Admin') &&    
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Translator?.includes('d') || decodedToken?.role === 'Admin') &&    
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}
       </div>
       }
-        </div>
+    </div>
     {showNewModule && <NewTranslator postData={postData} setShowNewModule={setShowNewModule}/>}
     {showEditModule && <EditTranslator getItem={getItem} putData={putData} editedID={editedID} setEditedID={setEditedID} setShowEditModule={setShowEditModule}/>}
     {showViewModule && <ViewTranslator getItem={getItem} editedID={editedID} setShowViewModule={setShowViewModule} setEditedID={setEditedID}/>}

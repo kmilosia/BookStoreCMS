@@ -80,21 +80,21 @@ function Sidebar() {
             <span>Magazyn</span>
           </div>
         </button>
-        {(decodedToken?.News && Array.isArray(decodedToken.News) && decodedToken.News.includes('r')) || (decodedToken?.News === 'r') || (decodedToken?.role === 'Admin') && 
+        {(decodedToken?.News?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/wiadomosci" className='default-link'>
           <div className='flex flex-row items-center'>
             <FaRegNewspaper className='text-xl mx-1'/>
             <span>Wiadomości</span>
           </div>
         </Link>}
-        {(decodedToken?.Images && Array.isArray(decodedToken.Images) && decodedToken.Images.includes('r')) || (decodedToken?.Images === 'r') || (decodedToken?.role === 'Admin') && 
+        {(decodedToken?.Images?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/zdjecie" className='default-link'>
           <div className='flex flex-row items-center'>
             <FaRegImage className='text-xl mx-1'/>
             <span>Zdjęcia</span>
           </div>
         </Link>}
-        {(decodedToken?.Newsletter && Array.isArray(decodedToken.Newsletter) && decodedToken.Newsletter.includes('r')) || (decodedToken?.Newsletter === 'r') || (decodedToken?.role === 'Admin') && 
+        {(decodedToken?.Newsletter?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/newsletter" className='default-link'>
           <div className='flex flex-row items-center'>
             <MdOutlineNewspaper className='text-xl mx-1'/>
@@ -113,14 +113,14 @@ function Sidebar() {
             <span className='whitespace-nowrap'>Strona Klienta</span>
           </div>
         </button>   
-        {(decodedToken?.Contact && Array.isArray(decodedToken.Contact) && decodedToken.Contact.includes('r')) || (decodedToken?.Contact === 'r') || (decodedToken?.role === 'Admin') && 
+        {(decodedToken?.Contact?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/kontakt" className='default-link'>
           <div className='flex flex-row items-center'>
             <AiOutlineMessage className='text-xl mx-1'/>
             <span>Kontakt</span>
           </div>
         </Link>}  
-        {(decodedToken?.Order && Array.isArray(decodedToken.Order) && decodedToken.Order.includes('r')) || (decodedToken?.Order === 'r') || (decodedToken?.role === 'Admin') && 
+        {(decodedToken?.Order?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/zamowienie" className='default-link'>
           <div className='flex flex-row items-center'>
             <FiPackage className='text-xl mx-1'/>

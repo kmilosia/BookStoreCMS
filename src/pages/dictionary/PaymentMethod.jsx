@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function PaymentMethod() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Metoda Płatności"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -124,7 +126,10 @@ function PaymentMethod() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.PaymentMethod?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.PaymentMethod?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.PaymentMethod?.includes('d') || decodedToken?.role === 'Admin',
   };
   return (
     <>

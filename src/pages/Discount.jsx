@@ -17,8 +17,10 @@ import EditDiscount from '../modules/edit/EditDiscount'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Discount() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -153,8 +155,9 @@ function Discount() {
         <h1 className='main-header'>Promocja</h1>    
         <div className='filter-panel'>
           <SortBar options={discountSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Promocję"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>   
+          {(decodedToken?.Discount?.includes('w') || decodedToken?.role === 'Admin') &&                                         
+          <AddNewButton setShowNewModule={setShowNewModule} title="Promocję"/>}                   
         </div>
         <ListHeader columnNames={discountColumns}/>
       </div>
@@ -170,8 +173,10 @@ function Discount() {
                 <p className='px-2'>{item.isAvailable ? "Aktywna" : "Zakończona"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Discount?.includes('e') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Discount?.includes('d') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

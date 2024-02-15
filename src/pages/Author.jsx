@@ -18,8 +18,10 @@ import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import axiosClient from '../api/apiClient'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Author() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -142,8 +144,9 @@ function Author() {
         <h1 className='main-header'>Autor</h1>    
         <div className='filter-panel'>
           <SortBar options={personSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>             
-          <AddNewButton setShowNewModule={() => setModule('new')} title="Autora"/>  
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>    
+          {(decodedToken?.Author?.includes('w') || decodedToken?.role === 'Admin') &&                                                   
+          <AddNewButton setShowNewModule={() => setModule('new')} title="Autora"/> } 
         </div>
         <ListHeader columnNames={personColumns}/>
       </div>
@@ -158,8 +161,10 @@ function Author() {
                 <p className='px-2'>{item.surname}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => {setEditedID(item.id); setModule('view')}} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => {setEditedID(item.id);setModule('edit')}} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => {deleteData(item.id);}} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Author?.includes('e') || decodedToken?.role === 'Admin') &&                                          
+                  <button onClick={() => {setEditedID(item.id);setModule('edit')}} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Author?.includes('d') || decodedToken?.role === 'Admin') &&                                          
+                  <button onClick={() => {deleteData(item.id);}} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

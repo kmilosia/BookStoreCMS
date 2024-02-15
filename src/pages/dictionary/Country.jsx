@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function Country() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Kraj"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -122,7 +124,10 @@ function Country() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.Country?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.Country?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.Country?.includes('d') || decodedToken?.role === 'Admin',
     }
   return (
     <>

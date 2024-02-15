@@ -18,8 +18,10 @@ import EditNavbarLink from '../modules/edit/EditNavbarLink'
 import ViewNavbarLink from '../modules/view/ViewNavbarLink'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function NavbarLink() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -148,8 +150,9 @@ function NavbarLink() {
         <h1 className='main-header'>Menu Linki</h1>    
         <div className='filter-panel'>
           <SortBar options={navbarLinksSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Link Menu"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/> 
+          {(decodedToken?.NavBarMenuLinks?.includes('w') || decodedToken?.role === 'Admin') &&                                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Link Menu"/>}                   
         </div>
         <ListHeader  columnNames={navbarLinksColumns}/>
       </div>
@@ -165,8 +168,10 @@ function NavbarLink() {
                 <p className='px-2'>{item.position}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.NavBarMenuLinks?.includes('e') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.NavBarMenuLinks?.includes('d') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

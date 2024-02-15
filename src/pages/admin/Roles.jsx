@@ -60,7 +60,7 @@ function Roles() {
       try{
         const token = getValidToken()
         if(token){  
-          const response = await axiosClient.post(`/Admin/Roles?roleName=${data}`,{
+          const response = await axiosClient.post(`/Admin/Roles?roleName=${data}`,null ,{
             headers:{
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',

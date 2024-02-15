@@ -17,8 +17,10 @@ import NewDiscountCode from '../modules/new/NewDiscountCode'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function DiscountCode() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -153,8 +155,9 @@ function DiscountCode() {
         <h1 className='main-header'>Kod Rabatowy</h1>    
         <div className='filter-panel'>
           <SortBar options={discountSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Kod Rabatowy"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>
+          {(decodedToken?.DiscountCodes?.includes('w') || decodedToken?.role === 'Admin') &&                                            
+          <AddNewButton setShowNewModule={setShowNewModule} title="Kod Rabatowy"/>}                   
         </div>
         <ListHeader columnNames={discountColumns}/>
       </div>
@@ -170,8 +173,10 @@ function DiscountCode() {
                 <p className='px-2'>{item.isAvailable ? "Aktywny" : "Nieaktywny"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.DiscountCodes?.includes('e') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.DiscountCodes?.includes('d') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

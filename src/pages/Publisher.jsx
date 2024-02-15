@@ -18,8 +18,10 @@ import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Publisher() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -148,10 +150,11 @@ function Publisher() {
         <h1 className='main-header'>Wydawnictwo</h1>    
         <div className='filter-panel'>
           <SortBar options={dictionarySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Wydawnictwo"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>  
+          {(decodedToken?.Publisher?.includes('w') || decodedToken?.role === 'Admin') &&                       
+          <AddNewButton setShowNewModule={setShowNewModule} title="Wydawnictwo"/>}                   
         </div>
-        <ListHeader  columnNames={dictionaryColumns}/>
+        <ListHeader columnNames={dictionaryColumns}/>
       </div>
       {isDataLoading ? 
       <Spinner />
@@ -163,8 +166,10 @@ function Publisher() {
                 <p className='px-2'>{item.name}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Publisher?.includes('e') || decodedToken?.role === 'Admin') &&                
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Publisher?.includes('d') || decodedToken?.role === 'Admin') &&                
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

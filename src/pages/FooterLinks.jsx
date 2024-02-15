@@ -18,8 +18,10 @@ import ViewFooterLink from '../modules/view/ViewFooterLink'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function FooterLinks() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -148,8 +150,9 @@ function FooterLinks() {
         <h1 className='main-header'>Link Footera</h1>    
         <div className='filter-panel'>
           <SortBar options={footerLinksSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Link Footera"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/> 
+          {(decodedToken?.FooterLinks?.includes('w') || decodedToken?.role === 'Admin') &&                                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Link Footera"/>}                   
         </div>
         <ListHeader columnNames={footerLinkColumns}/>
       </div>
@@ -164,8 +167,10 @@ function FooterLinks() {
                 <p className='px-2'>{item.columnName}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.FooterLinks?.includes('e') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.FooterLinks?.includes('d') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

@@ -13,8 +13,10 @@ import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import ContactAnswer from '../modules/user/ContactAnswer'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Contact() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [itemId, setItemId] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -81,7 +83,8 @@ function Contact() {
                 <p className='px-2'>{item.clientName}</p>
                 <p className='px-2'>{item.email}</p>
                 <div className='flex justify-end'>
-                  <button onClick={() => handleAnswer(item.id)} className='table-button'><TbWriting /></button>
+                {(decodedToken?.Contact?.includes('w') || decodedToken?.role === 'Admin') &&                                          
+                  <button onClick={() => handleAnswer(item.id)} className='table-button'><TbWriting /></button>}
                 </div>        
                 <div className='flex flex-col col-span-4 text-sm border-t dark:border-dracula-600 mt-2 pt-2'>
                     <p>Wiadomość</p>                       

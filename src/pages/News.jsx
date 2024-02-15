@@ -17,8 +17,10 @@ import EditNews from '../modules/edit/EditNews'
 import ViewNews from '../modules/view/ViewNews'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function News() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -154,7 +156,8 @@ function News() {
         <div className='filter-panel'>
           <SortBar options={newsSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Wiadomość"/>                   
+          {(decodedToken?.News?.includes('w') || decodedToken?.role === 'Admin') &&                           
+          <AddNewButton setShowNewModule={setShowNewModule} title="Wiadomość"/>}                  
         </div>
         <ListHeader columnNames={newsColumns}/>
       </div>
@@ -168,8 +171,10 @@ function News() {
                 <p className='px-2'>{item.topic}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.News?.includes('e') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.News?.includes('d') || decodedToken?.role === 'Admin') &&                                           
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

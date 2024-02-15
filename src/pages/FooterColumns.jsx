@@ -18,8 +18,10 @@ import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function FooterColumns() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -148,8 +150,9 @@ function FooterColumns() {
         <h1 className='main-header'>Kolumna Footera</h1>    
         <div className='filter-panel'>
           <SortBar options={footerColumnsSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Footer Kolumnę"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>   
+          {(decodedToken?.FooterColumns?.includes('w') || decodedToken?.role === 'Admin') &&                                         
+          <AddNewButton setShowNewModule={setShowNewModule} title="Footer Kolumnę"/>}                  
         </div>
         <ListHeader  columnNames={footerColumns}/>
       </div>
@@ -164,8 +167,10 @@ function FooterColumns() {
                 <p className='px-2'>{item.position}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.FooterColumns?.includes('e') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.FooterColumns?.includes('d') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

@@ -17,8 +17,10 @@ import axiosClient from '../api/apiClient'
 import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Book() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -154,8 +156,9 @@ function Book() {
         <h1 className='main-header'>Książka</h1>    
         <div className='filter-panel'>
           <SortBar options={bookSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Książkę"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>  
+          {(decodedToken?.Book?.includes('w') || decodedToken?.role === 'Admin') &&                                                 
+          <AddNewButton setShowNewModule={setShowNewModule} title="Książkę"/>}                   
         </div>
         <ListHeader columnNames={bookColumns}/>
       </div>
@@ -170,8 +173,10 @@ function Book() {
                 <p className='px-2'>{item.publisherName}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Book?.includes('e') || decodedToken?.role === 'Admin') &&                                          
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Book?.includes('d') || decodedToken?.role === 'Admin') &&                                          
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

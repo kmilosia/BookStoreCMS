@@ -17,8 +17,10 @@ import Spinner from '../components/Spinner'
 import { useMessageStore } from '../store/messageStore'
 import NewImage from '../modules/new/NewImage'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Image() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -153,8 +155,9 @@ function Image() {
         <h1 className='main-header'>Zdjęcie</h1>    
         <div className='filter-panel'>
           <SortBar options={imageSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Zdjęcie"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/> 
+          {(decodedToken?.Images?.includes('w') || decodedToken?.role === 'Admin') &&                                   
+          <AddNewButton setShowNewModule={setShowNewModule} title="Zdjęcie"/>}                   
         </div>
         <ListHeader columnNames={imageColumns}/>
       </div>
@@ -169,8 +172,10 @@ function Image() {
                 <p className='px-2'>{item.title}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Images?.includes('e') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Images?.includes('d') || decodedToken?.role === 'Admin') &&                           
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

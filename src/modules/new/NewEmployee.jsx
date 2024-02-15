@@ -20,6 +20,7 @@ function NewEmployee({setShowNewModule, postData}) {
         surname: '',
         phoneNumber: '',
         roleName: '',
+        isSubscribed: false
     })
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -52,6 +53,7 @@ function NewEmployee({setShowNewModule, postData}) {
       },[])
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
+            console.log(values);
             postData(values)
             handleCloseModule()
         }

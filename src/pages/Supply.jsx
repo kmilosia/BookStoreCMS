@@ -18,8 +18,10 @@ import NewSupply from '../modules/new/NewSupply'
 import { useMessageStore } from '../store/messageStore'
 import EditSupply from '../modules/edit/EditSupply'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Supply() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const setMessage = useMessageStore((state) => state.setMessage)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -155,7 +157,8 @@ function Supply() {
         <div className='filter-panel'>
           <SortBar options={supplySortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
           <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Nową Dostawę"/>                   
+          {(decodedToken?.Supply?.includes('w') || decodedToken?.role === 'Admin') &&    
+          <AddNewButton setShowNewModule={setShowNewModule} title="Nową Dostawę"/>}            
         </div>
         <ListHeader columnNames={supplyColumns}/>
       </div>
@@ -171,8 +174,10 @@ function Supply() {
                 <p className='px-2'>{item.priceBrutto}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Supply?.includes('e') || decodedToken?.role === 'Admin') &&    
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Supply?.includes('d') || decodedToken?.role === 'Admin') &&    
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

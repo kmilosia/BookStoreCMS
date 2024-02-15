@@ -71,7 +71,7 @@ function App() {
             {generatePermissionRoute('DiscountBanner', '/baner-promocyjny', <DiscountsBanner />)}
             {generatePermissionRoute('Contact', '/kontakt', <Contact />)}
             {generatePermissionRoute('Score', '/ocena', <Score />)}
-            {generatePermissionRoute('Order', '/kontakt', <Order />)}
+            {generatePermissionRoute('Order', '/zamowienie', <Order />)}
             {generatePermissionRoute('Roles', '/role', <Roles />)}
             {generatePermissionRoute('Employee', '/pracownik', <Employee />)}
             {decodedToken?.role === 'Admin' &&

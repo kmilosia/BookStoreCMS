@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function DeliveryStatus() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Status Dostawy"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -123,7 +125,10 @@ function DeliveryStatus() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.DeliveryStatus?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.DeliveryStatus?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.DeliveryStatus?.includes('d') || decodedToken?.role === 'Admin',
     }
   return (
     <>

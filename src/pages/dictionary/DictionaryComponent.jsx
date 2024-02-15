@@ -61,7 +61,8 @@ function DictionaryComponent(props) {
               setIsAscending={props.setIsAscending}
             />
             <Searchbar setSearchValue={props.setSearchValue} searchValue={props.searchValue} />
-            <AddNewButton setShowNewModule={props.setShowNewModule} title={props.title} />
+            {props.writePermission &&                                          
+            <AddNewButton setShowNewModule={props.setShowNewModule} title={props.title} />}
           </div>
           <ListHeader columnNames={dictionaryColumns} />
         </div>
@@ -92,12 +93,14 @@ function DictionaryComponent(props) {
                       <FaSave />
                     </button>
                   )}
+                  {props.editPermission &&                                          
                   <button onClick={() => handleEditClick(item.id, item.name)} className='table-button'>
                     <AiFillEdit />
-                  </button>
+                  </button>}
+                  {props.deletePermission &&                                          
                   <button onClick={() => handleDeleteClick(item.id)} className='table-button'>
                     <BsTrash3Fill />
-                  </button>
+                  </button>}
                 </div>
               </div>
             ))}

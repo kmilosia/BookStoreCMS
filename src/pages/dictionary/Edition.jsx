@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function Edition() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Edycja"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -123,7 +125,10 @@ function Edition() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.Edition?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.Edition?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.Edition?.includes('d') || decodedToken?.role === 'Admin',
   };
   return (
     <>

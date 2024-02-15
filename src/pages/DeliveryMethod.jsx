@@ -18,8 +18,10 @@ import EditDeliveryMethod from '../modules/edit/EditDeliveryMethod'
 import ViewDeliveryMethod from '../modules/view/ViewDeliveryMethod'
 import { useMessageStore } from '../store/messageStore'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function DeliveryMethod() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -148,8 +150,9 @@ function DeliveryMethod() {
         <h1 className='main-header'>Metoda Dostawy</h1>    
         <div className='filter-panel'>
           <SortBar options={numericSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>         
-          <AddNewButton setShowNewModule={setShowNewModule} title="Metodę Dostawy"/>                   
+          <Searchbar setSearchValue={setSearchValue} searchValue={searchValue}/>  
+          {(decodedToken?.DeliveryMethod?.includes('w') || decodedToken?.role === 'Admin') &&                                          
+          <AddNewButton setShowNewModule={setShowNewModule} title="Metodę Dostawy"/>}                   
         </div>
         <ListHeader  columnNames={numericColumns}/>
       </div>
@@ -164,8 +167,10 @@ function DeliveryMethod() {
                 <p className='px-2'>{item.price}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
-                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.DeliveryMethod?.includes('e') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.DeliveryMethod?.includes('d') || decodedToken?.role === 'Admin') &&                                   
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}

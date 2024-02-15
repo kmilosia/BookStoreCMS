@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function Availability() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Dostępność"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -122,7 +124,10 @@ function Availability() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.Availability?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.Availability?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.Availability?.includes('d') || decodedToken?.role === 'Admin',
   };
   return (
     <>

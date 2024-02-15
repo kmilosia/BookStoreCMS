@@ -14,8 +14,10 @@ import { useMessageStore } from '../store/messageStore'
 import {formatDisplayDate} from '../utils/functions/formatDisplayDate'
 import ViewOrder from '../modules/view/ViewOrder'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Order() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)

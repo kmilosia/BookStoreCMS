@@ -6,8 +6,10 @@ import NewDictionaryRecord from '../../modules/new/NewDictionaryRecord'
 import axiosClient from '../../api/apiClient'
 import { useMessageStore } from '../../store/messageStore'
 import { getValidToken } from '../../api/getValidToken'
+import { useAuthStore } from '../../store/authStore'
 
 function AddressType() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)  
     const title = "Typ Adresu"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
@@ -125,7 +127,10 @@ function AddressType() {
       postData,
       deleteData,
       putData,
-      isDataLoading
+      isDataLoading,
+      writePermission: decodedToken?.AddressType?.includes('w') || decodedToken?.role === 'Admin',
+      editPermission: decodedToken?.AddressType?.includes('e') || decodedToken?.role === 'Admin',
+      deletePermission: decodedToken?.AddressType?.includes('d') || decodedToken?.role === 'Admin',
   };
   return (
     <>

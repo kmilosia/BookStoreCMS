@@ -15,8 +15,10 @@ import { useMessageStore } from '../store/messageStore'
 import NewScore from '../modules/new/NewScore'
 import { FaSave } from 'react-icons/fa'
 import { getValidToken } from '../api/getValidToken'
+import { useAuthStore } from '../store/authStore'
 
 function Score() {
+    const decodedToken = useAuthStore((state) => state.decodedToken)
     const inputRef = useRef(null)
     const [value, setValue] = useState('')
     const [error, setError] = useState(null)  
@@ -148,7 +150,8 @@ function Score() {
         <h1 className='main-header'>Ocena</h1>    
         <div className='filter-panel'>
           <SortBar options={scoreSortOptions} setSelectedOption={setSelectedOption} selectedOption={selectedOption} isAscending={isAscending} setIsAscending={setIsAscending}/>
-          <AddNewButton setShowNewModule={setShowNewModule} title="Ocenę"/>                   
+          {(decodedToken?.Score?.includes('w') || decodedToken?.role === 'Admin') &&            
+          <AddNewButton setShowNewModule={setShowNewModule} title="Ocenę"/>}                   
         </div>
         <ListHeader columnNames={scoreColumns}/>
       </div>
@@ -179,8 +182,10 @@ function Score() {
                       <FaSave />
                     </button>
                   )}
-                  <button onClick={() => handleEditClick(item.id, item.value)} className='table-button'><AiFillEdit /></button>
-                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>
+                  {(decodedToken?.Score?.includes('e') || decodedToken?.role === 'Admin') &&            
+                  <button onClick={() => handleEditClick(item.id, item.value)} className='table-button'><AiFillEdit /></button>}
+                  {(decodedToken?.Score?.includes('d') || decodedToken?.role === 'Admin') &&            
+                  <button onClick={() => handleDeleteClick(item.id)} className='table-button'><BsTrash3Fill /></button>}
                 </div>             
             </div>        
         ))}
