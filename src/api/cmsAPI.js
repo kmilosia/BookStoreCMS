@@ -18,3 +18,20 @@ export const getWeeklySummary = async (setData) => {
       console.log(e)
     }
 }
+export const getMonthlyRaport = async (month, year, setData) => {
+  try{
+    const token = getValidToken()
+    if(token){
+    const response = await axiosClient.get(`/CMS/MonthlyRaport?month=${month}&year=${year}`,{
+      headers:{
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+    }})
+    if(response.status === 200 || response.status === 204){
+      setData(response.data)
+    }
+  }
+  }catch(e){
+    console.log(e)
+  }
+}

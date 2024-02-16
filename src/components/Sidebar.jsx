@@ -60,26 +60,34 @@ function Sidebar() {
       </div>
 
       <div className='flex flex-col h-full pl-3 pr-10 py-2 my-0 overflow-y-auto overflow-x-hidden sidebar-scrollbar mr-2 justify-start'>
-        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-1 mx-2'>OGÓLNE</span>
-
+        {(decodedToken?.Author?.includes('r') || decodedToken?.Availability?.includes('r') || decodedToken?.Edition?.includes('r') ||
+        decodedToken?.Form?.includes('r') || decodedToken?.FileFormat?.includes('r') || decodedToken?.Language?.includes('r') ||
+        decodedToken?.Category?.includes('r') || decodedToken?.Country?.includes('r') || decodedToken?.PaymentMethod?.includes('r') ||
+        decodedToken?.DeliveryMethod?.includes('r') || decodedToken?.City?.includes('r') || decodedToken?.Score?.includes('r') ||
+        decodedToken?.DeliveryStatus?.includes('r') || decodedToken?.TransactionsStatus?.includes('r') || decodedToken?.RentalStatus?.includes('r') ||
+        decodedToken?.OrderStatus?.includes('r') || decodedToken?.Translator?.includes('r') || decodedToken?.AddressType?.includes('r') ||
+        decodedToken?.RentalType?.includes('r') || decodedToken?.Publisher?.includes('r') || decodedToken?.role === 'Admin') && 
         <button onClick={() => toggleSideMenu("dictionary")} className='default-link'>
           <div className='flex flex-row items-center'>
             <BiBook className='text-xl mx-1'/>
             <span>Słownik</span>
           </div>
-        </button>
+        </button>}
+        {(decodedToken?.Book?.includes('r') || decodedToken?.BookItems?.includes('r') || decodedToken?.role === 'Admin') && 
         <button onClick={() => toggleSideMenu("books")} className='default-link'>
           <div className='flex flex-row items-center'>
             <PiBooks className='text-xl mx-1'/>
             <span>Książki</span>
           </div>
-        </button>
+        </button>}
+        {(decodedToken?.StockAmount?.includes('r') || decodedToken?.Supply?.includes('r') ||
+          decodedToken?.Supplier?.includes('r') || decodedToken?.role === 'Admin') && 
         <button onClick={() => toggleSideMenu("stock")} className='default-link'>
           <div className='flex flex-row items-center'>
             <BiBox className='text-xl mx-1'/>
             <span>Magazyn</span>
           </div>
-        </button>
+        </button>}
         {(decodedToken?.News?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/wiadomosci" className='default-link'>
           <div className='flex flex-row items-center'>
@@ -101,18 +109,24 @@ function Sidebar() {
             <span>Newsletter</span>
           </div>
         </Link>}
+        {(decodedToken?.DiscountCodes?.includes('r') || decodedToken?.Discount?.includes('r') ||
+          decodedToken?.role === 'Admin') && 
         <button onClick={() => toggleSideMenu("discount")} className='default-link'>
           <div className='flex flex-row items-center'>
             <MdOutlineDiscount className='text-xl mx-1'/>
             <span>Promocje</span>
           </div>
-        </button>
+        </button>}
+        {(decodedToken?.FooterColumns?.includes('r') || decodedToken?.FooterLinks?.includes('r') ||
+         decodedToken?.NavBarMenuLinks?.includes('r') || decodedToken?.Banner?.includes('r') ||
+          decodedToken?.DiscountBanner?.includes('r') || decodedToken?.CategoryElement?.includes('r') ||
+          decodedToken?.role === 'Admin') && 
         <button onClick={()=> toggleSideMenu("clientapp")} className='default-link'>
           <div className='flex flex-row items-center'>
             <CgWebsite className='text-xl mx-1'/>
             <span className='whitespace-nowrap'>Strona Klienta</span>
           </div>
-        </button>   
+        </button>}
         {(decodedToken?.Contact?.includes('r') || decodedToken?.role === 'Admin') && 
         <Link to="/kontakt" className='default-link'>
           <div className='flex flex-row items-center'>
@@ -138,7 +152,6 @@ function Sidebar() {
       </div>
       <div className='flex flex-col mt-2'>
       <div className='flex flex-col px-3 py-4 border-t-[1px] dark:border-dracula-600'>
-        <span className='text-xs text-dracula-500 dark:text-dracula-400 font-semibold my-2 mx-2'>KONTO</span>      
         <Link to='/' className='flex flex-row items-center py-1 hover:text-purple-500'><BiSolidDashboard className='text-xl mx-2'/><span>Dashboard</span></Link>
         <Link to='/konto' className='flex flex-row items-center py-1 hover:text-purple-500'><MdOutlineAccountCircle className='text-xl mx-2'/><span>Konto</span></Link>
         <button onClick={toggleTheme} id='theme-toggle' type='button' className='flex flex-row items-center py-1 hover:text-purple-500'>

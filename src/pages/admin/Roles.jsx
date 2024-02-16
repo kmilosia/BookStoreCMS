@@ -96,8 +96,8 @@ function Roles() {
       <Spinner />
       :
       <div className='main-list-wrapper'>
-      {data.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-2'>
+      {data.map((item,index) => (             
+            <div key={index} className='table-row-wrapper grid-cols-2'>
                 <p className='px-2'>{item}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleDeleteClick(item)} className='table-button'><BsTrash3Fill /></button>

@@ -163,12 +163,12 @@ function Employee() {
       <Spinner />
       :
       <div className='main-list-wrapper'>
-      {filteredItems.map(item => (             
-            <div key={item.id} className='table-row-wrapper grid-cols-5'>
+      {filteredItems.map((item,index) => (             
+            <div key={index} className='table-row-wrapper grid-cols-5'>
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.username}</p>
                 <p className='px-2 break-words'>{item.email}</p>
-                <p className='px-2'>{item.roleName}</p>
+                <p className='px-2'>{item?.roleName?.map((value, index) => {return(<span>{index > 0 && ' , '}{value}</span>)})}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   <button onClick={() => handleEditClick(item.id)} className='table-button'><AiFillEdit /></button>

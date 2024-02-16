@@ -6,7 +6,7 @@ export const rolesSortOptions = [
     {value: 'name', label: 'Nazwa', type: 'string'}
 ]
 export const employeeSortOptions = [
-    {value: 'id', label: 'ID', type: 'number'},
+    {value: 'id', label: 'ID', type: 'string'},
     {value: 'username', label: 'Nazwa użytkownika', type: 'string'},
 ]
 export const orderSortOptions = [
