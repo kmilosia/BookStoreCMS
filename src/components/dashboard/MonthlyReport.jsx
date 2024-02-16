@@ -1,68 +1,88 @@
 import React, { useEffect, useState } from 'react'
 import { getMonthlyRaport } from '../../api/cmsAPI'
-import { Chart } from "react-google-charts";
+import GrowthSpan from './GrowthSpan';
+import { PieChart } from '@mui/x-charts';
 
 function MonthlyReport() {
+   
     const currentdate = new Date()
     const currentmonth = currentdate.getMonth() + 1
     const currentyear = currentdate.getFullYear()
     const [data, setData] = useState(null)
-    const [categoryChartData, setCategoryChartData] = useState([])
-    const [bookItemChartData, setBookItemChartData] = useState([])
+    const [previosData, setPreviousData] = useState(null)
+    const [growth, setGrowth] = useState({
+        grossExpensesGrowth: 0,
+        grossRevenueGrowth: 0,
+        soldQuantityGrowth: 0,
+        totalIncomeGrowth: 0,
+    })
+
+    const [categoriesData, setCategoriesData] = useState([])
+
+    const [bookUnitsData, setBookUnitsData]= useState([])
+    const [booksPriceData, setBooksPriceData]= useState([])
+    const [booksTitlesData, setBooksTitlesData]= useState([])
+
     const [month, setMonth] = useState(Number(currentmonth))
     const [year, setYear] = useState(Number(currentyear))
     useEffect(() => {
         getMonthlyRaport(month, year, setData)
+        if(month === 1){
+            getMonthlyRaport(12, year - 1, setPreviousData)
+        }else{
+            getMonthlyRaport(month - 1, year, setPreviousData)
+        }
     },[month,year])
     useEffect(() => {
         console.log(data);
-    },[data])
+        if(data && previosData){
+            setGrowth({...growth,
+                 grossExpensesGrowth: calculateGrowth(previosData.grossExpenses, data.grossExpenses),
+                 grossRevenueGrowth: calculateGrowth(previosData.grossRevenue, data.grossRevenue),
+                 soldQuantityGrowth: calculateGrowth(previosData.soldQuantity, data.soldQuantity),
+                 totalIncomeGrowth: calculateGrowth(previosData.totalIncome, data.totalIncome),
+            })
+        }
+        if (data && data.bookItems) {
+            const titles = [...data.bookItems.map(item => item.bookTitle + " (" + item.formTitle + ")")]
+            const prices = [...data.bookItems.map(item => item.soldPrice)]
+            const units = [...data.bookItems.map(item => item.soldUnits)]
+            setBooksTitlesData(titles)
+            setBooksPriceData(prices)
+            setBookUnitsData(units)
+        }
+        if (data && data.categories) {
+            const newdata = [...data.categories.map((item,index) => ({id:index, value:item.percentOfTotalAppearances, label:item.categoryName}))]
+            setCategoriesData(newdata)
+        }
+    },[data, previosData])
+    useEffect(() => {
+        console.log(bookUnitsData);
+    },[bookUnitsData])
     const handleMonthChange = (e) => {
         setMonth(e.target.value)
     }
     const handleYearChange = (e) => {
         setYear(e.target.value)
     }
-    useEffect(() => {
-        if (data && data.categories) {
-            const newChartData = [
-                ["Kategoria", "Procent sprzedanych"],
-                ...data.categories.map(category => [category.categoryName, category.percentOfTotalAppearances])
-            ]
-            setCategoryChartData(newChartData)
+    const calculateGrowth = (prevMonth, newMonth) => {
+        if (prevMonth === 0) {
+            if (newMonth === 0) {
+                return 0
+            } else {
+                return 0
+            }
+        } else {
+            const value = (newMonth - prevMonth) / prevMonth * 100
+            return value.toFixed(2)
         }
-        if (data && data.bookItems) {
-            const newChartData = [
-                ["Książka", "Procent sprzedanych", "Procent"],
-                ...data.bookItems.map(book => [book.bookTitle + " (" + book.formTitle + ")", book.percentOfTotalSoldPrice, book.percentOfTotalSoldUnits])
-            ]
-            setBookItemChartData(newChartData)
-        }
-    }, [data])   
-    const categoriesOptions = {
-        title: "Procentowy wykres sprzedaży według kategorii książek na dany miesiąc",
-        pieSliceText: "label",
-        legend: 'none',
-        pieHole: 0.4,
-        is3D: false,
     }
-    const bookItemsOptions = {
-        title: "Wykres sprzedaży poszczególnych książek na dany miesiąc",
-        chartArea: { width: "50%" },
-        hAxis: {
-          title: "Procent sprzedaży",
-          minValue: 0,
-        },
-        vAxis: {
-          title: "Książka",
-        },
-        // legend: 'none',
-    }
+   
   return (
-    data &&
+    (data && previosData) &&
     <div className='flex flex-col'>
     <h3 className='home-element-header'>Raport miesięczny</h3>
-    <div className='flex items-center'>
+    <div className='flex items-center my-1'>
         <select name="month" onChange={handleMonthChange} value={month} className='dark:border-dracula-600 w-[200px] mr-2 border-2 text-black dark:text-white rounded-md dark:bg-dracula-700 p-2'>
             <option value={1}>Styczeń</option>
             <option value={2}>Luty</option>
@@ -82,33 +102,44 @@ function MonthlyReport() {
             <option value={2023}>2023</option>
         </select>
     </div>
-    <div className='grid grid-cols-3 gap-3 my-2'>
-            <div className='rounded-md flex flex-col w-full bg-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default'>
-                <h4 className='font-medium font-lg'>Gross expenses</h4>
-                <p className='text-3xl font-medium mt-2'>{data.grossExpenses} PLN</p>
+    <div className='grid grid-cols-4 gap-3 my-2'>
+            <div className='growth-div'>
+                <h4 className='growth-title'>Wydatki brutto</h4>
+                <div className='flex items-end'>
+                    <p className='growth-total'>{data.grossExpenses} PLN</p>
+                    <GrowthSpan growth={growth.grossExpensesGrowth} />
+                </div>
             </div>
-            <div className='rounded-md flex flex-col w-full bg-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default'>
-                <h4 className='font-medium font-lg'>Gross revenue</h4>
-                <p className='text-3xl font-medium mt-2'>{data.grossRevenue} PLN</p>
+            <div className='growth-div'>
+                <h4 className='growth-title'>Przychód brutto</h4>
+                <div className='flex items-end'>
+                    <p className='growth-total'>{data.grossRevenue} PLN</p>
+                    <GrowthSpan growth={growth.grossRevenueGrowth} />
+                </div>
             </div>
-            <div className='rounded-md flex flex-col w-full bg-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default'>
-                <h4 className='font-medium font-lg'>Total income</h4>
-                <p className='text-3xl font-medium mt-2'>{data.totalIncome} PLN</p>
+            <div className='growth-div'>
+                <h4 className='growth-title'>Przychód całkowity</h4>
+                <div className='flex items-end'>
+                    <p className='growth-total'>{data.totalIncome} PLN</p>
+                    <GrowthSpan growth={growth.totalIncomeGrowth} />
+                </div>
             </div>
-            <div className='rounded-md flex flex-col w-full bg-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default'>
-                <h4 className='font-medium font-lg'>Sold quantity</h4>
-                <p className='text-3xl font-medium mt-2'>{data.soldQuantity}</p>
-            </div>
-            <div className='rounded-md flex flex-col w-full bg-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default'>
-                <h4 className='font-medium font-lg'>Total discounts</h4>
-                <p className='text-3xl font-medium mt-2'>{data.totalDiscounts} PLN</p>
-            </div>
+            <div className='growth-div'>
+                <h4 className='growth-title'>Sprzedana ilość</h4>
+                <div className='flex items-end'>
+                    <p className='growth-total'>{data.soldQuantity}</p>
+                    <GrowthSpan growth={growth.soldQuantityGrowth} />
+                </div>
+            </div>         
     </div>
-    {categoryChartData.length > 0 &&
-    <Chart chartType="PieChart" data={categoryChartData} options={categoriesOptions} width={"100%"} height={"400px"} />}
-    {bookItemChartData.length > 0 &&
-    <Chart chartType="BarChart" data={bookItemChartData} options={bookItemsOptions} width={"100%"} height={"400px"} />}
-
+    {categoriesData.length > 0 &&
+    <PieChart
+    slotProps={{legend: {labelStyle: {fill: '#aaa'}}}}
+    series={[{data: categoriesData, innerRadius: 30, outerRadius: 100, paddingAngle: 5, cornerRadius: 5, cx: 150, cy:150}]}
+    width={500}
+    height={300}
+    />
+    }
     </div>
   )
 }
