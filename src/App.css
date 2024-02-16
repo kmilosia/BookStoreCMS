@@ -5,20 +5,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @layer components{
-    /* CMS */
-    .growth-div{
-      @apply rounded-md flex flex-col w-full bg-white dark:text-white dark:bg-dracula-700 px-5 py-5 shadow-md cursor-default;
+    /*CMS*/
+    .cms-select{
+     @apply dark:border-dracula-600 w-[200px] mr-2 border-2 text-black dark:text-white rounded-md dark:bg-dracula-700 p-2;
     }
-    .growth-span{
-      @apply rounded-full py-1.5 px-3 text-xs flex-row flex ml-2 text-white mb-1;
+    .chart-container{
+      @apply flex flex-col items-center bg-white dark:bg-dracula-700 rounded-md shadow-md py-5 px-5;
     }
-    .growth-title{
-      @apply font-medium dark:font-normal;
+    .chart-title{
+      @apply text-xl font-medium text-dracula-500 dark:text-dracula-300 cursor-default;
     }
-    .growth-total{
-      @apply text-3xl font-medium mt-2;
-    }
-    /* CMS */
+    /*CMS*/
     /* buttons */
     .default-button{
       @apply my-2 w-full px-5 py-2 rounded-md text-white text-sm font-medium bg-purple-400 transition-all hover:bg-purple-500 flex items-center justify-center;

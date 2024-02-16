@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getMonthlyRaport } from '../../api/cmsAPI'
 import GrowthSpan from './GrowthSpan';
 import { PieChart } from '@mui/x-charts';
+import GrowthContainer from './GrowthContainer';
 
 function MonthlyReport() {
    
@@ -16,13 +17,8 @@ function MonthlyReport() {
         soldQuantityGrowth: 0,
         totalIncomeGrowth: 0,
     })
-
     const [categoriesData, setCategoriesData] = useState([])
-
-    const [bookUnitsData, setBookUnitsData]= useState([])
-    const [booksPriceData, setBooksPriceData]= useState([])
-    const [booksTitlesData, setBooksTitlesData]= useState([])
-
+    const [booksData, setBooksData] = useState([])
     const [month, setMonth] = useState(Number(currentmonth))
     const [year, setYear] = useState(Number(currentyear))
     useEffect(() => {
@@ -44,21 +40,14 @@ function MonthlyReport() {
             })
         }
         if (data && data.bookItems) {
-            const titles = [...data.bookItems.map(item => item.bookTitle + " (" + item.formTitle + ")")]
-            const prices = [...data.bookItems.map(item => item.soldPrice)]
-            const units = [...data.bookItems.map(item => item.soldUnits)]
-            setBooksTitlesData(titles)
-            setBooksPriceData(prices)
-            setBookUnitsData(units)
+            const newdata = [...data.bookItems.map((item,index) => ({id:index, value: item.percentOfTotalSoldPrice, label:item.bookTitle + " (" + item.formTitle + ")"}))]
+            setBooksData(newdata)
         }
         if (data && data.categories) {
             const newdata = [...data.categories.map((item,index) => ({id:index, value:item.percentOfTotalAppearances, label:item.categoryName}))]
             setCategoriesData(newdata)
         }
     },[data, previosData])
-    useEffect(() => {
-        console.log(bookUnitsData);
-    },[bookUnitsData])
     const handleMonthChange = (e) => {
         setMonth(e.target.value)
     }
@@ -83,7 +72,7 @@ function MonthlyReport() {
     <div className='flex flex-col'>
     <h3 className='home-element-header'>Raport miesięczny</h3>
     <div className='flex items-center my-1'>
-        <select name="month" onChange={handleMonthChange} value={month} className='dark:border-dracula-600 w-[200px] mr-2 border-2 text-black dark:text-white rounded-md dark:bg-dracula-700 p-2'>
+        <select name="month" onChange={handleMonthChange} value={month} className='cms-select'>
             <option value={1}>Styczeń</option>
             <option value={2}>Luty</option>
             <option value={3}>Marzec</option>
@@ -97,49 +86,39 @@ function MonthlyReport() {
             <option value={11}>Listopad</option>
             <option value={12}>Grudzień</option>              
         </select>
-        <select name="year" onChange={handleYearChange} value={year} className='dark:border-dracula-600 w-[200px] mr-2 border-2 text-black dark:text-white rounded-md dark:bg-dracula-700 p-2'>
+        <select name="year" onChange={handleYearChange} value={year} className='cms-select'>
             <option value={2024}>2024</option>
             <option value={2023}>2023</option>
         </select>
     </div>
     <div className='grid grid-cols-4 gap-3 my-2'>
-            <div className='growth-div'>
-                <h4 className='growth-title'>Wydatki brutto</h4>
-                <div className='flex items-end'>
-                    <p className='growth-total'>{data.grossExpenses} PLN</p>
-                    <GrowthSpan growth={growth.grossExpensesGrowth} />
-                </div>
-            </div>
-            <div className='growth-div'>
-                <h4 className='growth-title'>Przychód brutto</h4>
-                <div className='flex items-end'>
-                    <p className='growth-total'>{data.grossRevenue} PLN</p>
-                    <GrowthSpan growth={growth.grossRevenueGrowth} />
-                </div>
-            </div>
-            <div className='growth-div'>
-                <h4 className='growth-title'>Przychód całkowity</h4>
-                <div className='flex items-end'>
-                    <p className='growth-total'>{data.totalIncome} PLN</p>
-                    <GrowthSpan growth={growth.totalIncomeGrowth} />
-                </div>
-            </div>
-            <div className='growth-div'>
-                <h4 className='growth-title'>Sprzedana ilość</h4>
-                <div className='flex items-end'>
-                    <p className='growth-total'>{data.soldQuantity}</p>
-                    <GrowthSpan growth={growth.soldQuantityGrowth} />
-                </div>
-            </div>         
+        <GrowthContainer title="Wydatki brutto" value={data.grossExpenses} growth={growth.grossExpensesGrowth} />
+        <GrowthContainer title="Przychód brutto" value={data.grossRevenue} growth={growth.grossRevenueGrowth} />
+        <GrowthContainer title="Przychód całkowity" value={data.totalIncome} growth={growth.totalIncomeGrowth} />
+        <GrowthContainer title="Sprzedana ilość" value={data.soldQuantity} growth={growth.soldQuantityGrowth} />         
     </div>
+    <div className='grid grid-cols-1 gap-3 my-2'>
     {categoriesData.length > 0 &&
-    <PieChart
-    slotProps={{legend: {labelStyle: {fill: '#aaa'}}}}
-    series={[{data: categoriesData, innerRadius: 30, outerRadius: 100, paddingAngle: 5, cornerRadius: 5, cx: 150, cy:150}]}
-    width={500}
-    height={300}
-    />
+    <div className='chart-container'>
+        <h4 className='chart-title'>Procent sprzedanych tytułów książek na dany miesiąc</h4>    
+        <PieChart
+        slotProps={{legend: {markGap: 10,direction: 'column', position: {vertical: 'middle', horizontal: 'left'}, labelStyle: {fill: '#aaa'}}}}
+        series={[{data: categoriesData, innerRadius: 30, outerRadius: 100, paddingAngle: 5, cornerRadius: 5, cx: '50%', cy:'50%'}]}
+        height={300}
+        />
+    </div>
     }
+    {booksData.length > 0 &&
+    <div className='chart-container'>
+        <h4 className='chart-title'>Procent sprzedanych tytułów książek na dany miesiąc</h4>    
+        <PieChart
+        slotProps={{legend: {markGap: 10, itemGap: 10,direction: 'column', position: {vertical: 'middle', horizontal: 'left'}, labelStyle: {fill: '#aaa'}}}}
+        series={[{data: booksData, innerRadius: 30, outerRadius: 100, paddingAngle: 5, cornerRadius: 5, cx: '80%', cy:'50%'}]}
+        height={300}
+        />
+    </div>
+    }
+    </div>
     </div>
   )
 }
