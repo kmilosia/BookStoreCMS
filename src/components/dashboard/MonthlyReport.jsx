@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { getMonthlyRaport } from '../../api/cmsAPI'
-import GrowthSpan from './GrowthSpan';
 import { PieChart } from '@mui/x-charts';
 import GrowthContainer from './GrowthContainer';
 
@@ -30,7 +29,6 @@ function MonthlyReport() {
         }
     },[month,year])
     useEffect(() => {
-        console.log(data);
         if(data && previosData){
             setGrowth({...growth,
                  grossExpensesGrowth: calculateGrowth(previosData.grossExpenses, data.grossExpenses),
