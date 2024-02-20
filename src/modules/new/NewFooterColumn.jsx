@@ -14,6 +14,12 @@ function NewFooterColumn({setShowNewModule, postData}) {
       {value: "row", label: "Wiersz"},
       {value: "col", label: "Kolumna"},
     ]
+    const htmlOptions = [
+      {value: 'Link', label: 'Link wewnętrzny'},
+      {value: 'Image', label: 'Zdjęcie'},
+      {value: 'Icon Anchor', label: 'Ikona'},
+      {value: 'Anchor', label: 'Link zewnętrzny'},
+    ]
     const [directionOptions, setDirectionOptions] = useState(options)
     const [values, setValues] = useState({
         name: '',
@@ -26,6 +32,9 @@ function NewFooterColumn({setShowNewModule, postData}) {
     }
     const handleDirection = (selected) => {
       setValues({ ...values, direction:selected })
+    }
+    const handleHtml = (selected) => {
+      setValues({ ...values, htmlObject:selected })
     }
     const handleCloseModule = () => {
         setShowNewModule(false)
@@ -62,7 +71,7 @@ function NewFooterColumn({setShowNewModule, postData}) {
                     <DefaultInput name="position" error={errors.position} onChange={handleChange} type='number' placeholder='Pozycja' title="Pozycja linku w kolumnie"/>
                 </div>
                 <div className='grid grid-cols-2 gap-2'>
-                    <DefaultInput name="htmlObject" error={errors.htmlObject} onChange={handleChange} type='text' placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
+                    <DefaultSelect name="htmlObject" error={errors.htmlObject} onChange={handleHtml} value={values.htmlObject} options={htmlOptions} placeholder='Obiekt HTML' title='Obiekty HTML kolumny'/>
                     <DefaultSelect name='direction' error={errors.direction} onChange={handleDirection} value={values.direction} options={directionOptions} title='Kierunek wyświetlania obiektów' placeholder='Kierunek wyświetlania'/>
                 </div>
                 <button onClick={handleAcceptButton} className='module-button'>Akceptuj</button>

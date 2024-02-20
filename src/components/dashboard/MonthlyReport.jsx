@@ -4,7 +4,6 @@ import { PieChart } from '@mui/x-charts';
 import GrowthContainer from './GrowthContainer';
 
 function MonthlyReport() {
-   
     const currentdate = new Date()
     const currentmonth = currentdate.getMonth() + 1
     const currentyear = currentdate.getFullYear()
@@ -60,10 +59,24 @@ function MonthlyReport() {
                 return 0
             }
         } else {
-            const value = (newMonth - prevMonth) / prevMonth * 100
+            const value = (newMonth - prevMonth) / (Math.abs(prevMonth)) * 100
             return value.toFixed(2)
         }
-    }
+    }  
+    const monthOptions = [
+        {value: 1, label: 'Styczeń'},
+        {value: 2, label: 'Luty'},
+        {value: 3, label: 'Marzec'},
+        {value: 4, label: 'Kwiecień'},
+        {value: 5, label: 'Maj'},
+        {value: 6, label: 'Czerwiec'},
+        {value: 7, label: 'Lipiec'},
+        {value: 8, label: 'Sierpień'},
+        {value: 9, label: 'Wrzesień'},
+        {value: 10, label: 'Październik'},
+        {value: 11, label: 'Listopad'},
+        {value:12, label: 'Grudzień'},
+    ]
    
   return (
     (data && previosData) &&
@@ -71,18 +84,12 @@ function MonthlyReport() {
     <h3 className='home-element-header'>Raport miesięczny</h3>
     <div className='flex items-center my-1'>
         <select name="month" onChange={handleMonthChange} value={month} className='cms-select'>
-            <option value={1}>Styczeń</option>
-            <option value={2}>Luty</option>
-            <option value={3}>Marzec</option>
-            <option value={4}>Kwiecień</option>
-            <option value={5}>Maj</option>
-            <option value={6}>Czerwiec</option>
-            <option value={7}>Lipiec</option>
-            <option value={8}>Sierpień</option>
-            <option value={9}>Wrzesień</option>
-            <option value={10}>Październik</option>
-            <option value={11}>Listopad</option>
-            <option value={12}>Grudzień</option>              
+        {monthOptions.map((item, index) => {
+            const isDisabled = (year === currentyear && item.value > currentmonth);
+            return (
+                <option key={index} value={item.value} disabled={isDisabled}>{item.label}</option>
+            )
+        })}
         </select>
         <select name="year" onChange={handleYearChange} value={year} className='cms-select'>
             <option value={2024}>2024</option>
@@ -90,10 +97,10 @@ function MonthlyReport() {
         </select>
     </div>
     <div className='grid grid-cols-4 gap-3 my-2'>
-        <GrowthContainer title="Wydatki brutto" value={data.grossExpenses} growth={growth.grossExpensesGrowth} />
-        <GrowthContainer title="Przychód brutto" value={data.grossRevenue} growth={growth.grossRevenueGrowth} />
-        <GrowthContainer title="Przychód całkowity" value={data.totalIncome} growth={growth.totalIncomeGrowth} />
-        <GrowthContainer title="Sprzedana ilość" value={data.soldQuantity} growth={growth.soldQuantityGrowth} />         
+        <GrowthContainer currency={true} title="Wydatki brutto" value={data.grossExpenses} growth={growth.grossExpensesGrowth} />
+        <GrowthContainer currency={true} title="Przychód brutto" value={data.grossRevenue} growth={growth.grossRevenueGrowth} />
+        <GrowthContainer currency={true} title="Przychód całkowity" value={data.totalIncome} growth={growth.totalIncomeGrowth} />
+        <GrowthContainer currency={false} title="Sprzedana ilość" value={data.soldQuantity} growth={growth.soldQuantityGrowth} />         
     </div>
     <div className='grid grid-cols-1 gap-3 my-2'>
     {categoriesData.length > 0 &&
