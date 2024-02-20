@@ -44,15 +44,15 @@ function NewSupply({setShowNewModule, postData}) {
     const handleBooksChange = (selectedBook) => {
       setSelectedBook(selectedBook)
     }
-    const removeBookItem = (bookID) => {
-      const updatedBookItems = values.bookItems.filter(item => item.bookID !== bookID)
+    const removeBookItem = (id) => {
+      const updatedBookItems = values.bookItems.filter(item => item.id !== id)
       setValues({ ...values, bookItems: updatedBookItems })
     }
     const addNewProduct = () => {
       if((selectedBook.value.formName === 'Book' && (quantity <= 0 || !quantity)) || (bruttoPrice <= 0 || !bruttoPrice)){
         setProductError("Wprowadź prawidłowe dane (ilość ani cena brutto nie mogą być mniejsze niż 1!")
       }else{
-        const existingBook = values.bookItems.find(item => item.bookID === selectedBook.value.bookID)
+        const existingBook = values.bookItems.find(item => item.id === selectedBook.value.id)
         if(!existingBook){
           const currentBookItems = values.bookItems
           const newBookItem = {
@@ -87,7 +87,7 @@ function NewSupply({setShowNewModule, postData}) {
           deliveryDate: convertedDate,
           bookItems: values.bookItems.map((item) => {
             const bookItemData = {
-              bookItemId: item.bookID,
+              bookItemId: item.id,
               bruttoPrice: item.bruttoPrice
           }
           if(item.quantity) {
@@ -145,14 +145,14 @@ function NewSupply({setShowNewModule, postData}) {
               <div className='grid grid-cols-1 gap-2'>
                 {values.bookItems.length > 0 && values.bookItems.map((item,index) => {
                   return(
-                    <div key={index} className='flex flex-row items-center justify-between border-2 border-gray-200 dark:border-dracula-700 rounded-md p-3'>
+                    <div key={index} className='flex flex-row items-center justify-between border-2 border-gray-200 dark:border-dracula-700 rounded-md p-3 dark:text-white'>
                       <div className='flex flex-col'>
                         <h1 className='font-semibold'>{item.bookTitle}</h1>
                         <h2 className='text-sm'>{item.formName === 'Book' ? 'Książka' : 'Ebook'}</h2>
                         <h3 className='text-xs font-light mt-1'>ISBN {item.isbn}</h3>
                       </div>
                       <div className='flex flex-col items-end justify-start h-full'>
-                        <button onClick={() => removeBookItem(item.bookID)} className='text-xl dark:text-white'><IoClose /></button>
+                        <button onClick={() => removeBookItem(item.id)} className='text-xl dark:text-white'><IoClose /></button>
                         <div className='flex flex-col mt-4 text-sm font-light items-end'>
                           {item.quantity && <p>Ilość: {item.quantity}</p>}
                           <p>Cena brutto: {item?.bruttoPrice?.toFixed(2)}zł</p>

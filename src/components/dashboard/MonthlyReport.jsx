@@ -98,7 +98,7 @@ function MonthlyReport() {
     <div className='grid grid-cols-1 gap-3 my-2'>
     {categoriesData.length > 0 &&
     <div className='chart-container'>
-        <h4 className='chart-title'>Procent sprzedanych tytułów książek na dany miesiąc</h4>    
+        <h4 className='chart-title'>Procent sprzedanych kategorii książek na dany miesiąc</h4>    
         <PieChart
         slotProps={{legend: {markGap: 10,direction: 'column', position: {vertical: 'middle', horizontal: 'left'}, labelStyle: {fill: '#aaa'}}}}
         series={[{data: categoriesData, innerRadius: 30, outerRadius: 100, paddingAngle: 5, cornerRadius: 5, cx: '50%', cy:'50%'}]}

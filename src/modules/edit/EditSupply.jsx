@@ -45,7 +45,7 @@ function EditSupply(props) {
             deliveryStatusID: { value: response.data.deliveryStatusId, label: response.data.deliveryStatusName },
             supplierID: { value: response.data.supplierData.id, label: response.data.supplierData.name },
             bookItems: response.data.supplyBooksData.map((item) => ({
-              bookID: item.bookItemId,
+              id: item.bookItemId,
               bookTitle: item.bookTitle,
               bruttoPrice: item.bruttoPrice,
               formName: item.formName,
@@ -69,8 +69,8 @@ function EditSupply(props) {
     const handleBooksChange = (selectedBook) => {
       setSelectedBook(selectedBook)
     }
-    const removeBookItem = (bookID) => {
-      const updatedBookItems = values.bookItems.filter(item => item.bookID !== bookID)
+    const removeBookItem = (id) => {
+      const updatedBookItems = values.bookItems.filter(item => item.id !== id)
       setValues({ ...values, bookItems: updatedBookItems })
     }
     const addNewProduct = () => {
@@ -78,7 +78,7 @@ function EditSupply(props) {
       if((selectedBook.value.formName === 'Book' && (quantity <= 0 || !quantity)) || (bruttoPrice <= 0 || !bruttoPrice)){
         setProductError("Wprowadź prawidłowe dane (ilość ani cena brutto nie mogą być mniejsze niż 1!")
       }else{
-        const existingBook = values.bookItems.find(item => item.bookID === selectedBook.value.bookID)
+        const existingBook = values.bookItems.find(item => item.id === selectedBook.value.id)
         if(!existingBook){
           const currentBookItems = values.bookItems
           const newBookItem = {
@@ -115,7 +115,7 @@ function EditSupply(props) {
           deliveryDate: convertedDate,
           bookItems: values.bookItems.map((item) => {
             const bookItemData = {
-              bookItemId: item.bookID,
+              bookItemId: item.id,
               bruttoPrice: item.bruttoPrice
           }
           if(item.quantity) {
@@ -178,7 +178,7 @@ function EditSupply(props) {
                         <h2 className='text-sm'>{item.formName === 'Book' ? 'Książka' : 'Ebook'}</h2>
                       </div>
                       <div className='flex flex-col items-end justify-start h-full'>
-                        <button onClick={() => removeBookItem(item.bookID)} className='text-xl dark:text-white'><IoClose /></button>
+                        <button onClick={() => removeBookItem(item.id)} className='text-xl dark:text-white'><IoClose /></button>
                         <div className='flex flex-col mt-4 text-sm font-light items-end'>
                           {item.quantity && <p>Ilość: {item.quantity}</p>}
                           <p>Cena brutto: {item?.bruttoPrice?.toFixed(2)}zł</p>

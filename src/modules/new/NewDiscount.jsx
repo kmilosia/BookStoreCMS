@@ -8,7 +8,7 @@ import DefaultInput from '../../components/forms/DefaultInput'
 import DefaultTextarea from '../../components/forms/DefaultTextarea'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import { discountValidate } from '../../utils/validation/newValidate'
-import { getBookItems, getFormBookItems } from '../../api/selectAPI'
+import { getFormBookItems } from '../../api/selectAPI'
 
 function NewDiscount({setShowNewModule, postData}) {
     const [errors,setErrors] = useState({})
@@ -45,7 +45,7 @@ function NewDiscount({setShowNewModule, postData}) {
           expiryDate: convertedExpDate,
           startingDate: convertedStartDate,
           listOfBookItems: values.selectedBooks.map((item) => ({
-            id: item.value,
+            id: item.value.id,
           })),
           }     
           postData(data)

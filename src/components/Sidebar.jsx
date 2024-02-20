@@ -124,7 +124,7 @@ function Sidebar() {
         <button onClick={()=> toggleSideMenu("clientapp")} className='default-link'>
           <div className='flex flex-row items-center'>
             <CgWebsite className='text-xl mx-1'/>
-            <span className='whitespace-nowrap'>Strona Klienta</span>
+            <span className='whitespace-nowrap'>Strona WWW</span>
           </div>
         </button>}
         {(decodedToken?.Contact?.includes('r') || decodedToken?.role === 'Admin') && 
@@ -176,7 +176,7 @@ function Sidebar() {
           : sideMenu === "clientapp" ?
           <>
           <div className='flex py-3 px-2 border-b-[1px] dark:border-dracula-600'>
-            <h1 className='text-base font-semibold whitespace-nowrap'>Strona Klienta</h1>
+            <h1 className='text-base font-semibold whitespace-nowrap'>Strona WWW</h1>
           </div>
           <ClientAppLinks handleLinkClick={handleLinkClick}/>
           </>
