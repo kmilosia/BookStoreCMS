@@ -10,7 +10,7 @@ import { useAuthStore } from '../../store/authStore'
 
 function Category() {
     const decodedToken = useAuthStore((state) => state.decodedToken)  
-    const title = "Kategoria"
+    const title = "Kategorie"
     const [data, setData] = useState([])
     const [editedID, setEditedID] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)

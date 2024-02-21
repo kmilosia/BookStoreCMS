@@ -273,7 +273,7 @@ export const getForms = async (setData) => {
       if(response.status === 200 || response.status === 204){
       const options = response.data.map(item => ({
         value: item.id,
-        label: item.name
+        label: item.name === 'Book' ? 'Książka' : 'Ebook'
       }))
       setData(options)
     }}

@@ -7,7 +7,7 @@ import {convertDate} from '../../utils/functions/convertDate'
 import DefaultSelect from '../../components/forms/DefaultSelect'
 import DefaultInput from '../../components/forms/DefaultInput'
 import { bookItemValidate } from '../../utils/validation/newValidate'
-import { getAvailabilities, getBooks, getEditions, getFileFormats, getForms, getLanguages, getTranslators } from '../../api/selectAPI'
+import { getBooks, getEditions, getFileFormats, getForms, getLanguages, getTranslators } from '../../api/selectAPI'
 
 function NewBookItem({setShowNewModule, postData}) {
   const [errors,setErrors] = useState({})
@@ -24,7 +24,6 @@ function NewBookItem({setShowNewModule, postData}) {
     edition: null,
     fileFormat: null,
     form: null,
-    availability: null,
     book: null,
   })
     const [translatorOptions, setTranslatorOptions] = useState([])
@@ -32,7 +31,6 @@ function NewBookItem({setShowNewModule, postData}) {
     const [editionOptions, setEditionOptions] = useState([])
     const [fileFormatOptions, setFileFormatOptions] = useState([])
     const [formOptions, setFormOptions] = useState([])
-    const [availabilityOptions, setAvailabilityOptions] = useState([])
     const [bookOptions, setBookOptions] = useState([])
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value });
@@ -51,10 +49,7 @@ function NewBookItem({setShowNewModule, postData}) {
     }
     const handleForm = (form) => {
       setValues({ ...values, form });
-    }
-    const handleAvailability = (availability) => {
-      setValues({ ...values, availability });
-    }
+    }   
     const handleBook = (book) => {
       setValues({ ...values, book });
     }
@@ -65,6 +60,7 @@ function NewBookItem({setShowNewModule, postData}) {
       setSubmitting(true)
       setErrors(bookItemValidate(values))
     } 
+
     const finishSubmit = () => {
       const covertedDate = convertDate(values.publishingDate)
       const data = {
@@ -73,13 +69,14 @@ function NewBookItem({setShowNewModule, postData}) {
         isbn: values.ISBN,
         pages: Number(values.pages),
         publishingDate: covertedDate,
-        translatorID: values.translator.value,
         languageID: values.language.value,
         editionID: values.edition ? values.edition.value : null,
         fileFormatID: values.fileFormat ? values.fileFormat.value : null,
         formID: values.form.value,
-        availabilityID: values.availability.value,
         bookID: values.book.value,
+        }   
+        if(values.translator){
+          data.translatorID = values.translator.value
         }
         postData(data)
         handleCloseModule()
@@ -106,7 +103,6 @@ function NewBookItem({setShowNewModule, postData}) {
       getEditions(setEditionOptions)
       getFileFormats(setFileFormatOptions)
       getForms(setFormOptions)
-      getAvailabilities(setAvailabilityOptions)
       getBooks(setBookOptions)
     },[])
   return (
@@ -132,9 +128,8 @@ function NewBookItem({setShowNewModule, postData}) {
               <DefaultSelect name="language" error={errors.language} onChange={handleLanguage} placeholder="Język" options={languageOptions} value={values.language} title="Język"/>
               <DefaultSelect name="translator" error={errors.translator} onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={values.translator} title="Translator"/>
             </div>
-            <div className='grid grid-cols-[2fr_1fr] gap-2 my-1'>
+            <div className='grid grid-cols-1 gap-2 my-1'>
               <DefaultSelect name="book" error={errors.book} onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={values.book} title="Podstawowa książka"/>
-              <DefaultSelect name="availability" error={errors.availability} onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={values.availability} title="Dostępność"/>
             </div>
             <div className='grid grid-cols-2 gap-2 my-1'>
               <DefaultSelect name="form" error={errors.form} onChange={handleForm} placeholder="Format książki" options={formOptions} value={values.form} title="Format książki"/>

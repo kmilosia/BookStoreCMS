@@ -11,7 +11,7 @@ function DictionaryLinks({handleLinkClick}) {
         <SideLink handleLinkClick={handleLinkClick} attribute="Form" title="Format książki" path="/format" />
         <SideLink handleLinkClick={handleLinkClick} attribute="FileFormat" title="Format pliku" path="/format-pliku" />
         <SideLink handleLinkClick={handleLinkClick} attribute="Language" title="Język" path="/jezyk" />
-        <SideLink handleLinkClick={handleLinkClick} attribute="Category" title="Kategoria" path="/kategoria" />
+        <SideLink handleLinkClick={handleLinkClick} attribute="Category" title="Kategorie" path="/kategoria" />
         <SideLink handleLinkClick={handleLinkClick} attribute="Country" title="Kraj" path="/kraj" />
         <SideLink handleLinkClick={handleLinkClick} attribute="DeliveryMethod" title="Metoda dostawy" path="/metoda-dostawy" />
         <SideLink handleLinkClick={handleLinkClick} attribute="PaymentMethod" title="Metoda płatności" path="/metoda-platnosci" />

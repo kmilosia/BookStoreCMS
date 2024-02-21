@@ -52,6 +52,8 @@ export const useAuthStore = create((set) => ({
             }
         }catch(e){
             console.log(e)
+            set({ token: null })
+            set({decodedToken: null})
         }
         set({restoring: false})
     },

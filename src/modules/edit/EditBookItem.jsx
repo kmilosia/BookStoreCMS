@@ -26,7 +26,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     edition: null,
     fileFormat: null,
     form: null,
-    availability: null,
     book: null,
   })
     const [translatorOptions, setTranslatorOptions] = useState([])
@@ -34,7 +33,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     const [editionOptions, setEditionOptions] = useState([])
     const [fileFormatOptions, setFileFormatOptions] = useState([])
     const [formOptions, setFormOptions] = useState([])
-    const [availabilityOptions, setAvailabilityOptions] = useState([])
     const [bookOptions, setBookOptions] = useState([])
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value })
@@ -53,9 +51,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
     }
     const handleForm = (form) => {
       setValues({ ...values, form })
-    }
-    const handleAvailability = (availability) => {
-      setValues({ ...values, availability })
     }
     const handleBook = (book) => {
       setValues({ ...values, book })
@@ -82,7 +77,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               edition: { value: response.data.editionID, label: response.data.editionName },
               fileFormat: { value: response.data.fileFormatID, label: response.data.fileFormatName },
               form: { value: response.data.formID, label: response.data.formName },
-              availability: { value: response.data.availabilityID, label: response.data.availabilityName },
               book: { value: response.data.bookID, label: response.data.bookName },
             })
           }}
@@ -105,13 +99,14 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
         isbn: values.ISBN,
         pages: Number(values.pages),
         publishingDate: covertedDate,
-        translatorID: values.translator.value,
         languageID: values.language.value,
         editionID: values.edition ? values.edition.value : null,
         fileFormatID: values.fileFormat ? values.fileFormat.value : null,
         formID: values.form.value,
-        availabilityID: values.availability.value,
         bookID: values.book.value,
+        }
+        if(values.translator){
+          data.translatorID = values.translator.value
         }
         putData(editedID,data)
         handleCloseModule()
@@ -146,7 +141,6 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
       getEditions(setEditionOptions)
       getFileFormats(setFileFormatOptions)
       getForms(setFormOptions)
-      getAvailabilities(setAvailabilityOptions)
       getBooks(setBookOptions)
       getItem(editedID)
     },[])
@@ -174,9 +168,8 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               <DefaultSelect name="translator" error={errors.translator} onChange={handleTranslator} placeholder="Translator" options={translatorOptions} value={values.translator} title="Translator"/>
             </div>
             <div className='divider'/>
-            <div className='grid grid-cols-[2fr_1fr] gap-2'>
+            <div className='grid grid-cols-1 gap-2'>
               <DefaultSelect name="book" error={errors.book} onChange={handleBook} placeholder="Podstawowa książka" options={bookOptions} value={values.book} title="Podstawowa książka"/>
-              <DefaultSelect name="availability" error={errors.availability} onChange={handleAvailability} placeholder="Dostępność" options={availabilityOptions} value={values.availability} title="Dostępność"/>
             </div>
             <div className='divider'/>
             <div className='grid grid-cols-2 gap-2 my-1'>

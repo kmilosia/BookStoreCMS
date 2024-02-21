@@ -239,20 +239,17 @@ export const bookItemValidate = (values) => {
     if (!values.pages) {
         errors.pages = "Wprowadź ilość stron!"
     } 
-    if (values.language === null) {
+    if (!values.language) {
         errors.language = "Wybierz język!"
     } 
-    if (values.edition === null && values.fileFormat === null) {
+    if (!values.edition && !values.fileFormat) {
         errors.edition = "Wybierz edycję okładki lub format pliku!"
         errors.fileFormat = "Wybierz edycję okładki lub format pliku!"
     } 
-    if (values.form === null) {
+    if (!values.form) {
         errors.form = "Wybierz formę!"
     } 
-    if (values.availability === null) {
-        errors.availability = "Wybierz dostępność!"
-    } 
-    if (values.book === null) {
+    if (!values.book) {
         errors.book = "Wybierz książkę bazową!"
     } 
     return errors
