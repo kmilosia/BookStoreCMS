@@ -37,11 +37,11 @@ function MonthlyReport() {
             })
         }
         if (data && data.bookItems) {
-            const newdata = [...data.bookItems.map((item,index) => ({id:index, value: item.percentOfTotalSoldPrice, label:item.bookTitle + " (" + item.formTitle + ")"}))]
+            const newdata = [...data.bookItems.slice(0,7).map((item,index) => ({id:index, value: item.percentOfTotalSoldPrice, label:item.bookTitle + " (" + item.formTitle + ")"}))]
             setBooksData(newdata)
         }
         if (data && data.categories) {
-            const newdata = [...data.categories.map((item,index) => ({id:index, value:item.percentOfTotalAppearances, label:item.categoryName}))]
+            const newdata = [...data.categories.slice(0,7).map((item,index) => ({id:index, value:item.percentOfTotalAppearances, label:item.categoryName}))]
             setCategoriesData(newdata)
         }
     },[data, previosData])
