@@ -9,6 +9,7 @@ function AdminLinks({handleLinkClick}){
           <Link to='/uprawnienia-dostepu' onClick={handleLinkClick} className='sidemenu-link'>Uprawnienia dostępu</Link>
           <Link to='/wartosci-uprawnien' onClick={handleLinkClick} className='sidemenu-link'>Wartości uprawnień</Link>
           <Link to='/widoki-uprawnien' onClick={handleLinkClick} className='sidemenu-link'>Widoki uprawnień</Link>
+          <Link to='/szablon' onClick={handleLinkClick} className='sidemenu-link'>Szablon dokumentów</Link>
     </div>
   )
 }
