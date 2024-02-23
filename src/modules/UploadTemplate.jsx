@@ -54,8 +54,7 @@ function UploadTemplate({setUploadModal}) {
               <CloseWindowButton handleCloseModule={() => setUploadModal(false)} />
             </div>
             <div className='flex flex-col my-2 w-max'>
-                <label htmlFor="file" className="sr-only">Wybierz plik</label>
-                <input id="file" type="file" onChange={handleFileChange} placeholder='Wgraj plik'/>
+                <input id="file" type="file" onChange={handleFileChange}/>
             </div>
             <button onClick={handleUpload} className='module-button flex items-center justify-center w-[200px]'>{loading ? <ButtonSpinner /> : 'Dodaj'}</button>
             {error && <p className='error-text'>{error}</p>}
