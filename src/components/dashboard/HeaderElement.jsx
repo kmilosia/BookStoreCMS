@@ -12,7 +12,7 @@ function HeaderElement() {
     <div className='flex w-full rounded-md bg-white dark:bg-dracula-700 px-10 py-10 shadow-md my-2 cursor-default'>
       <div className='w-full grid grid-cols-[5fr_1fr] py-5 relative'>
         <div className='flex flex-col justify-center dark:text-white'>
-          <h1 className=' text-4xl font-semibold'>Witaj, {userData?.name} {userData?.surname}</h1>
+          <h1 className=' text-4xl font-semibold'>Witaj, {userData?.name}</h1>
           <h2 className='text-xl my-2 font-light'>Rozpocznij swój dzień produktywnie!</h2>
         </div>
         <div className='w-full relative'>

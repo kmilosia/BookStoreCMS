@@ -40,7 +40,7 @@ function Templates() {
     <>
     <div className='main-wrapper'>
         <div className='flex flex-col min-h-[90vh]'>
-        <h1 className='main-header'>Szablony dokumentów</h1>    
+        <h1 className='main-header'>Szablon dokumentów</h1>    
         <div className='flex flex-col h-full items-center justify-center'>
             <button onClick={() => {downloadFile()}} className={button}>
                 {downloadLoading ? <ButtonSpinner /> :
