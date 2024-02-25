@@ -171,7 +171,7 @@ function Supply() {
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.supplierName}</p>
                 <p className='px-2'>{item.supplyDate && formatDisplayDate(item.supplyDate)}</p>
-                <p className='px-2'>{item.priceBrutto}</p>
+                <p className='px-2'>{item.priceBrutto}zł</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   {(decodedToken?.Supply?.includes('e') || decodedToken?.role === 'Admin') &&    

@@ -76,7 +76,7 @@ function EditBookItem({setShowEditModule, putData, editedID}) {
               language: { value: response.data.languageID, label: response.data.languageName },
               edition: { value: response.data.editionID, label: response.data.editionName },
               fileFormat: { value: response.data.fileFormatID, label: response.data.fileFormatName },
-              form: { value: response.data.formID, label: response.data.formName },
+              form: { value: response.data.formID, label: response.data.formName === 'Book' ? 'Książka' : 'Ebook' },
               book: { value: response.data.bookID, label: response.data.bookName },
             })
           }}
