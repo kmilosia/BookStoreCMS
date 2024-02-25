@@ -9,7 +9,7 @@ function ViewNewsletter({setShowViewModule,editedItem,setEditedItem}) {
         setShowViewModule(false)
       }
   return (
-    <div className='module-wrapper center-elements' style={backgroundOverlayModule}>
+    <div className='module-wrapper' style={backgroundOverlayModule}>
         <div className='module-window'>
             <div className='module-content-wrapper'>
             <div className='module-header-row'>
@@ -25,7 +25,7 @@ function ViewNewsletter({setShowViewModule,editedItem,setEditedItem}) {
                     <p className='column-info-title'>Data publikacji</p>
                     <h2 className='column-info-text'>{editedItem?.publicationDate && formatDisplayDate(editedItem.publicationDate)}</h2>
                 </div>
-                <div className='flex flex-col'>
+                <div className='flex flex-col col-span-2'>
                     <p className='column-info-title'>Treść</p>
                     <h2 className='column-info-text'>{editedItem?.content}</h2>
                 </div>
