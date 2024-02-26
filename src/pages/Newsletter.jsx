@@ -101,6 +101,7 @@ function Newsletter() {
       }
     }
     const sendData = async () => {
+      console.log('sending')
       try{
           setSendingLoading(true)
           const token = getValidToken()
