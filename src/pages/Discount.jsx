@@ -170,7 +170,7 @@ function Discount() {
                 <p className='px-2'>{item.id}</p>                       
                 <p className='px-2'>{item.title}</p>
                 <p className='px-2'>{item.percentOfDiscount}%</p>
-                <p className='px-2'>{item.isAvailable ? "Aktywna" : "Zakończona"}</p>
+                <p className='px-2'>{item.isAvailable ? "Aktywna" : "Nieaktywna"}</p>
                 <div className='flex justify-end'>
                   <button onClick={() => handleViewClick(item.id)} className='table-button'><AiFillEye /></button>
                   {(decodedToken?.Discount?.includes('e') || decodedToken?.role === 'Admin') &&                                   
